@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIRecorder", "UIRecorder\UIRecorder.csproj", "{5E314CE8-C638-4CAB-A780-4DD558D661DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmotyperStorageUtility", "EmotyperStorageUtility\EmotyperStorageUtility.csproj", "{C5DA12F9-81DB-4AB4-BAE7-D2A3713B21CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{F3953227-55F4-4E35-82CC-0E2232B48219}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5E314CE8-C638-4CAB-A780-4DD558D661DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E314CE8-C638-4CAB-A780-4DD558D661DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E314CE8-C638-4CAB-A780-4DD558D661DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E314CE8-C638-4CAB-A780-4DD558D661DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5DA12F9-81DB-4AB4-BAE7-D2A3713B21CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5DA12F9-81DB-4AB4-BAE7-D2A3713B21CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5DA12F9-81DB-4AB4-BAE7-D2A3713B21CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5DA12F9-81DB-4AB4-BAE7-D2A3713B21CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3953227-55F4-4E35-82CC-0E2232B48219}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3953227-55F4-4E35-82CC-0E2232B48219}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3953227-55F4-4E35-82CC-0E2232B48219}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3953227-55F4-4E35-82CC-0E2232B48219}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

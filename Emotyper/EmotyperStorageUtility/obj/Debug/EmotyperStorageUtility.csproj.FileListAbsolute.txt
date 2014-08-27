@@ -1,0 +1,8 @@
+D:\GitRepos\Emotyper\Emotyper\Emotyper\EmotyperStorageUtility\obj\Debug\EmotyperStorageUtility.csprojResolveAssemblyReference.cache
+D:\GitRepos\Emotyper\Emotyper\Emotyper\EmotyperStorageUtility\bin\Debug\EmotyperStorageUtility.dll.config
+D:\GitRepos\Emotyper\Emotyper\Emotyper\EmotyperStorageUtility\bin\Debug\EmotyperStorageUtility.dll
+D:\GitRepos\Emotyper\Emotyper\Emotyper\EmotyperStorageUtility\bin\Debug\EmotyperStorageUtility.pdb
+D:\GitRepos\Emotyper\Emotyper\Emotyper\EmotyperStorageUtility\bin\Debug\DotNetEmotivSDK.dll
+D:\GitRepos\Emotyper\Emotyper\Emotyper\EmotyperStorageUtility\bin\Debug\DotNetEmotivSDK.pdb
+D:\GitRepos\Emotyper\Emotyper\Emotyper\EmotyperStorageUtility\obj\Debug\EmotyperStorageUtility.dll
+D:\GitRepos\Emotyper\Emotyper\Emotyper\EmotyperStorageUtility\obj\Debug\EmotyperStorageUtility.pdb

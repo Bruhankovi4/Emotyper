@@ -1,0 +1,6 @@
+D:\GitRepos\Emotyper\Emotyper\Emotyper\Resources\obj\Debug\Resources.csprojResolveAssemblyReference.cache
+D:\GitRepos\Emotyper\Emotyper\Emotyper\Resources\bin\Debug\Resources.dll.config
+D:\GitRepos\Emotyper\Emotyper\Emotyper\Resources\bin\Debug\Resources.dll
+D:\GitRepos\Emotyper\Emotyper\Emotyper\Resources\bin\Debug\Resources.pdb
+D:\GitRepos\Emotyper\Emotyper\Emotyper\Resources\obj\Debug\Resources.dll
+D:\GitRepos\Emotyper\Emotyper\Emotyper\Resources\obj\Debug\Resources.pdb
