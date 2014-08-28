@@ -24,6 +24,7 @@ namespace EmotyperStorageUtility
 
             // create a header for our output file            
             filestorageRoot = filestorageRootFolder;
+            writingThread = new Thread(startRecording);
         }
         void engine_UserAdded_Event(object sender, EmoEngineEventArgs e)
         {
@@ -36,7 +37,8 @@ namespace EmotyperStorageUtility
             engine.DataAcquisitionEnable((uint)userID, true);
 
             // ask for up to 1 second of buffered data
-            engine.EE_DataSetBufferSizeInSec(1);
+            
+            engine.EE_DataSetBufferSizeInSec(0.3f);
 
         }
         public void WriteHeader()
@@ -89,20 +91,23 @@ namespace EmotyperStorageUtility
         public void StartWritingToFile(string _folderName, string _fileName)
         {
             filename = filestorageRoot + _folderName + filename + ".csv";
-            WriteHeader();
+            WriteHeader();     
+                           writingThread.Start();
            //init of the filewriting
         }
-        public void StopWriting(string _folderName, string _fileName)
-        {
-            filename = filestorageRoot + _folderName + filename + ".csv";
-            WriteHeader();
-            //init of the filewriting
 
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    Run();
-            //    Thread.Sleep(100);
-            //}
+        private void startRecording()
+        {
+            while (true)
+            {                
+                    Run();
+                    Thread.Sleep(100);                
+            }
+        }
+
+        public void StopWriting()
+        {
+                           writingThread.Abort();
         }
     }
 }

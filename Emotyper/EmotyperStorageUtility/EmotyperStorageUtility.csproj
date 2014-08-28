@@ -35,7 +35,8 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DotNetEmotivSDK">
+    <Reference Include="DotNetEmotivSDK, Version=0.8.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Resources\DotNetEmotivSDK.dll</HintPath>
     </Reference>
     <Reference Include="System" />

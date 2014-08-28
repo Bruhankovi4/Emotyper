@@ -22,36 +22,29 @@ namespace UIRecorder
     public partial class MainWindow : Window
     {
         private FileStorageWriter filewriter;
+        private bool isWriting= false;
+        private int i = 0;
         public MainWindow()
         {
-           // filewriter = new FileStorageWriter("D://GitRepos//Emotyper//Emotyper");
-            InitializeComponent();
+          
+            InitializeComponent(); 
+            filewriter = new FileStorageWriter("D://GitRepos//Emotyper//Emotyper");
         }
-        //End Writing to file
-        private void Record_KeyUp(object sender, KeyEventArgs e)
+
+        private void recordButton_Click(object sender, RoutedEventArgs e)
         {
-            if (e.Key == Key.Space)
+           
+            if (!isWriting)
             {
-                   Console.WriteLine("End writing");
-            } 
-        }
-        //Start Writing to file
-        private void Record_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Space)
+                Console.WriteLine("Writing started");
+                filewriter.StartWritingToFile("A","sample"+i++);
+            }
+            else
             {
-                Console.WriteLine("Start writing");
-            }        
+                filewriter.StopWriting();
+                Console.WriteLine("Writing ended");
+            }
         }
-         //Start Writing to file
-        private void recordButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            Console.WriteLine("Start writing");
-        }
-        //End Writing to file
-        private void recordButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            Console.WriteLine("End writing");
-        }
+     
     }
 }
