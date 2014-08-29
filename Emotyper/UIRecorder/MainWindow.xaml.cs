@@ -28,7 +28,7 @@ namespace UIRecorder
         {
           
             InitializeComponent(); 
-            filewriter = new FileStorageWriter("D://GitRepos//Emotyper//Emotyper");
+            filewriter = new FileStorageWriter("D:\\GitRepos\\Emotyper\\Emotyper");
         }
 
         private void recordButton_Click(object sender, RoutedEventArgs e)
@@ -38,7 +38,7 @@ namespace UIRecorder
             {
                 Console.WriteLine("Writing started");
                 recordButton.Content = "Stop";
-                 filewriter.StartWritingToFile("A","sample"+i++);
+                filewriter.StartWritingToFile(folderPath.Text, filenameTextbox.Text + i++);
 
             }
             else

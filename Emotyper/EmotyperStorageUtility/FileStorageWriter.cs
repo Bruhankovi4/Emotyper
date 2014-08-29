@@ -96,8 +96,12 @@ namespace EmotyperStorageUtility
 
         public void StartWritingToFile(string _folderName, string _fileName)
         {
-            filename = filestorageRoot + _folderName + filename + ".csv";
-            WriteHeader();     
+            filename = filestorageRoot + "\\" + _folderName + "\\";
+            if (!Directory.Exists(filename))
+            Directory.CreateDirectory(filename);
+            filename += _fileName + ".csv";
+            WriteHeader();
+            writingThread = new Thread(startRecording);
                            writingThread.Start();
            //init of the filewriting
         }
