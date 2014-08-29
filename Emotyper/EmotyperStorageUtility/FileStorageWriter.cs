@@ -16,6 +16,11 @@ namespace EmotyperStorageUtility
         public FileStorageWriter(string filestorageRootFolder="C://")
         {
             // create the engine
+            init(filestorageRootFolder);
+        }
+
+        private void init(string filestorageRootFolder)
+        {
             engine = EmoEngine.Instance;
             engine.UserAdded += new EmoEngine.UserAddedEventHandler(engine_UserAdded_Event);
 
@@ -26,6 +31,7 @@ namespace EmotyperStorageUtility
             filestorageRoot = filestorageRootFolder;
             writingThread = new Thread(startRecording);
         }
+
         void engine_UserAdded_Event(object sender, EmoEngineEventArgs e)
         {
             Console.WriteLine("User Added Event has occured");

@@ -36,19 +36,29 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="DotNetEmotivSDK.csproj.FileListAbsolute.txt" />
-    <Content Include="DotNetEmotivSDK.dll" />
-    <Content Include="DotNetEmotivSDK.pdb" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="EdkDll.cs" />
-    <Compile Include="EmoEngine.cs" />
-    <Compile Include="EmoState.cs" />
+    <None Include="DotNetEmotivSDK-vs2010.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DotNetEmotivSDK-vs2010.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DotNetEmotivSDK-vs2010.pdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DotNetEmotivSDK.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="edk.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="edk_utils.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

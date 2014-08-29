@@ -21,3 +21,9 @@
 obj/
 [Rr]elease*/
 _ReSharper*/
+*/obj/*
+Emotyper/EmotyperStorageUtility/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+Emotyper/EmotyperStorageUtility/obj/Debug/EmotyperStorageUtility.csproj.FileListAbsolute.txt
+Emotyper/EmotyperStorageUtility/obj/Debug/EmotyperStorageUtility.csprojResolveAssemblyReference.cache
+Emotyper/EmotyperStorageUtility/obj/Debug/EmotyperStorageUtility.dll
+Emotyper/EmotyperStorageUtility/obj/Debug/EmotyperStorageUtility.pdb

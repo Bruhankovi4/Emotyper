@@ -37,13 +37,17 @@ namespace UIRecorder
             if (!isWriting)
             {
                 Console.WriteLine("Writing started");
-                filewriter.StartWritingToFile("A","sample"+i++);
+                recordButton.Content = "Stop";
+                 filewriter.StartWritingToFile("A","sample"+i++);
+
             }
             else
             {
                 filewriter.StopWriting();
                 Console.WriteLine("Writing ended");
+                recordButton.Content = "Record";
             }
+            isWriting = !isWriting;
         }
      
     }

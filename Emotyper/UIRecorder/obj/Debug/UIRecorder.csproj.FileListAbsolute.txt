@@ -25,6 +25,10 @@ D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\obj\Debug\UIRecorder.g.resourc
 D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\obj\Debug\UIRecorder.Properties.Resources.resources
 D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\obj\Debug\UIRecorder.csproj.GenerateResource.Cache
 D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\EmotyperStorageUtility.dll
-D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\DotNetEmotivSDK.dll
 D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\EmotyperStorageUtility.pdb
-D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\DotNetEmotivSDK.pdb
+D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\DotNetEmotivSDK-vs2010.dll
+D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\DotNetEmotivSDK-vs2010.pdb
+D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\DotNetEmotivSDK.dll
+D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\edk.dll
+D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\edk_utils.dll
+D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\DotNetEmotivSDK-vs2010.dll.config
