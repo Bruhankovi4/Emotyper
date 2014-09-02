@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -13,10 +14,40 @@ namespace EmotyperStorageUtility
         int userID = -1; // userID is used to uniquely identify a user's headset
         string filename = "outfile.csv"; // output filename
         private Thread writingThread;
-        public FileStorageWriter(string filestorageRootFolder="C://")
+        private TextWriter file;
+        private Dictionary<String, List<double>> rawData = new Dictionary<string, List<double>>()
+            {
+                {"COUNTER", new List<double>()},
+                {"INTERPOLATED", new List<double>()},
+                {"RAW_CQ", new List<double>()},
+                {"AF3", new List<double>()},
+                {"F7", new List<double>()},
+                {"F3", new List<double>()},
+                {"FC5", new List<double>()},
+                {"T7", new List<double>()},
+                {"P7", new List<double>()},
+                {"O1", new List<double>()},
+                {"O2", new List<double>()},
+                {"P8", new List<double>()},
+                {"T8", new List<double>()},
+                {"FC6", new List<double>()},
+                {"F4", new List<double>()},
+                {"F8", new List<double>()},
+                {"AF4", new List<double>()},
+                {"GYROX", new List<double>()},
+                {"GYROY", new List<double>()},
+                {"TIMESTAMP", new List<double>()},
+                {"ES_TIMESTAMP", new List<double>()},
+                {"FUNC_ID", new List<double>()},
+                {"FUNC_VALUE", new List<double>()},
+                {"MARKER", new List<double>()},
+                {"SYNC_SIGNAL", new List<double>()}
+            };
+        public FileStorageWriter(string filestorageRootFolder = "C://")
         {
             // create the engine
             init(filestorageRootFolder);
+
         }
 
         private void init(string filestorageRootFolder)
@@ -43,21 +74,11 @@ namespace EmotyperStorageUtility
             engine.DataAcquisitionEnable((uint)userID, true);
 
             // ask for up to 1 second of buffered data
-            
-            engine.EE_DataSetBufferSizeInSec(0.3f);
+
+            //engine.EE_DataSetBufferSizeInSec(0.3f);
 
         }
-        public void WriteHeader()
-        {
-            TextWriter file = new StreamWriter(filename, false);
-
-            string header = "COUNTER,INTERPOLATED,RAW_CQ,AF3,F7,F3, FC5, T7, P7, O1, O2,P8" +
-                            ", T8, FC6, F4,F8, AF4,GYROX, GYROY, TIMESTAMP, ES_TIMESTAMP" +
-                            "FUNC_ID, FUNC_VALUE, MARKER, SYNC_SIGNAL,";
-
-            file.WriteLine(header);
-            file.Close();
-        }
+      
         void Run()
         {
             // Handle any waiting events
@@ -80,17 +101,21 @@ namespace EmotyperStorageUtility
             Console.WriteLine("Writing " + _bufferSize.ToString() + " lines of data ");
 
             // Write the data to a file
-            TextWriter file = new StreamWriter(filename, true);
+
 
             for (int i = 0; i < _bufferSize; i++)
             {
                 // now write the data
                 foreach (EdkDll.EE_DataChannel_t channel in data.Keys)
-                    file.Write(data[channel][i] + ",");
-                file.WriteLine("");
-
+                {
+                    //   file.Write(data[channel][i] + ",");                    
+                        //if (channel.ToString() == "F4")
+                        //    Console.WriteLine(data[channel][i]);
+                    rawData[channel.ToString()].Add(data[channel][i]);
+                }
+               // file.WriteLine("");
             }
-            file.Close();
+
 
         }
 
@@ -98,26 +123,41 @@ namespace EmotyperStorageUtility
         {
             filename = filestorageRoot + "\\" + _folderName + "\\";
             if (!Directory.Exists(filename))
-            Directory.CreateDirectory(filename);
-            filename += _fileName + ".csv";
-            WriteHeader();
+                Directory.CreateDirectory(filename);
+            filename += _fileName + ".csv";            
             writingThread = new Thread(startRecording);
-                           writingThread.Start();
-           //init of the filewriting
+            writingThread.Start();
+            //init of the filewriting
         }
 
         private void startRecording()
         {
+            
             while (true)
-            {                
-                    Run();
-                    Thread.Sleep(100);                
+            {
+                Run();             
             }
         }
 
         public void StopWriting()
         {
-                           writingThread.Abort();
+            writingThread.Abort();
+            file = new StreamWriter(filename, true);
+            string header = "COUNTER;INTERPOLATED;RAW_CQ;AF3;F7;F3; FC5; T7; P7; O1; O2;P8;T8; FC6; F4;F8; AF4;GYROX; GYROY; TIMESTAMP; ES_TIMESTAMP;FUNC_ID; FUNC_VALUE; MARKER; SYNC_SIGNAL;";
+            
+            file.WriteLine(header);
+            int size = rawData["TIMESTAMP"].Count;
+            for (int i = 0; i < size; i++)
+            {
+                // now write the data
+                foreach (String channel in rawData.Keys)
+                {
+                       file.Write( rawData[channel][i]+";" );                    
+                }
+                 file.WriteLine("");
+            }
+            file.Close();
+            
         }
     }
 }
