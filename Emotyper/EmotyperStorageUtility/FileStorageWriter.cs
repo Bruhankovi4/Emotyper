@@ -15,8 +15,18 @@ namespace EmotyperStorageUtility
         string filename = "outfile.csv"; // output filename
         private Thread writingThread;
         private TextWriter file;
-        private Dictionary<String, List<double>> rawData = new Dictionary<string, List<double>>()
-            {
+        private Dictionary<String, List<double>> rawData = new Dictionary<string, List<double>>();
+            
+        public FileStorageWriter(string filestorageRootFolder = "C://")
+        {
+            // create the engine
+            init(filestorageRootFolder);
+            initDatastorage();
+        }
+
+        private void initDatastorage()
+        {
+            rawData = new Dictionary<string, List<double>>(){
                 {"COUNTER", new List<double>()},
                 {"INTERPOLATED", new List<double>()},
                 {"RAW_CQ", new List<double>()},
@@ -43,11 +53,6 @@ namespace EmotyperStorageUtility
                 {"MARKER", new List<double>()},
                 {"SYNC_SIGNAL", new List<double>()}
             };
-        public FileStorageWriter(string filestorageRootFolder = "C://")
-        {
-            // create the engine
-            init(filestorageRootFolder);
-
         }
 
         private void init(string filestorageRootFolder)
@@ -74,7 +79,6 @@ namespace EmotyperStorageUtility
             engine.DataAcquisitionEnable((uint)userID, true);
 
             // ask for up to 1 second of buffered data
-
             //engine.EE_DataSetBufferSizeInSec(0.3f);
 
         }
@@ -83,40 +87,19 @@ namespace EmotyperStorageUtility
         {
             // Handle any waiting events
             engine.ProcessEvents();
-
             // If the user has not yet connected, do not proceed
             if ((int)userID == -1)
                 return;
-
             Dictionary<EdkDll.EE_DataChannel_t, double[]> data = engine.GetData((uint)userID);
-
-
             if (data == null)
             {
                 return;
             }
-
             int _bufferSize = data[EdkDll.EE_DataChannel_t.TIMESTAMP].Length;
-
             Console.WriteLine("Writing " + _bufferSize.ToString() + " lines of data ");
-
-            // Write the data to a file
-
-
-            for (int i = 0; i < _bufferSize; i++)
-            {
-                // now write the data
-                foreach (EdkDll.EE_DataChannel_t channel in data.Keys)
-                {
-                    //   file.Write(data[channel][i] + ",");                    
-                        //if (channel.ToString() == "F4")
-                        //    Console.WriteLine(data[channel][i]);
-                    rawData[channel.ToString()].Add(data[channel][i]);
-                }
-               // file.WriteLine("");
-            }
-
-
+            for (int i = 0; i < _bufferSize; i++)           
+                foreach (EdkDll.EE_DataChannel_t channel in data.Keys)                
+                    rawData[channel.ToString()].Add(data[channel][i]);                           
         }
 
         public void StartWritingToFile(string _folderName, string _fileName)
@@ -124,15 +107,14 @@ namespace EmotyperStorageUtility
             filename = filestorageRoot + "\\" + _folderName + "\\";
             if (!Directory.Exists(filename))
                 Directory.CreateDirectory(filename);
-            filename += _fileName + ".csv";            
+            filename += _fileName + ".csv";
+            initDatastorage();
             writingThread = new Thread(startRecording);
             writingThread.Start();
-            //init of the filewriting
         }
 
         private void startRecording()
-        {
-            
+        {            
             while (true)
             {
                 Run();             
@@ -143,20 +125,28 @@ namespace EmotyperStorageUtility
         {
             writingThread.Abort();
             file = new StreamWriter(filename, true);
-            string header = "COUNTER;INTERPOLATED;RAW_CQ;AF3;F7;F3; FC5; T7; P7; O1; O2;P8;T8; FC6; F4;F8; AF4;GYROX; GYROY; TIMESTAMP; ES_TIMESTAMP;FUNC_ID; FUNC_VALUE; MARKER; SYNC_SIGNAL;";
-            
+            string header = "COUNTER;INTERPOLATED;RAW_CQ;AF3;F7;F3; FC5; T7; P7; O1; O2;P8;T8; FC6; F4;F8; AF4;GYROX; GYROY; TIMESTAMP; ES_TIMESTAMP;FUNC_ID; FUNC_VALUE; MARKER; SYNC_SIGNAL;";            
             file.WriteLine(header);
-            int size = rawData["TIMESTAMP"].Count;
-            for (int i = 0; i < size; i++)
+            int size = rawData["TIMESTAMP"].Count;   //can be any of the sensors
+            try
             {
-                // now write the data
-                foreach (String channel in rawData.Keys)
+                for (int i = 0; i < size; i++)
                 {
-                       file.Write( rawData[channel][i]+";" );                    
+                    // now write the data
+                    foreach (String channel in rawData.Keys)
+                    {
+                        file.Write(rawData[channel][i] + ";");
+                    }
+                    file.WriteLine("");
                 }
-                 file.WriteLine("");
+                file.Close();
             }
-            file.Close();
+            catch (Exception)
+            {
+
+                file.Close();
+            }
+           
             
         }
     }
