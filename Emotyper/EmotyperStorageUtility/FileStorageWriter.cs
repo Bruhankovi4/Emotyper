@@ -15,7 +15,7 @@ namespace EmotyperStorageUtility
         string filename = "outfile.csv"; // output filename
         private Thread writingThread;
         private TextWriter file;
-        private Dictionary<String, List<double>> rawData = new Dictionary<string, List<double>>();
+        private Dictionary<String, List<double>> rawData;
             
         public FileStorageWriter(string filestorageRootFolder = "C://")
         {
