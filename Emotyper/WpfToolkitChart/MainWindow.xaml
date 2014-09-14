@@ -144,7 +144,147 @@
                     </chartingToolkit:LineSeries.DataPointStyle>
                 </chartingToolkit:LineSeries>
             </chartingToolkit:Chart>
-            </Grid>
+            <chartingToolkit:Chart  x:Name="AF3Chart_Copy" Title="AF3" VerticalAlignment="Top" Height="174" HorizontalAlignment="Left" Width="857" Margin="1029,58,0,0">
+                <chartingToolkit:LineSeries  DependentValuePath="Value" IndependentValuePath="Key" ItemsSource="{Binding}" IsSelectionEnabled="True" Height="56" VerticalAlignment="Bottom">
+                    <chartingToolkit:LineSeries.DataPointStyle>
+                        <Style TargetType="{x:Type chartingToolkit:LineDataPoint}">
+                            <Setter Property="Opacity" Value="0" />
+                            <Setter Property="Background" Value="Blue" />
+                        </Style>
+                    </chartingToolkit:LineSeries.DataPointStyle>
+                </chartingToolkit:LineSeries>
+            </chartingToolkit:Chart>
+            <chartingToolkit:Chart  x:Name="F7Chart_Copy" Title="F7" VerticalAlignment="Top" Margin="1029,237,0,0" Height="174" HorizontalAlignment="Left" Width="857">
+                <chartingToolkit:LineSeries  DependentValuePath="Value" IndependentValuePath="Key" ItemsSource="{Binding}" IsSelectionEnabled="True" Margin="0,0,0,0">
+                    <chartingToolkit:LineSeries.DataPointStyle>
+                        <Style TargetType="{x:Type chartingToolkit:LineDataPoint}">
+                            <Setter Property="Opacity" Value="0" />
+                            <Setter Property="Background" Value="Blue" />
+                        </Style>
+                    </chartingToolkit:LineSeries.DataPointStyle>
+                </chartingToolkit:LineSeries>
+            </chartingToolkit:Chart>
+            <chartingToolkit:Chart  x:Name="F3Chart_Copy" Title="F3" VerticalAlignment="Top" Margin="1029,411,0,0" Height="174" HorizontalAlignment="Left" Width="857">
+                <chartingToolkit:LineSeries  DependentValuePath="Value" IndependentValuePath="Key" ItemsSource="{Binding}" IsSelectionEnabled="True" Margin="0,0,0,0">
+                    <chartingToolkit:LineSeries.DataPointStyle>
+                        <Style TargetType="{x:Type chartingToolkit:LineDataPoint}">
+                            <Setter Property="Opacity" Value="0" />
+                            <Setter Property="Background" Value="Blue" />
+                        </Style>
+                    </chartingToolkit:LineSeries.DataPointStyle>
+                </chartingToolkit:LineSeries>
+            </chartingToolkit:Chart>
+            <chartingToolkit:Chart  x:Name="FC5Chart_Copy" Title="FC5" VerticalAlignment="Top" Margin="1029,586,0,0" Height="174" HorizontalAlignment="Left" Width="857">
+                <chartingToolkit:LineSeries  DependentValuePath="Value" IndependentValuePath="Key" ItemsSource="{Binding}" IsSelectionEnabled="True" Margin="0,0,0,0">
+                    <chartingToolkit:LineSeries.DataPointStyle>
+                        <Style TargetType="{x:Type chartingToolkit:LineDataPoint}">
+                            <Setter Property="Opacity" Value="0" />
+                            <Setter Property="Background" Value="Blue" />
+                        </Style>
+                    </chartingToolkit:LineSeries.DataPointStyle>
+                </chartingToolkit:LineSeries>
+            </chartingToolkit:Chart>
+            <chartingToolkit:Chart  x:Name="T7Chart_Copy" Title="T7" VerticalAlignment="Top" Margin="1029,760,0,0" Height="174" HorizontalAlignment="Left" Width="857">
+                <chartingToolkit:LineSeries  DependentValuePath="Value" IndependentValuePath="Key" ItemsSource="{Binding}" IsSelectionEnabled="True">
+                    <chartingToolkit:LineSeries.DataPointStyle>
+                        <Style TargetType="{x:Type chartingToolkit:LineDataPoint}">
+                            <Setter Property="Opacity" Value="0" />
+                            <Setter Property="Background" Value="Blue" />
+                        </Style>
+                    </chartingToolkit:LineSeries.DataPointStyle>
+                </chartingToolkit:LineSeries>
+            </chartingToolkit:Chart>
+            <chartingToolkit:Chart  x:Name="P7Chart_Copy" Title="P7" VerticalAlignment="Top" Margin="1031,930,0,0" Height="174" HorizontalAlignment="Left" Width="857">
+                <chartingToolkit:LineSeries  DependentValuePath="Value" IndependentValuePath="Key" ItemsSource="{Binding}" IsSelectionEnabled="True" Margin="0,0,0,0">
+                    <chartingToolkit:LineSeries.DataPointStyle>
+                        <Style TargetType="{x:Type chartingToolkit:LineDataPoint}">
+                            <Setter Property="Opacity" Value="0" />
+                            <Setter Property="Background" Value="Blue" />
+                        </Style>
+                    </chartingToolkit:LineSeries.DataPointStyle>
+                </chartingToolkit:LineSeries>
+            </chartingToolkit:Chart>
+            <chartingToolkit:Chart  x:Name="O1Chart_Copy" Title="O1" VerticalAlignment="Top" Margin="1031,1105,0,0" Height="174" HorizontalAlignment="Left" Width="857">
+                <chartingToolkit:LineSeries  DependentValuePath="Value" IndependentValuePath="Key" ItemsSource="{Binding}" IsSelectionEnabled="True" Margin="0,0,0,0">
+                    <chartingToolkit:LineSeries.DataPointStyle>
+                        <Style TargetType="{x:Type chartingToolkit:LineDataPoint}">
+                            <Setter Property="Opacity" Value="0" />
+                            <Setter Property="Background" Value="Blue" />
+                        </Style>
+                    </chartingToolkit:LineSeries.DataPointStyle>
+                </chartingToolkit:LineSeries>
+            </chartingToolkit:Chart>
+            <chartingToolkit:Chart  x:Name="O2Chart_Copy" Title="O2" VerticalAlignment="Top" Margin="1029,1279,0,0" Height="174" HorizontalAlignment="Left" Width="857">
+                <chartingToolkit:LineSeries  DependentValuePath="Value" IndependentValuePath="Key" ItemsSource="{Binding}" IsSelectionEnabled="True" Margin="0,0,0,0">
+                    <chartingToolkit:LineSeries.DataPointStyle>
+                        <Style TargetType="{x:Type chartingToolkit:LineDataPoint}">
+                            <Setter Property="Opacity" Value="0" />
+                            <Setter Property="Background" Value="Blue" />
+                        </Style>
+                    </chartingToolkit:LineSeries.DataPointStyle>
+                </chartingToolkit:LineSeries>
+            </chartingToolkit:Chart>
+            <chartingToolkit:Chart  x:Name="P8Chart_Copy" Title="P8" VerticalAlignment="Top" Margin="1025,1458,0,0" Height="174" HorizontalAlignment="Left" Width="857">
+                <chartingToolkit:LineSeries  DependentValuePath="Value" IndependentValuePath="Key" ItemsSource="{Binding}" IsSelectionEnabled="True" Margin="0,0,0,0">
+                    <chartingToolkit:LineSeries.DataPointStyle>
+                        <Style TargetType="{x:Type chartingToolkit:LineDataPoint}">
+                            <Setter Property="Opacity" Value="0" />
+                            <Setter Property="Background" Value="Blue" />
+                        </Style>
+                    </chartingToolkit:LineSeries.DataPointStyle>
+                </chartingToolkit:LineSeries>
+            </chartingToolkit:Chart>
+            <chartingToolkit:Chart  x:Name="T8Chart_Copy" Title="T8" VerticalAlignment="Top" Margin="1025,1632,0,0" Height="174" HorizontalAlignment="Left" Width="857">
+                <chartingToolkit:LineSeries  DependentValuePath="Value" IndependentValuePath="Key" ItemsSource="{Binding}" IsSelectionEnabled="True" Margin="0,0,0,0">
+                    <chartingToolkit:LineSeries.DataPointStyle>
+                        <Style TargetType="{x:Type chartingToolkit:LineDataPoint}">
+                            <Setter Property="Opacity" Value="0" />
+                            <Setter Property="Background" Value="Blue" />
+                        </Style>
+                    </chartingToolkit:LineSeries.DataPointStyle>
+                </chartingToolkit:LineSeries>
+            </chartingToolkit:Chart>
+            <chartingToolkit:Chart  x:Name="FC6Chart_Copy" Title="FC6" VerticalAlignment="Top" Margin="1023,1809,0,0" Height="174" HorizontalAlignment="Left" Width="857">
+                <chartingToolkit:LineSeries  DependentValuePath="Value" IndependentValuePath="Key" ItemsSource="{Binding}" IsSelectionEnabled="True" Margin="0,0,0,0">
+                    <chartingToolkit:LineSeries.DataPointStyle>
+                        <Style TargetType="{x:Type chartingToolkit:LineDataPoint}">
+                            <Setter Property="Opacity" Value="0" />
+                            <Setter Property="Background" Value="Blue" />
+                        </Style>
+                    </chartingToolkit:LineSeries.DataPointStyle>
+                </chartingToolkit:LineSeries>
+            </chartingToolkit:Chart>
+            <chartingToolkit:Chart  x:Name="F4Chart_Copy" Title="F4" VerticalAlignment="Top" Margin="1023,1983,0,0" Height="174" HorizontalAlignment="Left" Width="857">
+                <chartingToolkit:LineSeries  DependentValuePath="Value" IndependentValuePath="Key" ItemsSource="{Binding}" IsSelectionEnabled="True" Margin="0,0,0,0">
+                    <chartingToolkit:LineSeries.DataPointStyle>
+                        <Style TargetType="{x:Type chartingToolkit:LineDataPoint}">
+                            <Setter Property="Opacity" Value="0" />
+                            <Setter Property="Background" Value="Blue" />
+                        </Style>
+                    </chartingToolkit:LineSeries.DataPointStyle>
+                </chartingToolkit:LineSeries>
+            </chartingToolkit:Chart>
+            <chartingToolkit:Chart  x:Name="F8Chart_Copy" Title="F8" VerticalAlignment="Top" Margin="1023,2158,0,0" Height="174" HorizontalAlignment="Left" Width="857">
+                <chartingToolkit:LineSeries  DependentValuePath="Value" IndependentValuePath="Key" ItemsSource="{Binding}" IsSelectionEnabled="True" Margin="0,0,0,0">
+                    <chartingToolkit:LineSeries.DataPointStyle>
+                        <Style TargetType="{x:Type chartingToolkit:LineDataPoint}">
+                            <Setter Property="Opacity" Value="0" />
+                            <Setter Property="Background" Value="Blue" />
+                        </Style>
+                    </chartingToolkit:LineSeries.DataPointStyle>
+                </chartingToolkit:LineSeries>
+            </chartingToolkit:Chart>
+            <chartingToolkit:Chart  x:Name="AF4Chart_Copy" Title="AF4" VerticalAlignment="Top" Margin="1023,2332,0,0" Height="174" HorizontalAlignment="Left" Width="857">
+                <chartingToolkit:LineSeries  DependentValuePath="Value" IndependentValuePath="Key" ItemsSource="{Binding}" IsSelectionEnabled="True" Margin="0,0,0,0">
+                    <chartingToolkit:LineSeries.DataPointStyle>
+                        <Style TargetType="{x:Type chartingToolkit:LineDataPoint}">
+                            <Setter Property="Opacity" Value="0" />
+                            <Setter Property="Background" Value="Blue" />
+                        </Style>
+                    </chartingToolkit:LineSeries.DataPointStyle>
+                </chartingToolkit:LineSeries>
+            </chartingToolkit:Chart>
+        </Grid>
     </ScrollViewer>
 
 </Window>

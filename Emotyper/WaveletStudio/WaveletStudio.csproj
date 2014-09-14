@@ -51,6 +51,7 @@
     <Compile Include="Blocks\EmotivRawDataBlock.cs" />
     <Compile Include="Blocks\IBlockInOutSignal.cs" />
     <Compile Include="Blocks\InputSeriesBlock.cs" />
+    <Compile Include="Blocks\OutputSeriesBlock.cs" />
     <Compile Include="Blocks\RelationalOperatorBlock.cs" />
     <Compile Include="Blocks\LogicOperationBlock.cs" />
     <Compile Include="Blocks\ShiftBlock.cs" />

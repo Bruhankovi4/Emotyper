@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WaveletStudio.Blocks;
 
 namespace WpfToolkitChart
 {
@@ -31,13 +32,17 @@ namespace WpfToolkitChart
     
     private void showColumnChart()
     {
-        List<Chart> charts = new List<Chart>{ AF3Chart,F7Chart,F3Chart,FC5Chart,T7Chart,P7Chart,O1Chart,O2Chart,P8Chart,T8Chart,FC6Chart,
-      F4Chart,F8Chart,AF4Chart};
+        List<Chart> charts = new List<Chart>{ AF3Chart,F7Chart,F3Chart,FC5Chart,T7Chart,P7Chart,O1Chart,O2Chart,P8Chart,T8Chart,FC6Chart,F4Chart,F8Chart,AF4Chart};
+        List<Chart> chartsPrime = new List<Chart> { AF3Chart_Copy, F7Chart_Copy, F3Chart_Copy, FC5Chart_Copy, T7Chart_Copy, P7Chart_Copy, O1Chart_Copy, O2Chart_Copy, P8Chart_Copy, T8Chart_Copy, FC6Chart_Copy, F4Chart_Copy, F8Chart_Copy, AF4Chart_Copy };
         DataTable table = CSVReader.ReadCSVFile("D://GitRepos//Emotyper//Emotyper//A//Sample0.csv", true);
 
         for (int i = 3; i < 17; i++)
         {
             ObservableCollection<KeyValuePair<double, double>> valueList = new ObservableCollection<KeyValuePair<double, double>>();
+            ObservableCollection<KeyValuePair<double, double>> valueListPrime = new ObservableCollection<KeyValuePair<double, double>>();
+
+            List<double> serie = new List<double>();
+            List<double> timespan = new List<double>();
            // String sensorName = table.Columns[i].ColumnName;
             for (int j = 0; j < table.Rows.Count; j++)
             {
@@ -45,45 +50,55 @@ namespace WpfToolkitChart
                 double time;
                 Double.TryParse(row[19].ToString(),out time);
                 double val;
-                Double.TryParse(row[i].ToString(), out val);
-                valueList.Add(new KeyValuePair<double, double>(time, val));          
+                Double.TryParse(row[i].ToString(), out val);                
+                serie.Add(val);
+                timespan.Add(time);
             }
-            
+            List<double> seriePrime = processOneSeries(serie);
+           
+            for (int k = 0; k < timespan.Count; k++)
+            {                  
+                valueList.Add(new KeyValuePair<double, double>(timespan[k],serie[k]));
+               
+            }
+            for (int k = 0; k < seriePrime.Count; k++)
+            {
+                valueListPrime.Add(new KeyValuePair<double, double>(timespan[k], seriePrime[k]));
+            }
             charts[i - 3].DataContext = valueList;
+            chartsPrime[i - 3].DataContext = valueListPrime;
         }
-    
-
-      //valueList.Add(new KeyValuePair<string, int>("Developer",60));
-      //valueList.Add(new KeyValuePair<string, int>("Misc", 20));
-      //valueList.Add(new KeyValuePair<string, int>("Tester", 50));
-      //valueList.Add(new KeyValuePair<string, int>("QA", 30));
-      //valueList.Add(new KeyValuePair<string, int>("Project Manager", 40));
-        //int[] arr = valueList.Select(x => x.Value).ToArray();
-      //Setting data for column chart
-      //columnChart.DataContext = valueList;
-      //// Setting data for pie chart
-      //pieChart.DataContext = valueList;
-      ////Setting data for area chart
-      //areaChart.DataContext = valueList;
-      ////Setting data for bar chart
-      //barChart.DataContext = valueList;
-      //Setting data for line chart
-
-      //AF3Chart.DataContext = valueList;
-      //F7Chart.DataContext = valueList;
-      //F3Chart.DataContext = valueList;
-      //FC5Chart.DataContext = valueList;
-      //T7Chart.DataContext = valueList;
-      //P7Chart.DataContext = valueList;
-      //O1Chart.DataContext = valueList;
-      //O2Chart.DataContext = valueList;
-      //P8Chart.DataContext = valueList;
-      //T8Chart.DataContext = valueList;
-      //FC6Chart.DataContext = valueList;
-      //F4Chart.DataContext = valueList;
-      //F8Chart.DataContext = valueList;
-      //AF4Chart.DataContext = valueList;
     }
+    private List<double> processOneSeries(List<double> serie)
+      {
+
+          //Declaring the blocks
+          var inputSeriesBlock = new InputSeriesBlock();
+        inputSeriesBlock.SetSeries(serie);
+          var dWTBlock = new DWTBlock
+          {
+              WaveletName = "Daubechies 10 (db10)",
+              Level = 1,
+              Rescale = false,
+              ExtensionMode = WaveletStudio.SignalExtension.ExtensionMode.AntisymmetricWholePoint
+          };
+          var outputSeriesBlock = new OutputSeriesBlock();
+
+          //Connecting the blocks
+          inputSeriesBlock.OutputNodes[0].ConnectTo(dWTBlock.InputNodes[0]);
+          dWTBlock.OutputNodes[1].ConnectTo(outputSeriesBlock.InputNodes[0]);
+
+          //Appending the blocks to a block list and execute all
+          var blockList = new BlockList();
+          blockList.Add(inputSeriesBlock);
+          blockList.Add(dWTBlock);
+          blockList.Add(outputSeriesBlock);
+          blockList.ExecuteAll();
+
+
+          
+          return outputSeriesBlock.GetSeries();
+      }
 
   }
 }

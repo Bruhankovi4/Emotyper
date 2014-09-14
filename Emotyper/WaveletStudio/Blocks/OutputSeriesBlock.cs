@@ -1,32 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
-using WaveletStudio.Blocks.CustomAttributes;
-using WaveletStudio.Properties;
 
 namespace WaveletStudio.Blocks
 {
-    /// <summary>
-    /// 
-    /// </summary>
     [Serializable]
-    public class InputSeriesBlock : BlockBase
+  public class OutputSeriesBlock:BlockBase
     {
+       
         private List<double> _series = new List<double>(); 
       /// <summary>
         /// Constructor
         /// </summary>
-        public InputSeriesBlock()
+        public OutputSeriesBlock()
         {
             BlockBase root = this;
-            CreateNodes(ref root);        
-          Start = 0;
-          Finish = 100;
-          SamplingInterval = 1;
-          SamplingRate = 1;
-
+            CreateNodes(ref root);
         }
 
         public List<double> GetSeries()
@@ -45,19 +35,19 @@ namespace WaveletStudio.Blocks
         /// <summary>
         /// Name
         /// </summary>
-        public override string Name { get { return "InputSeries"; } }
+        public override string Name { get { return "OutputSeries"; } }
 
         /// <summary>
         /// Description
         /// </summary>
-        public override string Description { get { return "InputSeries"; } }
+        public override string Description { get { return "OutputSeries"; } }
 
         /// <summary>
         /// Processing type
         /// </summary>
         public override ProcessingTypeEnum ProcessingType
         {
-            get { return ProcessingTypeEnum.LoadSignal; }
+            get { return ProcessingTypeEnum.Export; }
         }
 
    
@@ -66,19 +56,17 @@ namespace WaveletStudio.Blocks
         /// </summary>
         public override void Execute()
         {
-                  if (_series == null || !_series.Any())   //series is empty
-                  {
-                      return;
-                  }
-                  OutputNodes[0].Object = new List<Signal> { new Signal(_series.ToArray())
-                        {
-                            SamplingRate = SamplingRate,
-                            Start = Start,
-                            Finish = Finish,
-                            SamplingInterval = SamplingInterval
-                        }};
-                  if (Cascade && OutputNodes[0].ConnectingNode != null)
-                      OutputNodes[0].ConnectingNode.Root.Execute();    
+            var inputNode = InputNodes[0].ConnectingNode as BlockOutputNode;
+            if (inputNode == null || inputNode.Object == null)
+                return;
+            if (inputNode.Object.Count()>0)
+             _series= new List<double>(inputNode.Object[0].Samples);
+            //foreach (var inputSignal in inputNode.Object)
+            //{
+
+            //} 
+            //todo Fire event with processed data here  istead of foreach loop
+            
         }
 
         /// <summary>
@@ -87,7 +75,7 @@ namespace WaveletStudio.Blocks
         /// <param name="root"></param>
         protected override sealed void CreateNodes(ref BlockBase root)
         {
-            root.OutputNodes = BlockOutputNode.CreateSingleOutputSignal(ref root);
+            root.InputNodes = BlockInputNode.CreateSingleInputSignal(ref root);
         }
 
 
@@ -97,7 +85,7 @@ namespace WaveletStudio.Blocks
         /// <returns></returns>
         public override BlockBase Clone()
         {
-            var block = (InputSeriesBlock)MemberwiseClone();
+            var block = (OutputSeriesBlock)MemberwiseClone();
             block.Execute();
             return block;
         }
@@ -108,17 +96,10 @@ namespace WaveletStudio.Blocks
         /// <returns></returns>
         public override BlockBase CloneWithLinks()
         {
-            var block = (InputSeriesBlock)MemberwiseCloneWithLinks();
+            var block = (OutputSeriesBlock)MemberwiseCloneWithLinks();
             block.Execute();
             return block;
         }
-
-        public int SamplingRate { get; set; }
-
-        public double Start { get; set; }
-
-        public double Finish { get; set; }
-
-        public double SamplingInterval { get; set; }
     }
 }
+       

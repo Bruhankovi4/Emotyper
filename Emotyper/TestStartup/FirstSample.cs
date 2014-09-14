@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
- using WaveletStudio.Blocks;
-using WaveletStudio.Functions;
+﻿using WaveletStudio.Blocks;
 
 namespace WaveletStudio
 {

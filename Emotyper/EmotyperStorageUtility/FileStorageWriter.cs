@@ -79,7 +79,7 @@ namespace EmotyperStorageUtility
             engine.DataAcquisitionEnable((uint)userID, true);
 
             // ask for up to 1 second of buffered data
-            //engine.EE_DataSetBufferSizeInSec(0.3f);
+            engine.EE_DataSetBufferSizeInSec(1);
 
         }
       
