@@ -178,7 +178,14 @@ namespace WaveletStudio.Designer.Forms
             block.CurrentDirectory = CurrentDirectory;
             Designer.Document.Action = DesignerAction.Connect;
             Designer.Document.LinkType = LinkType.RightAngle;
-            var diagramBlock = ApplicationUtils.CreateDiagramBlock(block, true); ;
+            var diagramBlock = ApplicationUtils.CreateDiagramBlock(block, true);
+            if (block.Height != 0 && block.Width != 0)
+            {
+                diagramBlock.Size= new Size(block.Width,block.Height); 
+            }
+           
+                 
+           
             Designer.Document.AddElement(diagramBlock);
             Designer.Document.ClearSelection();
             Designer.Document.SelectElement(diagramBlock);

@@ -65,7 +65,9 @@ namespace WaveletStudio.Blocks
         /// Id of the block (changes for each instance)
         /// </summary>
         public Guid Id { get; set; }
-        
+
+        public int Height { get; set; }
+        public int Width { get; set; }
         /// <summary>
         /// Name of the block
         /// </summary>
