@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="EmotivHeadsetDataProvider.cs" />
     <Compile Include="FileStorageWriter.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -27,3 +27,5 @@ Emotyper/EmotyperStorageUtility/obj/Debug/EmotyperStorageUtility.csproj.FileList
 Emotyper/EmotyperStorageUtility/obj/Debug/EmotyperStorageUtility.csprojResolveAssemblyReference.cache
 Emotyper/EmotyperStorageUtility/obj/Debug/EmotyperStorageUtility.dll
 Emotyper/EmotyperStorageUtility/obj/Debug/EmotyperStorageUtility.pdb
+**/bin
+**/obj

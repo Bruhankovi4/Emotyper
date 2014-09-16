@@ -47,9 +47,6 @@
     <Content Include="DotNetEmotivSDK-vs2010.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="DotNetEmotivSDK-vs2010.pdb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="DotNetEmotivSDK.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

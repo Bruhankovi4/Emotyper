@@ -56,9 +56,8 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DiagramNet, Version=0.5.0.24023, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\res\libs\Diagram.net\DiagramNet.dll</HintPath>
+    <Reference Include="DiagramNet">
+      <HintPath>..\..\3rd party\DiagramNet.dll</HintPath>
     </Reference>
     <Reference Include="Qios.DevSuite.Components, Version=4.0.0.20, Culture=neutral, PublicKeyToken=3cc53827b79c92fa, processorArchitecture=MSIL">
       <HintPath>..\..\res\libs\Qios\Qios.DevSuite.Components.dll</HintPath>
@@ -70,8 +69,8 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="ZedGraph, Version=5.1.5.1817, Culture=neutral, PublicKeyToken=02a83cbd123fcd60, processorArchitecture=MSIL">
-      <HintPath>..\..\res\libs\ZedGraph\ZedGraph.dll</HintPath>
+    <Reference Include="ZedGraph">
+      <HintPath>..\packages\ZedGraph.5.1.6\lib\net35-Client\ZedGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -245,6 +244,7 @@
       <DependentUpon>Separator.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -471,6 +471,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+    <Content Include="License-LGPL.txt" />
     <None Include="icon1.ico" />
     <None Include="Resources\Images\imgxormini1.png" />
     <None Include="Resources\Images\imgwaveletmini1.png" />
