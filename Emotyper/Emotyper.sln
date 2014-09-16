@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIRecorder", "UIRecorder\UIRecorder.csproj", "{5E314CE8-C638-4CAB-A780-4DD558D661DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmotyperStorageUtility", "EmotyperStorageUtility\EmotyperStorageUtility.csproj", "{C5DA12F9-81DB-4AB4-BAE7-D2A3713B21CC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmotyperDataUtility", "EmotyperStorageUtility\EmotyperDataUtility.csproj", "{C5DA12F9-81DB-4AB4-BAE7-D2A3713B21CC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{F3953227-55F4-4E35-82CC-0E2232B48219}"
 EndProject

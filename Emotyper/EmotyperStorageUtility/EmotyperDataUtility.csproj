@@ -7,8 +7,8 @@
     <ProjectGuid>{C5DA12F9-81DB-4AB4-BAE7-D2A3713B21CC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EmotyperStorageUtility</RootNamespace>
-    <AssemblyName>EmotyperStorageUtility</AssemblyName>
+    <RootNamespace>EmotyperDataUtility</RootNamespace>
+    <AssemblyName>EmotyperDataUtility</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmotivHeadsetDataProvider.cs" />
     <Compile Include="FileStorageWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

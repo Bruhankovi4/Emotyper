@@ -94,9 +94,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EmotyperStorageUtility\EmotyperStorageUtility.csproj">
+    <ProjectReference Include="..\EmotyperStorageUtility\EmotyperDataUtility.csproj">
       <Project>{c5da12f9-81db-4ab4-bae7-d2a3713b21cc}</Project>
-      <Name>EmotyperStorageUtility</Name>
+      <Name>EmotyperDataUtility</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
