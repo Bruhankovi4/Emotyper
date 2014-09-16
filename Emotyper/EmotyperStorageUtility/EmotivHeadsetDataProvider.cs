@@ -19,7 +19,8 @@ namespace EmotyperDataUtility
             // connect to Emoengine.            
             engine.Connect();
         }
-        void engine_UserAdded_Event(object sender, EmoEngineEventArgs e)
+
+        static void engine_UserAdded_Event(object sender, EmoEngineEventArgs e)
         {
             Console.WriteLine("User Added Event has occured");
             // record the user 
