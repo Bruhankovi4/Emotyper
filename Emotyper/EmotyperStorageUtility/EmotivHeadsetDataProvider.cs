@@ -11,8 +11,8 @@ namespace EmotyperDataUtility
     class EmotivHeadsetDataProvider
     {
         private static EmoEngine engine; // Access to the EDK is viaa the EmoEngine 
-        private int userID = -1; // userID is used to uniquely identify a user's headset
-        private void initeEngine()
+        private static int userID = -1; // userID is used to uniquely identify a user's headset
+        private static void initEngine()
         {
             engine = EmoEngine.Instance;
             engine.UserAdded += new EmoEngine.UserAddedEventHandler(engine_UserAdded_Event);
@@ -29,11 +29,11 @@ namespace EmotyperDataUtility
             // ask for up to 1 second of buffered data
             engine.EE_DataSetBufferSizeInSec(1);
         }
-        Dictionary<EdkDll.EE_DataChannel_t, double[]> GetData()
+        static  Dictionary<EdkDll.EE_DataChannel_t, double[]>  GetData()
         {
             if (engine == null)
             {
-                initeEngine();
+                initEngine();
             }
             // Handle any waiting events
             engine.ProcessEvents();
