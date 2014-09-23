@@ -33,7 +33,6 @@ G:\Emotyper\Emotyper\UIRecorder\obj\Debug\UIRecorder.g.resources
 G:\Emotyper\Emotyper\UIRecorder\obj\Debug\UIRecorder.Properties.Resources.resources
 G:\Emotyper\Emotyper\UIRecorder\obj\Debug\UIRecorder.csproj.GenerateResource.Cache
 D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\DotNetEmotivSDK-vs2010.dll
-D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\DotNetEmotivSDK-vs2010.pdb
 D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\DotNetEmotivSDK.dll
 D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\edk.dll
 D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\edk_utils.dll
@@ -41,8 +40,11 @@ D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\DotNetEmotivSDK-vs20
 D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\UIRecorder.exe.config
 D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\UIRecorder.exe
 D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\UIRecorder.pdb
-D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\EmotyperStorageUtility.dll
-D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\EmotyperStorageUtility.pdb
+D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\EmotyperDataUtility.dll
+D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\Resources.dll
+D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\EmotyperDataUtility.pdb
+D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\Resources.pdb
+D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\DotNetEmotivSDK-vs2010.pdb
 D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\obj\Debug\UIRecorder.csprojResolveAssemblyReference.cache
 D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\obj\Debug\MainWindow.baml
 D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\obj\Debug\MainWindow.g.cs
