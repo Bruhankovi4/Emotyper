@@ -1,0 +1,12 @@
+﻿<Window x:Class="TableAndTileLegend.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:Core="clr-namespace:TechNewLogic.GraphIT;assembly=TechNewLogic.GraphIT">
+
+	<DockPanel>
+		<ContentControl x:Name="tableLegendHolder" DockPanel.Dock="Bottom" />
+		<ContentControl x:Name="tileLegendHolder" DockPanel.Dock="Right" Margin="0,15,0,15" />
+		<Core:CurveDisplay x:Name="CurveDisplay" Margin="15" />
+	</DockPanel>
+
+</Window>

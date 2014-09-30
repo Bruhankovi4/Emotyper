@@ -1,0 +1,163 @@
+﻿<UserControl x:Class="TechNewLogic.GraphIT.Hv.Horizontal.HStaticRulerControl"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:Horizontal="clr-namespace:TechNewLogic.GraphIT.Hv.Horizontal"
+		xmlns:MultiLanguage="clr-namespace:TechNewLogic.GraphIT.MultiLanguage"
+		xmlns:Core="clr-namespace:Microsoft.Expression.Interactivity.Core;assembly=Microsoft.Expression.Interactions"
+		mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300" x:Name="root"
+		HorizontalAlignment="Left" x:ClassModifier="internal">
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/TechNewLogic.GraphIT;component/Styles/PopupButton.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+	<VisualStateManager.CustomVisualStateManager>
+		<Core:ExtendedVisualStateManager />
+	</VisualStateManager.CustomVisualStateManager>
+
+	<VisualStateManager.VisualStateGroups>
+		<VisualStateGroup x:Name="CommonStates">
+			<VisualState x:Name="Normal" />
+			<VisualState x:Name="MouseOver">
+				<Storyboard>
+					<ColorAnimation Storyboard.TargetName="backgroundGrid"
+							Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+							To="#40ffff00" Duration="0:0:0.15" />
+				</Storyboard>
+			</VisualState>
+		</VisualStateGroup>
+		<VisualStateGroup x:Name="ReferenceStates">
+			<VisualState x:Name="Reference">
+				<Storyboard>
+					<ObjectAnimationUsingKeyFrames Storyboard.TargetName="rulerBorder"
+							Storyboard.TargetProperty="Stroke">
+						<DiscreteObjectKeyFrame Value="{x:Static Brushes.Yellow}" KeyTime="0:0:0" />
+					</ObjectAnimationUsingKeyFrames>
+				</Storyboard>
+			</VisualState>
+			<VisualState x:Name="NoReference" />
+		</VisualStateGroup>
+		<VisualStateGroup x:Name="MenuStates">
+			<VisualState x:Name="MenuOpen">
+				<Storyboard>
+					<DoubleAnimation Storyboard.TargetName="popupGrid" Duration="0:0:0.15"
+							Storyboard.TargetProperty="Opacity" To="1" />
+				</Storyboard>
+			</VisualState>
+			<VisualState x:Name="MenuClosed" />
+		</VisualStateGroup>
+	</VisualStateManager.VisualStateGroups>
+
+	<UserControl.RenderTransform>
+		<TranslateTransform x:Name="transform" />
+	</UserControl.RenderTransform>
+
+	<!-- Ganz wichtig (wegen der Berechnung der Werte / vor allem Binärkurven: Schauen, dass der weiße Lineal-Strich auch tatsächlich in der Mitte liegt (Margin-Verschiebungen beachten -->
+	<Grid DataContext="{Binding ElementName=root}" Margin="-2,0,0,0">
+		<Control VerticalAlignment="Top" x:Name="popupTarget" />
+		<Popup x:Name="menuPopup" PlacementTarget="{Binding ElementName=popupTarget}" IsOpen="True"
+				Placement="Bottom" AllowsTransparency="True">
+			<Grid Background="#01000000" x:Name="popupGrid" Opacity="0">
+				<Border Background="{DynamicResource GeneralBackground}"
+						BorderBrush="{DynamicResource GeneralForeground}" BorderThickness="1"
+						CornerRadius="0,5,5,0" Margin="2,15,0,0">
+					<StackPanel Margin="5">
+						<Button Content="{x:Static MultiLanguage:MlResources.Remove}"
+								Command="{Binding RemoveCommand}" Margin="3"
+								Style="{StaticResource PopupButtonStyle}" />
+						<ToggleButton Content="{x:Static MultiLanguage:MlResources.ToggleReference}"
+								IsChecked="{Binding IsReference, Mode=OneWay}"
+								Style="{StaticResource PopupButtonStyle}"
+								Command="{Binding SetAsReferenceCommand}" Margin="3" />
+					</StackPanel>
+				</Border>
+			</Grid>
+		</Popup>
+
+		<Rectangle x:Name="rulerBorder" Stroke="{DynamicResource GeneralForeground}"
+				StrokeThickness="0.5" Margin="2,0" Width="1" HorizontalAlignment="Center" />
+		<Grid x:Name="backgroundGrid" Background="Transparent" Margin="-3,0" />
+
+		<Canvas>
+			<Canvas.Resources>
+				<Style TargetType="TextBlock" x:Key="{x:Type TextBlock}">
+					<!-- GeneralForeground muss bei den textBlocks direkt gesetzt werden, da es hier keine Auswirkungen hat -->
+					<Setter Property="HorizontalAlignment" Value="Center" />
+				</Style>
+			</Canvas.Resources>
+
+			<!-- Ruler Diff Control (To Next Ruler) -->
+			<Grid Canvas.Left="3" Canvas.Top="15" Width="{Binding ToNextRulerWidth}"
+					Visibility="{Binding RulerDiffVisibility}">
+				<Rectangle Stroke="{DynamicResource GeneralForeground}" StrokeThickness="0.5"
+						Height="1" VerticalAlignment="Center" />
+				<Path Data="M0,0.5 1,1 1,0 0,0.5" Fill="{DynamicResource GeneralForeground}"
+						Width="7" Height="7" VerticalAlignment="Center" Stretch="Uniform"
+						HorizontalAlignment="Left" />
+				<Path Data="M0,0 0,1 1,0.5 0,0" Fill="{DynamicResource GeneralForeground}" Width="7"
+						Height="7" VerticalAlignment="Center" Stretch="Uniform"
+						HorizontalAlignment="Right" />
+				<!-- OPT: Identisch mit DynamicRulerLabel -->
+				<Border BorderBrush="{DynamicResource GeneralForeground}" BorderThickness="1"
+						HorizontalAlignment="Center"
+						Background="{DynamicResource GeneralBackground}">
+					<StackPanel>
+						<TextBlock Text="{Binding NextRulerDiffText}" Margin="2"
+								FlowDirection="LeftToRight"
+								Foreground="{DynamicResource GeneralForeground}" />
+						<TextBlock Text="{Binding TimeDiffText}" Margin="2,0,2,2"
+								Foreground="{DynamicResource GeneralForeground}" />
+					</StackPanel>
+				</Border>
+			</Grid>
+
+			<!-- Ruler Diff Control (To reference Ruler) -->
+			<Grid x:Name="refDiffPanel" Canvas.Top="15"
+					FlowDirection="{Binding DiffPanelFlowDirection}"
+					HorizontalAlignment="{Binding DiffPanelAlignment}"
+					Visibility="{Binding RefDiffVisibility}" MaxWidth="{Binding RefDiffMaxWidth}">
+				<Canvas.Left>
+					<MultiBinding>
+						<Binding Path="PositionToReference" ElementName="root" />
+						<Binding Path="ActualWidth" ElementName="refDiffPanel" />
+						<Binding Path="MaxWidth" ElementName="refDiffPanel" />
+						<MultiBinding.Converter>
+							<!-- Der Offset muss identisch sein mit dem Canvas.Left Wert aus dem links alignten Control -->
+							<Horizontal:RulerPositionConverter Offset="3" />
+						</MultiBinding.Converter>
+					</MultiBinding>
+				</Canvas.Left>
+				<StackPanel Orientation="Horizontal">
+					<Rectangle x:Name="leftLine" Width="10"
+							Stroke="{DynamicResource GeneralForeground}" StrokeThickness="0.5"
+							Height="1" VerticalAlignment="Center" HorizontalAlignment="Left" />
+					<!-- OPT: Identisch mit DynamicRulerLabel -->
+					<Border BorderBrush="{DynamicResource GeneralForeground}" BorderThickness="1"
+							HorizontalAlignment="Center"
+							Background="{DynamicResource GeneralBackground}">
+						<StackPanel>
+							<TextBlock Text="{Binding RefRulerDiffText}" Margin="2"
+									FlowDirection="LeftToRight"
+									Foreground="{DynamicResource GeneralForeground}" />
+							<TextBlock Text="{Binding TimeDiffText}" Margin="2,0,2,2"
+									Foreground="{DynamicResource GeneralForeground}" />
+						</StackPanel>
+					</Border>
+					<Rectangle x:Name="rightLine" Width="10"
+							Stroke="{DynamicResource GeneralForeground}" StrokeThickness="0.5"
+							Height="1" VerticalAlignment="Center" HorizontalAlignment="Left" />
+					<Path x:Name="rightArrow" Data="M0,0 0,1 1,0.5 0,0"
+							Fill="{DynamicResource GeneralForeground}" Width="7" Height="7"
+							VerticalAlignment="Center" Stretch="Uniform" HorizontalAlignment="Right" />
+				</StackPanel>
+			</Grid>
+		</Canvas>
+	</Grid>
+
+</UserControl>

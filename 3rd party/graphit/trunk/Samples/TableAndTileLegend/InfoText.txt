@@ -1,0 +1,1 @@
+﻿There a two built-in types of legend. Table and tile. The table legend comes with analysis functionality (set some rulers to see), while the tile legend gives a good overview of your curve data.

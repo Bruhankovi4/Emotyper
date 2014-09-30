@@ -1,0 +1,1 @@
+﻿The built-in printing and print preview functionality allows you to make hard copies of your curves. It is also possible to add custom content (WPF type 'Visual') around the curve display.

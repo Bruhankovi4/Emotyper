@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	
+  <ItemGroup>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dependencies\NET40\Microsoft.Expression.Interactions-2.0.20520.0\Microsoft.Expression.Interactions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PreBuildEvent Condition=" '$(Framework)|$(Configuration)' == 'NET40|Release' ">
+IF EXIST "$(ProjectDir)..\..\Samples\binaries" (del /Q "$(SolutionDir)..\Samples\binaries\*.*")
+IF EXIST "$(ProjectDir)..\binaries\NET40" (del /Q "$(ProjectDir)..\binaries\NET40\*.*")
+	</PreBuildEvent>
+    <PostBuildEvent Condition=" '$(Framework)|$(Configuration)' == 'NET40|Release' ">
+xcopy "$(TargetDir)TechNewLogic.GraphIT.*" "$(ProjectDir)..\..\Samples\binaries" /E /I
+xcopy "$(TargetDir)TechNewLogic.GraphIT.*" "$(ProjectDir)..\binaries\NET40" /E /I
+	</PostBuildEvent>
+  </PropertyGroup>
+
+</Project>

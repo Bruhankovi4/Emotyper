@@ -1,0 +1,14 @@
+﻿<Window x:Class="Printing.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:Core="clr-namespace:TechNewLogic.GraphIT;assembly=TechNewLogic.GraphIT">
+
+	<DockPanel>
+		<ToolBar DockPanel.Dock="Top">
+			<Button Content="Print Preview" Click="PrintPreview_Click" />
+			<Button Content="Print" Click="Print_Click" />
+		</ToolBar>
+		<Core:CurveDisplay x:Name="CurveDisplay" Margin="15" />
+	</DockPanel>
+
+</Window>

@@ -1,0 +1,9 @@
+﻿<Window x:Class="SimpleCurve.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:Core="clr-namespace:GraphIT;assembly=GraphIT"
+		Title="GraphIT Simple Curve Demo" Height="800" Width="1000" Background="Black">
+
+	<Core:CurveDisplay x:Name="CurveDisplay" Margin="15" />
+
+</Window>

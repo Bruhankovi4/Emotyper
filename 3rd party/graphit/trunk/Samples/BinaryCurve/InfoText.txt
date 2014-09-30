@@ -1,0 +1,4 @@
+﻿Binary curves are a little bit different from the (default) floating curves:
+  - their values in legends or rulers are not interpolated (they only show 0 or 1)
+  - they have only 2 y-scale labels (0 and 1) which move (instead of being fixed)
+  - they cannot be grouped with floating curves

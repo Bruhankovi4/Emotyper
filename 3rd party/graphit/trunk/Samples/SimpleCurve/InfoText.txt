@@ -1,0 +1,5 @@
+﻿Here, we see a quite simple curve with line visualization.
+Try out the following:
+  - pan the canvas or the axes with the mouse
+  - zoom the canvas or the axes with with scroll wheel
+  - double-click on the canvas to create some rulers

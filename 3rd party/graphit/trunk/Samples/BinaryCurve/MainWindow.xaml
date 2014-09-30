@@ -1,0 +1,8 @@
+﻿<Window x:Class="BinaryCurve.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:Core="clr-namespace:TechNewLogic.GraphIT;assembly=TechNewLogic.GraphIT">
+
+	<Core:CurveDisplay x:Name="CurveDisplay" Margin="15" />
+
+</Window>

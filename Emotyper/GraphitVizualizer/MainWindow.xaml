@@ -1,0 +1,21 @@
+﻿<Window x:Class="GraphitVizualizer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:graphIt="clr-namespace:TechNewLogic.GraphIT;assembly=TechNewLogic.GraphIT"
+        Title="MainWindow" Height="1080" Width="1920" Closed="Window_Closed">
+
+    <DockPanel>
+        <Grid HorizontalAlignment="Left" Height="1029" VerticalAlignment="Top" Width="1912" RenderTransformOrigin="0.497,0.495" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <!--<ContentControl x:Name="tableLegendHolder" Margin="0,912,0,0">--> 
+            <!--</ContentControl>-->
+            <graphIt:CurveDisplay Grid.Column="0" x:Name="RawDisplay" />                        
+            <graphIt:CurveDisplay  Grid.Column="1" x:Name="TransformedDisplay"/>
+           
+        </Grid>
+
+    </DockPanel>
+</Window>

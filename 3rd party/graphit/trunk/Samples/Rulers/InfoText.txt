@@ -1,0 +1,1 @@
+﻿You can add rulers by double-clicking on the curve canvas or you can do it programatically by the API. If you have 2 or more rulers, hover over a curve to see some additional information between the curves. If one ruler is set as 'reference', all other rulers will refer to this one.

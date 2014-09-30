@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="TestHost.OnlineOfflineLegend"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d"
+		d:DesignHeight="300" d:DesignWidth="300" x:Name="root">
+
+	<Grid>
+		<!-- Hintergrund -->
+		<Rectangle Fill="#032237" />
+		<Rectangle>
+			<Rectangle.Fill>
+				<LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+					<GradientStop Color="#50ffffff" Offset="0" />
+					<GradientStop Color="#20ffffff" Offset="1" />
+				</LinearGradientBrush>
+			</Rectangle.Fill>
+		</Rectangle>
+		
+		<Grid>
+			<ContentControl x:Name="onlineLegendHolder" />
+			<ContentControl x:Name="offlineLegendHolder" />
+		</Grid>
+
+		<!-- Separator Line -->
+		<UniformGrid Rows="2" Height="2" VerticalAlignment="Bottom">
+			<Rectangle Fill="#500E0E0E" />
+			<Rectangle Fill="#50D0D0D0" />
+		</UniformGrid>
+	</Grid>
+
+</UserControl>

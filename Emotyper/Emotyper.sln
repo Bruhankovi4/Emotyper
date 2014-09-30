@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaveletStudio.Designer", "W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestStartup", "TestStartup\TestStartup.csproj", "{3C7EE759-8DDD-4D94-B37C-59CB9614041F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphitVizualizer", "GraphitVizualizer\GraphitVizualizer.csproj", "{8E580FC4-F1EA-4595-A860-583F8AF30169}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,16 @@ Global
 		{3C7EE759-8DDD-4D94-B37C-59CB9614041F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{3C7EE759-8DDD-4D94-B37C-59CB9614041F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{3C7EE759-8DDD-4D94-B37C-59CB9614041F}.Release|x86.ActiveCfg = Release|Any CPU
+		{8E580FC4-F1EA-4595-A860-583F8AF30169}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E580FC4-F1EA-4595-A860-583F8AF30169}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E580FC4-F1EA-4595-A860-583F8AF30169}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8E580FC4-F1EA-4595-A860-583F8AF30169}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8E580FC4-F1EA-4595-A860-583F8AF30169}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8E580FC4-F1EA-4595-A860-583F8AF30169}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E580FC4-F1EA-4595-A860-583F8AF30169}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E580FC4-F1EA-4595-A860-583F8AF30169}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8E580FC4-F1EA-4595-A860-583F8AF30169}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8E580FC4-F1EA-4595-A860-583F8AF30169}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

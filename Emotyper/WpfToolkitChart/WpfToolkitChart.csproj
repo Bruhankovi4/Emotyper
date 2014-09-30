@@ -38,7 +38,7 @@
   <ItemGroup>
     <Reference Include="DotNetEmotivSDK-vs2010, Version=0.8.4.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Resources\DotNetEmotivSDK-vs2010.dll</HintPath>
+      <HintPath>..\UIRecorder\bin\Debug\DotNetEmotivSDK-vs2010.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

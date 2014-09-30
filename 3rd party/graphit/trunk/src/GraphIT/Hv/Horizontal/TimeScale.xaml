@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="TechNewLogic.GraphIT.Hv.Horizontal.TimeScale"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:Horizontal="clr-namespace:TechNewLogic.GraphIT.Hv.Horizontal"
+		xmlns:Core="clr-namespace:Microsoft.Expression.Interactivity.Core;assembly=Microsoft.Expression.Interactions"
+		mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300" x:Name="root"
+		x:ClassModifier="internal">
+
+	<VisualStateManager.CustomVisualStateManager>
+		<Core:ExtendedVisualStateManager />
+	</VisualStateManager.CustomVisualStateManager>
+
+	<!--<VisualStateManager.VisualStateGroups>
+		<VisualStateGroup x:Name="CommonStates">
+			<VisualState x:Name="Normal" />
+			<VisualState x:Name="MouseOver">
+				<Storyboard>
+					<ObjectAnimationUsingKeyFrames Storyboard.TargetName="intervalCanvas"
+							Storyboard.TargetProperty="Visibility">
+						<DiscreteObjectKeyFrame KeyTime="0:0:0"
+								Value="{x:Static Visibility.Visible}" />
+					</ObjectAnimationUsingKeyFrames>
+				</Storyboard>
+			</VisualState>
+		</VisualStateGroup>
+	</VisualStateManager.VisualStateGroups>-->
+
+	<Grid DataContext="{Binding ElementName=root}">
+
+		<Rectangle Height="1" Fill="{DynamicResource GeneralForeground}" VerticalAlignment="Top"
+				Margin="0,2,0,0" />
+
+		<Grid x:Name="sectionGrid" />
+
+		<!-- Vor / Zurück blättern -->
+		<Canvas x:Name="IntervalCanvas" VerticalAlignment="Top" Visibility="Visible">
+			<Horizontal:IntervalControl VerticalAlignment="Top" Canvas.Bottom="-3" Canvas.Left="0"
+					IntervalLeftCommand="{Binding IntervalLeftCommand}"
+					IntervalRightCommand="{Binding IntervalRightCommand}"
+					IsInOfflineMode="{Binding IsInOfflineMode}" />
+			<Horizontal:IntervalControl VerticalAlignment="Top" Canvas.Bottom="-3" Canvas.Right="0"
+					IntervalLeftCommand="{Binding IntervalLeftCommand}"
+					IntervalRightCommand="{Binding IntervalRightCommand}"
+					IsInOfflineMode="{Binding IsInOfflineMode}" />
+		</Canvas>
+
+		<Canvas>
+			<Horizontal:DynamicRulerLabel x:Name="DynamicRulerLabel" Visibility="Collapsed" />
+		</Canvas>
+
+		<Grid x:Name="MoveScaleSurface" Background="Transparent" />
+	</Grid>
+
+</UserControl>

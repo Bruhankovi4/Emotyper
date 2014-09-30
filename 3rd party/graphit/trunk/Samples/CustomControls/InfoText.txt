@@ -1,0 +1,4 @@
+﻿There's the possibility to add custom controls (i.e. any WPF UIElement). There are 3 possibilities:
+  - place a control to the curve surface with fixed time and fixed y-screen coordinate
+  - pin a control to a curve (with a given point in time) and a fixed y-coordinate refering to the curve axis
+  - pin a control to a curve (with a given point in time) and place it automatically to the y-coordinate of that curve

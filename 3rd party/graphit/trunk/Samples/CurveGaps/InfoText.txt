@@ -1,0 +1,1 @@
+﻿Curve data doesn't have to be continuous. You can add a gap in a curve by adding an entry with a pre-defined value (double.NaN by default) that will be interpreted as gap.

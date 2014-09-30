@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="TechNewLogic.GraphIT.Hv.Legend.TableCellControl"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d"
+		d:DesignHeight="300" d:DesignWidth="300" x:Name="root">
+
+	<!-- HACK: Margin von -6, weil der GridViewRowPresenter einen hard-codeten Margin hat. 
+		Siehe hier: http://stackoverflow.com/questions/1351605/where-are-the-margins-padding-set-on-a-wpf-listview-gridview -->
+
+	<!-- Wichtig: KEINEN DataContext setzen, da das Auswirkungen auf die Controls von ControlContent Property hat. -->
+
+	<Grid Margin="-7,0,-8,0">
+		<Border Background="{Binding CellBackground, ElementName=root}" Margin="3,0,-1,0"
+				BorderBrush="{DynamicResource foregroundBrush}" BorderThickness="1,0,1,1">
+			<Grid Margin="6,3" MinWidth="60">
+				<TextBlock Text="{Binding Text, ElementName=root}" HorizontalAlignment="Center"
+						VerticalAlignment="Center" />
+				<ContentControl Content="{Binding ControlContent, ElementName=root}" />
+			</Grid>
+		</Border>
+	</Grid>
+
+</UserControl>

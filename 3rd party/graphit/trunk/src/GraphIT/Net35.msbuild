@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	
+  <ItemGroup>
+    <Reference Include="WPFToolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dependencies\NET35\WPF Toolkit v3.5.50211.1\WPFToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dependencies\NET35\Microsoft.Expression.Interactions-1.0.1340.0\Microsoft.Expression.Interactions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PreBuildEvent Condition=" '$(Framework)|$(Configuration)' == 'NET35|Release' ">
+IF EXIST "$(ProjectDir)..\binaries\NET35" (del /Q "$(ProjectDir)..\binaries\NET35\*.*")
+	</PreBuildEvent>
+    <PostBuildEvent Condition=" '$(Framework)|$(Configuration)' == 'NET35|Release' ">
+xcopy "$(TargetDir)TechNewLogic.GraphIT.*" "$(ProjectDir)..\binaries\NET35" /E /I
+	</PostBuildEvent>
+  </PropertyGroup>
+
+</Project>

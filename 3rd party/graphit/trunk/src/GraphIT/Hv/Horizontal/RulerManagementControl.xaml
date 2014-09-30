@@ -1,0 +1,104 @@
+﻿<UserControl x:Class="TechNewLogic.GraphIT.Hv.Horizontal.RulerManagementControl"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:Helper="clr-namespace:TechNewLogic.GraphIT.Helper"
+		xmlns:MultiLanguage="clr-namespace:TechNewLogic.GraphIT.MultiLanguage"
+		xmlns:Core="clr-namespace:Microsoft.Expression.Interactivity.Core;assembly=Microsoft.Expression.Interactions"
+		mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300" x:Name="root"
+		x:ClassModifier="internal">
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/TechNewLogic.GraphIT;component/Styles/PopupButton.xaml" />
+				<ResourceDictionary Source="/TechNewLogic.GraphIT;component/Styles/RoundButton.xaml" />
+				<ResourceDictionary
+						Source="/TechNewLogic.GraphIT;component/Styles/ScrollViewerStyle.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+	<VisualStateManager.CustomVisualStateManager>
+		<Core:ExtendedVisualStateManager />
+	</VisualStateManager.CustomVisualStateManager>
+
+	<VisualStateManager.VisualStateGroups>
+		<VisualStateGroup x:Name="CommonStates">
+			<VisualState x:Name="Normal" />
+			<VisualState x:Name="MouseOver">
+				<Storyboard>
+					<DoubleAnimation Storyboard.TargetName="LayoutRoot"
+							Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.15" />
+					<ObjectAnimationUsingKeyFrames Duration="0:0:0" Storyboard.TargetName="menu"
+							Storyboard.TargetProperty="Visibility">
+						<DiscreteObjectKeyFrame Value="{x:Static Visibility.Visible}" />
+					</ObjectAnimationUsingKeyFrames>
+					<DoubleAnimation Storyboard.TargetName="menu"
+							Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.15" />
+				</Storyboard>
+			</VisualState>
+		</VisualStateGroup>
+		<VisualStateGroup x:Name="RulerStates">
+			<VisualState x:Name="Empty" />
+			<VisualState x:Name="RulersPresent">
+				<Storyboard>
+					<DoubleAnimation Storyboard.TargetName="noRulersText"
+							Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.15" />
+				</Storyboard>
+			</VisualState>
+		</VisualStateGroup>
+	</VisualStateManager.VisualStateGroups>
+
+	<DockPanel x:Name="LayoutRoot" Opacity="0.4" DataContext="{Binding ElementName=root}">
+		<Border Background="{DynamicResource GeneralBackground}" BorderThickness="1.5"
+				HorizontalAlignment="Left" BorderBrush="{DynamicResource GeneralForeground}"
+				DockPanel.Dock="Top">
+			<TextBlock Foreground="{DynamicResource GeneralForeground}"
+					Text="{x:Static MultiLanguage:MlResources.Rulers}" Margin="3" />
+		</Border>
+		<Border x:Name="menu" Background="{DynamicResource GeneralBackground}" Opacity="0"
+				Visibility="Collapsed" BorderThickness="1.5" Margin="0,-1.5,0,0"
+				BorderBrush="{DynamicResource GeneralForeground}">
+			<Grid Margin="10">
+				<TextBlock x:Name="noRulersText"
+						Text="{x:Static MultiLanguage:MlResources.NoRulersPresent}"
+						Foreground="{DynamicResource GeneralForeground}" FontSize="12" />
+				<ScrollViewer VerticalScrollBarVisibility="Auto">
+					<ItemsControl ItemsSource="{Binding RulerViewModels}">
+						<ItemsControl.Resources>
+							<Helper:BoolBrushConverter x:Key="isRefBrushConverter"
+									TrueBrush="Yellow" FalseBrush="{x:Null}" />
+						</ItemsControl.Resources>
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Grid>
+									<Rectangle Opacity="0.39"
+											Fill="{Binding IsReference, Converter={StaticResource isRefBrushConverter}}" />
+									<Border BorderThickness="1"
+											BorderBrush="{Binding IsReference, Converter={StaticResource isRefBrushConverter}}">
+										<StackPanel Orientation="Horizontal" Margin="7">
+											<TextBlock
+													Foreground="{DynamicResource GeneralForeground}"
+													Text="{Binding Name}" VerticalAlignment="Center"
+													Margin="0,0,5,0" Width="20" />
+											<Button Content="{Binding Position}"
+													Style="{StaticResource PopupButtonStyle}"
+													Padding="2" Command="{Binding GotoCommand}" />
+											<Button Style="{StaticResource PopupButtonStyle}"
+													Content="{x:Static MultiLanguage:MlResources.Delete}"
+													Padding="2" Margin="-1,0,0,0"
+													Command="{Binding DeleteCommand}" />
+										</StackPanel>
+									</Border>
+								</Grid>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</ScrollViewer>
+			</Grid>
+		</Border>
+	</DockPanel>
+
+</UserControl>

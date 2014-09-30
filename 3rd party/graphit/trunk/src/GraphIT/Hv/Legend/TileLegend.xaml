@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="TechNewLogic.GraphIT.Hv.Legend.TileLegend"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:Legend="clr-namespace:TechNewLogic.GraphIT.Hv.Legend" mc:Ignorable="d"
+		d:DesignHeight="300" d:DesignWidth="300" x:Name="root">
+
+	<Grid DataContext="{Binding ViewModel,ElementName=root}" Background="{DynamicResource GeneralBackground}">
+		<ItemsControl ItemsSource="{Binding Curves}">
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<Legend:UniformWrapPanel MaxRows="5" IsItemsHost="True" />
+					<!--<WrapPanel IsItemsHost="True" />-->
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<Legend:TileControl ViewModel="{Binding}"
+							Width="{Binding TileWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Legend:TileLegend}}}" />
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
+	</Grid>
+
+</UserControl>

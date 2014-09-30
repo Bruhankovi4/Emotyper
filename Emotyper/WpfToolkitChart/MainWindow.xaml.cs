@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls.DataVisualization.Charting;
+﻿
+
+using System.Windows.Controls.DataVisualization.Charting;
 using System.Windows.Threading;
 using Com.StellmanGreene.CSVReader;
 using System;
@@ -11,7 +13,7 @@ using System.Windows.Documents;
 using Emotiv;
 using EmotyperDataUtility;
 using WaveletStudio.Blocks;
-
+using System.Timers;
 namespace WpfToolkitChart
 {
   /// <summary>
@@ -19,35 +21,77 @@ namespace WpfToolkitChart
   /// </summary>
   public partial class MainWindow : Window
   {
-      public static List< List<KeyValuePair<double, double>>> dataContexts = new List<List<KeyValuePair<double, double>>>();
-      public static List<List<KeyValuePair<double, double>>> dataContextsPrime = new List<List<KeyValuePair<double, double>>>(); 
+      public static List<ObservableCollection<KeyValuePair<double, double>>> dataContexts = new List<ObservableCollection<KeyValuePair<double, double>>>();
+      public static List<ObservableCollection<KeyValuePair<double, double>>> dataContextsPrime = new List<ObservableCollection<KeyValuePair<double, double>>>();
+      private List<Chart> charts;
+      private List<Chart> chartsPrime;
+      static Timer _timer;
 
     public MainWindow()
     {
       InitializeComponent();  
         EmotypeEventSource source = new EmotypeEventSource();
        // source.fireDictionary = false;
+        _timer = new Timer(1000);
+        _timer.Elapsed += new ElapsedEventHandler(_timer_Elapsed);
+        _timer.Enabled = true;
         initContexts();
       source.OnDataArrived += OnDataArrived;
      // showColumnChart();
         source.Start();
     }
 
-    private void initContexts()
+      private void _timer_Elapsed(object sender, ElapsedEventArgs e)
+      {
+          Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>cropContexts()));
+      }
+
+      private void cropContexts()
+      {
+          int length;
+          for (int i = 0; i < charts.Count; i++)
+          {
+              List<KeyValuePair<double, double>> temp = new List<KeyValuePair<double, double>>();
+              length = dataContexts[i].Count;
+              if (length > 200)
+              {
+                  lock (dataContexts[i])
+                  {
+                                                  
+                     dataContexts[i] = new ObservableCollection<KeyValuePair<double, double>>(dataContexts[i].ToList().GetRange(length-201,200));
+                      charts[i].DataContext = dataContexts[i];                  
+                   }
+              }
+              length = dataContextsPrime[i].Count;
+              if (length > 200)
+              {
+                  lock (dataContextsPrime[i])
+                  {
+                      dataContextsPrime[i] = new ObservableCollection<KeyValuePair<double, double>>(dataContextsPrime[i].ToList().GetRange(length - 201, 200));
+                      chartsPrime[i].DataContext = dataContextsPrime[i];
+                  }
+
+              }
+          }
+      }
+
+
+      private void initContexts()
     {
-        List<Chart> charts = new List<Chart> { AF3Chart, F7Chart, F3Chart, FC5Chart, T7Chart, P7Chart, O1Chart, O2Chart, P8Chart, T8Chart, FC6Chart, F4Chart, F8Chart, AF4Chart };
-        List<Chart> chartsPrime = new List<Chart> { AF3Chart_Copy, F7Chart_Copy, F3Chart_Copy, FC5Chart_Copy, T7Chart_Copy, P7Chart_Copy, O1Chart_Copy, O2Chart_Copy, P8Chart_Copy, T8Chart_Copy, FC6Chart_Copy, F4Chart_Copy, F8Chart_Copy, AF4Chart_Copy };
+        charts = new List<Chart> { AF3Chart, F7Chart, F3Chart, FC5Chart, T7Chart, P7Chart, O1Chart, O2Chart, P8Chart, T8Chart, FC6Chart, F4Chart, F8Chart, AF4Chart };
+        chartsPrime = new List<Chart> { AF3Chart_Copy, F7Chart_Copy, F3Chart_Copy, FC5Chart_Copy, T7Chart_Copy, P7Chart_Copy, O1Chart_Copy, O2Chart_Copy, P8Chart_Copy, T8Chart_Copy, FC6Chart_Copy, F4Chart_Copy, F8Chart_Copy, AF4Chart_Copy };
+       
         for (int i = 0; i < charts.Count(); i++)
         {
-            List<KeyValuePair<double, double>> context = new List<KeyValuePair<double, double>>(); 
+            ObservableCollection<KeyValuePair<double, double>> context = new ObservableCollection<KeyValuePair<double, double>>(); 
             dataContexts.Add(context);
             charts[i].DataContext = context;
         }
         for (int i = 0; i < chartsPrime.Count(); i++)
         {
-            List<KeyValuePair<double, double>> context = new List<KeyValuePair<double, double>>();
+            ObservableCollection<KeyValuePair<double, double>> context = new ObservableCollection<KeyValuePair<double, double>>();
             dataContextsPrime.Add(context);
-            chartsPrime[i].DataContext = context;
+            chartsPrime[i].DataContext =context;
         }
         
     }
@@ -62,6 +106,24 @@ namespace WpfToolkitChart
          }
         
      }
+     void addPointsToContext(int index, List<double> time, List<double> vals)
+     {
+         List< KeyValuePair<double,double>> temp = new List<KeyValuePair<double, double>>(); 
+         for (int i = 0; i < vals.Count; i++)
+         {
+             temp.Add(new KeyValuePair<double, double>(time[i], vals[i]));
+         }
+         try
+         {
+             dataContexts[index]=new ObservableCollection<KeyValuePair<double, double>>(dataContexts[index].Concat(temp));
+            charts[index].DataContext = dataContexts[index];
+
+         }
+         catch (Exception)
+         {
+         }
+
+     }
      void addPointToContextPrime(int index, KeyValuePair<double, double> pair)
      {
          try
@@ -74,56 +136,43 @@ namespace WpfToolkitChart
          
      }
 
-      private void invalidateWindow()
-      {
-          this.InvalidateVisual();
-      }
-
       void OnDataArrived(object sender, EmoEventDictionary e)
     {
        
         Dictionary<EdkDll.EE_DataChannel_t, double[]> data = e.Dictionary;
         if (data==null)
             return;
-        int bufferSize = data[EdkDll.EE_DataChannel_t.TIMESTAMP].Length;
-       // foreach (EdkDll.EE_DataChannel_t channel in data.Keys)
-       //     {
-                double[] timestamp = data[EdkDll.EE_DataChannel_t.TIMESTAMP];
-                //data[channel].Add(data[channel][i]);
-               // int k = 2;
-               //if (k > 17)
-               //    break;
-               // k++;
-                //ObservableCollection<KeyValuePair<double, double>> valueList = new ObservableCollection<KeyValuePair<double, double>>();
-                    //ObservableCollection<KeyValuePair<double, double>> valueListPrime = new ObservableCollection<KeyValuePair<double, double>>();
+       //foreach (EdkDll.EE_DataChannel_t channel in data.Keys)
+        for (int k = 3; k < 16;k++ )
+        {
+            double[] timestamp = data[EdkDll.EE_DataChannel_t.TIMESTAMP];
+            //data[channel].Add(data[channel][i]);
+            // int k = 2;
+            //if (k > 17)
+            //    break;
+            // k++;
+            //ObservableCollection<KeyValuePair<double, double>> valueList = new ObservableCollection<KeyValuePair<double, double>>();
+            //ObservableCollection<KeyValuePair<double, double>> valueListPrime = new ObservableCollection<KeyValuePair<double, double>>();
 
-                    List<double> serie = new List<double>(data[EdkDll.EE_DataChannel_t.AF3]);
-                   // List<double> seriePrime = processOneSeries(serie);
-                    for (int i = 0; i < bufferSize; i++)
-                    {
-                        for (int j = 0; j < timestamp.Length-1; j++)
-                        {
-                            dataContexts[0].Add(new KeyValuePair<double, double>(timestamp[j], serie[j]));
-                           // Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle,new Action(() => addPointToContext(1, new KeyValuePair<double, double>(timestamp[j], serie[j]))));
-                        }
-                       // for (int j = 0; j < seriePrime.Count-1; j++)
-                        {
-                           // dataContextsPrime[k-3].Add(new KeyValuePair<double, double>(timestamp[j], seriePrime[j]));
-                          //  Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => addPointToContextPrime(k - 3, new KeyValuePair<double, double>(timestamp[j], seriePrime[j]))));
-                        
-                        }
-                    }
-                    //dataContexts[k - 3] = valueList;
-                    //chartsPrime[k - 3].DataContext = valueListPrime;
-                    Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => invalidateWindow()));
-                }   
-          //  }
+            List<double> serie = new List<double>(data[data.Keys.ElementAt(k)]);
+            //List<double> seriePrime = processOneSeries(serie);
+
+           
+                //dataContexts[0].Add(new KeyValuePair<double, double>(timestamp[j], serie[j]));
+                Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() => addPointsToContext(k - 3, new List<double>(timestamp), serie)));
+            
+            //for (int j = 0; j < seriePrime.Count - 1; j++)
+            //{
+            //    // dataContextsPrime[k-3].Add(new KeyValuePair<double, double>(timestamp[j], seriePrime[j]));
+            //    Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => addPointToContextPrime(k - 3, new KeyValuePair<double, double>(timestamp[j], seriePrime[j]))));
+
+            //}
+        }   
+  }
     
     private void showColumnChart()
     {
-        List<Chart> charts = new List<Chart>{ AF3Chart,F7Chart,F3Chart,FC5Chart,T7Chart,P7Chart,O1Chart,O2Chart,P8Chart,T8Chart,FC6Chart,F4Chart,F8Chart,AF4Chart};
-        List<Chart> chartsPrime = new List<Chart> { AF3Chart_Copy, F7Chart_Copy, F3Chart_Copy, FC5Chart_Copy, T7Chart_Copy, P7Chart_Copy, O1Chart_Copy, O2Chart_Copy, P8Chart_Copy, T8Chart_Copy, FC6Chart_Copy, F4Chart_Copy, F8Chart_Copy, AF4Chart_Copy };
-        DataTable table = CSVReader.ReadCSVFile("D://GitRepos//Emotyper//Emotyper//A//Sample0.csv", true);
+         DataTable table = CSVReader.ReadCSVFile("D://GitRepos//Emotyper//Emotyper//A//Sample0.csv", true);
 
         for (int i = 3; i < 17; i++)
         {
@@ -185,6 +234,15 @@ namespace WpfToolkitChart
           blockList.ExecuteAll();         
           return outputSeriesBlock.GetSeries();
       }
+
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+
+        //AF3Chart.DataContext=new List<KeyValuePair<double, double>>() { new KeyValuePair<double, double>(2, 2), new KeyValuePair<double, double>(3, 4) }; 
+       // dataContexts[0].Add(new KeyValuePair<double, double>(2, 2));
+      //  dataContexts[0].Add(new KeyValuePair<double, double>(3,4));
+       // invalidateWindow();
+    }
 
   }
 }

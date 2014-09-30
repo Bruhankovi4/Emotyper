@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Root>
+	<CenterHere>
+		<en-US>Center here</en-US>
+		<de-DE>Hier zentrieren</de-DE>
+	</CenterHere>
+	<FitCurvesToScreen>
+		<en-US>Fit curves to screen</en-US>
+		<de-DE>Kurven ins Bild einpassen</de-DE>
+	</FitCurvesToScreen>
+	<ResetBounds>
+		<en-US>Reset bounds to original values</en-US>
+		<de-DE>Grenzen zurücksetzen</de-DE>
+	</ResetBounds>
+	<From>
+		<en-US>From</en-US>
+		<de-DE>Von</de-DE>
+	</From>
+	<GroupAbsolute>
+		<en-US>Group absolute</en-US>
+		<de-DE>Absolut grupp.</de-DE>
+	</GroupAbsolute>
+	<GroupRelative>
+		<en-US>Group relative</en-US>
+		<de-DE>Relativ grupp.</de-DE>
+	</GroupRelative>
+	<NoData>
+		<en-US>No data</en-US>
+		<de-DE>Keine Daten</de-DE>
+	</NoData>
+	<NoRulersPresent>
+		<en-US>No rulers present</en-US>
+		<de-DE>Keine Lineale vorhanden</de-DE>
+	</NoRulersPresent>
+	<PleaseWait>
+		<en-US>Please wait...</en-US>
+		<de-DE>Bitte warten...</de-DE>
+	</PleaseWait>
+	<Remove>
+		<en-US>Remove</en-US>
+		<de-DE>Entfernen</de-DE>
+	</Remove>
+	<Rulers>
+		<en-US>Rulers</en-US>
+		<de-DE>Lineale</de-DE>
+	</Rulers>
+	<To>
+		<en-US>To</en-US>
+		<de-DE>Bis</de-DE>
+	</To>
+	<ToggleReference>
+		<en-US>Toggle Reference</en-US>
+		<de-DE>Referenz ein/aus</de-DE>
+	</ToggleReference>
+	<UngroupAxes>
+		<en-US>Ungroup axes</en-US>
+		<de-DE>Gruppierung aufheben</de-DE>
+	</UngroupAxes>
+	<Uom>
+		<en-US>Unit</en-US>
+		<de-DE>Einheit</de-DE>
+	</Uom>
+	<Value>
+		<en-US>Value</en-US>
+		<de-DE>Wert</de-DE>
+	</Value>
+	<Delete>
+		<en-US>Delete</en-US>
+		<de-DE>Löschen</de-DE>
+	</Delete>
+
+	<RulerShortText>
+		<en-US>Rul</en-US>
+		<de-DE>Lin</de-DE>
+	</RulerShortText>
+	<SelectAggregates>
+		<en-US>Select Aggregate Functions:</en-US>
+		<de-DE>Aggregat-Funktionen:</de-DE>
+	</SelectAggregates>
+	<DeltaY>
+		<en-US>Δy</en-US>
+		<!--<de-DE>Lin</de-DE>-->
+	</DeltaY>
+	<DeltaT>
+		<en-US>Δt</en-US>
+		<!--<de-DE>Lin</de-DE>-->
+	</DeltaT>
+	<Min>
+		<en-US>Min</en-US>
+		<!--<de-DE>Lin</de-DE>-->
+	</Min>
+	<Max>
+		<en-US>Max</en-US>
+		<!--<de-DE>Lin</de-DE>-->
+	</Max>
+	<Avg>
+		<en-US>Avg</en-US>
+		<!--<de-DE>Lin</de-DE>-->
+	</Avg>
+
+	<DocumentIsBeingGenerated>
+		<en-US>"Document is being generated..."</en-US>
+		<de-DE>Dokument wird generiert...</de-DE>
+	</DocumentIsBeingGenerated>
+	<PaperOrientationPortrait>
+		<en-US>Portrait</en-US>
+		<de-DE>Hochkant</de-DE>
+	</PaperOrientationPortrait>
+	<PaperOrientationLandscape>
+		<en-US>Landscape</en-US>
+		<de-DE>Quer</de-DE>
+	</PaperOrientationLandscape>
+	<CannotCreateDocument>
+		<en-US>The document cannot be created.</en-US>
+		<de-DE>Das Dokument kann nicht erzeugt werden.</de-DE>
+	</CannotCreateDocument>
+
+	<PrintPreview>
+		<en-US>Print Preview</en-US>
+		<de-DE>Druckvorschau</de-DE>
+	</PrintPreview>
+	<Print>
+		<en-US>Print</en-US>
+		<de-DE>Drucken</de-DE>
+	</Print>
+	<ZoomIn>
+		<en-US>Zoom +</en-US>
+		<de-DE>Zoom +</de-DE>
+	</ZoomIn>
+	<ZoomOut>
+		<en-US>Zoom -</en-US>
+		<de-DE>Zoom -</de-DE>
+	</ZoomOut>
+	<ActualSize>
+		<en-US>Actual Size</en-US>
+		<de-DE>Aktuelle Größe</de-DE>
+	</ActualSize>
+	<FitToWidth>
+		<en-US>Fit To Width</en-US>
+		<de-DE>An Breite anpassen</de-DE>
+	</FitToWidth>
+	<WholePage>
+		<en-US>Whole Page</en-US>
+		<de-DE>Ganze Seite</de-DE>
+	</WholePage>
+	<TwoPages>
+		<en-US>Two Pages</en-US>
+		<de-DE>Zwei Seiten</de-DE>
+	</TwoPages>
+	<PageBorder>
+		<en-US>Page Border</en-US>
+		<de-DE>Seitenrand</de-DE>
+	</PageBorder>
+
+</Root>

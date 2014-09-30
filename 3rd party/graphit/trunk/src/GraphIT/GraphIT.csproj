@@ -1,0 +1,681 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Framework Condition=" '$(Framework)' == '' ">NET40</Framework>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Framework)' == 'NET35' ">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FrameworkCompileConstant>NET35</FrameworkCompileConstant>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Framework)' == 'NET40' ">
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FrameworkCompileConstant>NET40</FrameworkCompileConstant>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FC120B7C-B3E9-41E9-A82D-C58D46CCE352}</ProjectGuid>
+    <OutputType>library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TechNewLogic.GraphIT</RootNamespace>
+    <AssemblyName>TechNewLogic.GraphIT</AssemblyName>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <ErrorReport>prompt</ErrorReport>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <DocumentationFile>$(TargetDir)TechNewLogic.GraphIT.XML</DocumentationFile>
+    <OutputPath>bin\$(Configuration)\$(Framework)</OutputPath>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac, Version=2.5.2.830, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dependencies\$(Framework)\Autofac-2.5.2.830\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive, Version=1.0.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dependencies\$(Framework)\Rx-Main.1.0.10621\System.Reactive.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ReachFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Printing" />
+    <Reference Include="System.Windows.Presentation" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(Framework)' == 'NET40' ">
+    <Reference Include="System.Xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="ContextMenuControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CurveDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\BeltControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\CurveBeltSurface.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\CurveRectControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\CustomControlSurface.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\Horizontal\DynamicRulerLabel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\Horizontal\HDynamicRuler.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\Horizontal\HGridLine.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\Horizontal\HGridSurface.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\Horizontal\HSectionLabel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\Horizontal\HStaticRulerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\Horizontal\HStaticRulerSurface.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\Horizontal\IntervalControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\Horizontal\RulerManagementControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\Horizontal\RulerManagementSurface.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\Horizontal\TimeScale.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\Legend\TableCellControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\Legend\TileControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\Legend\TableLegend.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\Legend\TileLegend.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\SectionZoomManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\Vertical\DoubleScale.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\Vertical\DragScaleControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\Vertical\DynamicRulerLabel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Hv\Vertical\VDynamicRuler.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\Vertical\VGridLine.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\Vertical\VGridSurface.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hv\Vertical\VSectionLabel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Printing\PrintLayouter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Printing\PrintPreviewWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Printing\TextControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Printing\XpsDocumentGenerator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SimpleContextMenuAction.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\PopupButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\RoundButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ScrollViewerStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Bpp.cs" />
+    <Compile Include="ContainerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ContextMenuEntry.cs" />
+    <Compile Include="CurveContextMenuSurface.cs" />
+    <Compile Include="Curve.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CurveBitmap.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ContextMenuControl.xaml.cs">
+      <DependentUpon>ContextMenuControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CurveControlSurface.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CurveDescription.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CurveDisplay.xaml.cs">
+      <DependentUpon>CurveDisplay.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CurveDrawingSurface.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DesignerCurveDrawingSurface.cs" />
+    <Compile Include="Drawing\IDrawer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Drawing\ILogicalToScreenMapper.cs" />
+    <Compile Include="Drawing\LineDrawingVisual.cs" />
+    <Compile Include="Drawing\Pixel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Drawing\RectangleWpfDrawingVisual.cs" />
+    <Compile Include="Drawing\SolidPalette.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Drawing\WpfBlurSelectionDrawer.cs" />
+    <Compile Include="Drawing\WpfDrawingVisual.cs" />
+    <Compile Include="Drawing\WpfExplicitSelectionDrawer.cs" />
+    <Compile Include="Extensions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helper\BaseContainerAdorner.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helper\BoolBrushConverter.cs" />
+    <Compile Include="Helper\EventArgs.cs" />
+    <Compile Include="Helper\KeyboardHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helper\MathHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helper\NotifyPropertyChanged.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helper\Pair.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helper\RelayCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helper\SynchronizedCollection.cs" />
+    <Compile Include="HitTester.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\AxisParameter.cs" />
+    <Compile Include="Hv\AxisBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\BeltControl.xaml.cs">
+      <DependentUpon>BeltControl.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\BinaryValueFormater.cs" />
+    <Compile Include="Hv\BoundaryRegistration.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\CurveBeltSurface.xaml.cs">
+      <DependentUpon>CurveBeltSurface.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\CurveColor.cs" />
+    <Compile Include="Hv\CurveDrawingMode.cs" />
+    <Compile Include="Hv\CurveRectControl.xaml.cs">
+      <DependentUpon>CurveRectControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Hv\CustomControlInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\CustomControlManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\CustomControlSurface.xaml.cs">
+      <DependentUpon>CustomControlSurface.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\DynamicRulerChangedEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\DynamicRulerManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\FloatingCommaValueFormater.cs" />
+    <Compile Include="Hv\GetValueMode.cs" />
+    <Compile Include="Hv\GlobalContextMenuSurface.cs" />
+    <Compile Include="Hv\GroupingResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Horizontal\RulerCompareMode.cs" />
+    <Compile Include="Hv\Horizontal\DynamicRulerLabel.xaml.cs">
+      <DependentUpon>DynamicRulerLabel.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Horizontal\HDynamicRuler.xaml.cs">
+      <DependentUpon>HDynamicRuler.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Horizontal\HGridLine.xaml.cs">
+      <DependentUpon>HGridLine.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Horizontal\HGridSurface.xaml.cs">
+      <DependentUpon>HGridSurface.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Horizontal\HSectionLabel.xaml.cs">
+      <DependentUpon>HSectionLabel.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Horizontal\HStaticRuler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Horizontal\HStaticRulerControl.xaml.cs">
+      <DependentUpon>HStaticRulerControl.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Horizontal\HStaticRulerSurface.xaml.cs">
+      <DependentUpon>HStaticRulerSurface.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Horizontal\IHScale.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Horizontal\IHStaticRulerSurface.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Horizontal\IntervalControl.xaml.cs">
+      <DependentUpon>IntervalControl.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Horizontal\RelativeRulerPosition.cs" />
+    <Compile Include="Hv\Horizontal\RulerCompareInfo.cs" />
+    <Compile Include="Hv\Horizontal\RulerManagementControl.xaml.cs">
+      <DependentUpon>RulerManagementControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Hv\Horizontal\RulerManagementSurface.xaml.cs">
+      <DependentUpon>RulerManagementSurface.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Hv\Horizontal\RulerPositionConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Horizontal\RulerViewModel.xaml.cs" />
+    <Compile Include="Hv\Horizontal\TimeAxis.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Horizontal\TimeScale.xaml.cs">
+      <DependentUpon>TimeScale.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Horizontal\HVStepHelper.cs" />
+    <Compile Include="Hv\ICustomControlSurface.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\IDoubleAxesGroupPool.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\IDoubleScalePool.cs" />
+    <Compile Include="Hv\IDynamicRulerEventBroker.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\InterpolationValueFetchStrategy.cs" />
+    <Compile Include="Hv\IOnlineMode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\IScaleGroupManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\IStaticRulerManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\IValueFetcher.cs" />
+    <Compile Include="Hv\IValueFetchStrategy.cs" />
+    <Compile Include="Hv\IValueFormater.cs" />
+    <Compile Include="Hv\Legend\ExtendedGridView.cs" />
+    <Compile Include="Hv\Legend\GridViewColumnWrapper.xaml.cs" />
+    <Compile Include="Hv\Legend\GridViewHelper.cs" />
+    <Compile Include="Hv\Legend\IColumn.cs" />
+    <Compile Include="Hv\Legend\IColumnConfiguration.cs" />
+    <Compile Include="Hv\Legend\IndexedObservableCollection.cs" />
+    <Compile Include="Hv\Legend\ITable.cs" />
+    <Compile Include="Hv\Legend\GridViewTable.cs" />
+    <Compile Include="Hv\Legend\RefRulerColumnCollection.xaml.cs" />
+    <Compile Include="Hv\Legend\RefRulerColumnInfo.xaml.cs" />
+    <Compile Include="Hv\Legend\RulerColumnCollection.xaml.cs" />
+    <Compile Include="Hv\Legend\RulerColumnInfo.xaml.cs" />
+    <Compile Include="Hv\Legend\DynamicRulerColumn.cs" />
+    <Compile Include="Hv\Legend\TableCellControl.xaml.cs">
+      <DependentUpon>TableCellControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Hv\Legend\TableLegendContainerFactory.cs" />
+    <Compile Include="Hv\Legend\TableLegendItemViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Legend\TileLegendItemViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Legend\TileControl.xaml.cs">
+      <DependentUpon>TileControl.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Legend\TableLegend.xaml.cs">
+      <DependentUpon>TableLegend.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Hv\Legend\TableLegendViewModel.cs" />
+    <Compile Include="Hv\Legend\TileLegend.xaml.cs">
+      <DependentUpon>TileLegend.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Hv\Legend\TileLegendViewModel.cs" />
+    <Compile Include="Hv\Legend\UniformWrapPanel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\MaxEntriesCount.cs" />
+    <Compile Include="Hv\MoveInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\OnlineMode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\PanZoomManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\RedrawTime.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\ScaleZoomHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\ScrollInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\SectionZoomManager.xaml.cs">
+      <DependentUpon>SectionZoomManager.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\EntriesCollection.cs" />
+    <Compile Include="Hv\SimpleValueFetchStrategy.cs" />
+    <Compile Include="Hv\TimeDoubleCurve.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\TimeDoubleCurveFactory.cs" />
+    <Compile Include="Hv\TimeDoubleDataEntry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\TimeDoubleDataSeries.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\TimeDoublePlottingSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\UiMoveHelper.cs" />
+    <Compile Include="Hv\ValueFetcher.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Vertical\AxisFormat.cs" />
+    <Compile Include="Hv\Vertical\AxisMatchingMode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Vertical\BinaryScaleLabelCreationStrategy.cs" />
+    <Compile Include="Hv\Vertical\DoubleAxesGroup.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Vertical\DoubleAxesGroupFactory.cs" />
+    <Compile Include="Hv\Vertical\DoubleAxisParameter.cs" />
+    <Compile Include="Hv\Vertical\DoubleAxis.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Vertical\DoubleAxisBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Vertical\DoubleScale.xaml.cs">
+      <DependentUpon>DoubleScale.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Vertical\DoubleScaleLabelCreationStrategy.cs" />
+    <Compile Include="Hv\Vertical\DragDropManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Vertical\DragScaleAdorner.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Vertical\DragScaleControl.xaml.cs">
+      <DependentUpon>DragScaleControl.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Vertical\DynamicRulerLabel.xaml.cs">
+      <DependentUpon>DynamicRulerLabel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Hv\Vertical\GroupingAbilities.cs" />
+    <Compile Include="Hv\Vertical\IDragDropManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Vertical\IScaleLabelCreationStrategy.cs" />
+    <Compile Include="Hv\Vertical\IVScale.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Vertical\ProxyDoubleAxis.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Vertical\ScaleDragDropBehavior.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Vertical\ScalePosition.cs" />
+    <Compile Include="Hv\Vertical\VDynamicRuler.xaml.cs">
+      <DependentUpon>VDynamicRuler.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Vertical\VGridLine.xaml.cs">
+      <DependentUpon>VGridLine.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Vertical\VGridSurface.xaml.cs">
+      <DependentUpon>VGridSurface.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Vertical\VSectionLabel.xaml.cs">
+      <DependentUpon>VSectionLabel.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hv\Vertical\VStepHelper.cs" />
+    <Compile Include="IContextMenu.xaml.cs" />
+    <Compile Include="ICurveContextMenuSurface.cs" />
+    <Compile Include="ICurveControlSurface.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ICurveDrawingSurface.cs" />
+    <Compile Include="IPrintingRedrawRequest.cs" />
+    <Compile Include="IRedrawRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ICurvePool.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ICurveRegistrar.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IDrawingAreaInfo.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="InputReference.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MultiLanguage\MlResources.cs" />
+    <Compile Include="Printing\DirectPrinter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Printing\IPrinter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Printing\IViewDrawingState.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Printing\PaperFormat.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Printing\PaperFormatViewModel.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Printing\PaperOrientation.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Printing\PaperOrientationViewModel.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Printing\PrintContent.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Printing\PrintLayouter.xaml.cs">
+      <DependentUpon>PrintLayouter.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Printing\PrintPreviewWindow.xaml.cs">
+      <DependentUpon>PrintPreviewWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Printing\TextControl.xaml.cs">
+      <DependentUpon>TextControl.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Printing\TextDocumentGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Printing\ViewDrawingState.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Printing\XpsDocumentGenerator.xaml.cs">
+      <DependentUpon>XpsDocumentGenerator.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SimpleContextMenuAction.xaml.cs">
+      <DependentUpon>SimpleContextMenuAction.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DrawingParameter.cs" />
+    <Compile Include="SurfacePlacement.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="MultiLanguage\MultiLanguageDB.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\TechNewLogic.GraphIt.License.txt">
+      <Link>TechNewLogic.GraphIt.License.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <Import Project="Features.msbuild" />
+  <Import Project="Net35.msbuild" Condition=" '$(Framework)' == 'NET35'" />
+  <Import Project="Net40.msbuild" Condition=" '$(Framework)' == 'NET40'" />
+</Project>

@@ -1,0 +1,3 @@
+﻿Here, we see a 3 curves that are drawn in filled rectangle mode.
+There are 3 different modes of baseline: Highest value, lowest value or a specific baseline value.
+The data is internally reformatted so that it becomes rectangular.

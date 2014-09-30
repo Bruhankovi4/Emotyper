@@ -306,6 +306,7 @@
                     </chartingToolkit:LineSeries.DataPointStyle>
                 </chartingToolkit:LineSeries>
             </chartingToolkit:Chart>
+            <Button Content="Button" HorizontalAlignment="Left" Margin="908,45,0,0" VerticalAlignment="Top" Width="76" RenderTransformOrigin="0.461,0.523" Click="Button_Click"/>
         </Grid>
     </ScrollViewer>
 

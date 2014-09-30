@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Feature-Set pro User. -->
+
+<!-- 
+
+	Zusammenfassung aller Konstanten:
+	
+    DEBUG                                                   - debug constant
+    TRACE                                                   - trace constant
+    BPP8                                                    - 8 Bits Per Pixel for rendering to the WriteableBitmaps.
+    BPP1                                                    - 1 Bits Per Pixel for rendering to the WriteableBitmaps.
+    SORT_REF_RULER                                          - If set, Reference-Ruler (if present) in RulerManagementControl will be placed first.
+
+-->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	
+	<!-- Demo and Debug Configuration -->
+
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<DefineConstants>$(FrameworkCompileConstant),DEBUG,TRACE,BPP1,SORT_REF_RULER</DefineConstants>
+	</PropertyGroup>
+
+	<!-- Release Konfigurationen -->
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<DefineConstants>$(FrameworkCompileConstant),BPP1</DefineConstants>
+	</PropertyGroup>
+
+</Project>

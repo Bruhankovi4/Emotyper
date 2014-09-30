@@ -115,7 +115,7 @@ namespace EmotyperDataUtility
                         }
                         OnRowsArrived(this, new EmoEventRows { Rows = rows });
                     }
-                    Thread.Sleep(0);
+                    Thread.Sleep(300);
                 }
 
             }
