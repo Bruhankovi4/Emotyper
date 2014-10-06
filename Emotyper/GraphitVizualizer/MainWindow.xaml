@@ -12,8 +12,8 @@
             </Grid.ColumnDefinitions>
             <!--<ContentControl x:Name="tableLegendHolder" Margin="0,912,0,0">--> 
             <!--</ContentControl>-->
-            <graphIt:CurveDisplay Grid.Column="0" x:Name="RawDisplay" />                        
-            <graphIt:CurveDisplay  Grid.Column="1" x:Name="TransformedDisplay"/>
+            <!--<graphIt:CurveDisplay Grid.Column="0" x:Name="RawDisplay" />                        
+            <graphIt:CurveDisplay  Grid.Column="1" x:Name="TransformedDisplay"/>-->
            
         </Grid>
 

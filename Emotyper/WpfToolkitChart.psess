@@ -66,18 +66,52 @@
       <ProjPath>WpfToolkitChart\WpfToolkitChart.csproj</ProjPath>
       <ProjName>WpfToolkitChart</ProjName>
     </ProjBinary>
+    <ProjBinary>
+      <Path>GraphitVizualizer\obj\Debug\GraphitVizualizer.exe</Path>
+      <ArgumentTimestamp>01/01/0001 00:00:00</ArgumentTimestamp>
+      <Instrument>true</Instrument>
+      <Sample>true</Sample>
+      <ExternalWebsite>false</ExternalWebsite>
+      <InteractionProfilingEnabled>false</InteractionProfilingEnabled>
+      <IsLocalJavascript>false</IsLocalJavascript>
+      <IsWindowsStoreApp>false</IsWindowsStoreApp>
+      <IsWWA>false</IsWWA>
+      <LaunchProject>true</LaunchProject>
+      <OverrideProjectSettings>false</OverrideProjectSettings>
+      <LaunchMethod>Executable</LaunchMethod>
+      <ExecutablePath>GraphitVizualizer\bin\Debug\GraphitVizualizer.exe</ExecutablePath>
+      <StartupDirectory>GraphitVizualizer\bin\Debug\</StartupDirectory>
+      <Arguments>
+      </Arguments>
+      <NetAppHost>IIS</NetAppHost>
+      <NetBrowser>InternetExplorer</NetBrowser>
+      <ExcludeSmallFuncs>true</ExcludeSmallFuncs>
+      <JScriptProfilingEnabled>false</JScriptProfilingEnabled>
+      <PreinstrumentEvent>
+        <InstrEventExclude>false</InstrEventExclude>
+      </PreinstrumentEvent>
+      <PostinstrumentEvent>
+        <InstrEventExclude>false</InstrEventExclude>
+      </PostinstrumentEvent>
+      <ProjRef>{8E580FC4-F1EA-4595-A860-583F8AF30169}|GraphitVizualizer\GraphitVizualizer.csproj</ProjRef>
+      <ProjPath>GraphitVizualizer\GraphitVizualizer.csproj</ProjPath>
+      <ProjName>GraphitVizualizer</ProjName>
+    </ProjBinary>
   </Binaries>
   <Reports>
     <Report>
       <Path>WpfToolkitChart140914.vsp</Path>
     </Report>
     <Report>
-      <Path>WpfToolkitChart140914(1).vsp</Path>
+      <Path>WpfToolkitChart140930(2).vsp</Path>
     </Report>
   </Reports>
   <Launches>
     <ProjBinary>
       <Path>:PB:{1FBF4292-DAEF-459C-9D95-C32688E2CF3B}|WpfToolkitChart\WpfToolkitChart.csproj</Path>
+    </ProjBinary>
+    <ProjBinary>
+      <Path>:PB:{8E580FC4-F1EA-4595-A860-583F8AF30169}|GraphitVizualizer\GraphitVizualizer.csproj</Path>
     </ProjBinary>
   </Launches>
 </VSPerformanceSession>

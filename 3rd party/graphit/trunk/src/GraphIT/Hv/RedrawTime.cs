@@ -34,6 +34,7 @@ namespace TechNewLogic.GraphIT.Hv
 
 		static RedrawTime()
 		{
+            Ms100 = new RedrawTime(TimeSpan.FromMilliseconds(100));
 			Ms500 = new RedrawTime(TimeSpan.FromMilliseconds(500));
 			S1 = new RedrawTime(TimeSpan.FromSeconds(1));
 			S2 = new RedrawTime(TimeSpan.FromSeconds(2));
@@ -51,7 +52,7 @@ namespace TechNewLogic.GraphIT.Hv
 		/// Defines a redraw time of 500ms.
 		/// </summary>
 		public static RedrawTime Ms500 { get; private set; }
-
+        public static RedrawTime Ms100 { get; private set; }
 		/// <summary>
 		/// Defines a redraw time of 1s.
 		/// </summary>

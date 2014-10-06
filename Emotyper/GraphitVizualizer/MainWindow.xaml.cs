@@ -23,19 +23,19 @@ namespace GraphitVizualizer
        static DateTime time = DateTime.UtcNow;
         public MainWindow()
         {
+           
+            InitializeComponent();
             EmotypeEventSource source = new EmotypeEventSource();
             source.OnDataArrived += OnDataArrived;
             source.Start();
-            InitializeComponent();
-
             // Set the bounds of the time axis
-            RawDisplay.TimeDoublePlottingSystem.TimeAxis.SetBounds(
-                DateTime.UtcNow,
-                DateTime.UtcNow.AddMinutes(2));
+            //RawDisplay.TimeDoublePlottingSystem.TimeAxis.SetBounds(
+            //    DateTime.UtcNow,
+            //    DateTime.UtcNow.AddMinutes(2));
 
-            TransformedDisplay.TimeDoublePlottingSystem.TimeAxis.SetBounds(
-         DateTime.UtcNow,
-         DateTime.UtcNow.AddMinutes(2));  
+            //TransformedDisplay.TimeDoublePlottingSystem.TimeAxis.SetBounds(
+         //DateTime.UtcNow,
+         //DateTime.UtcNow.AddMinutes(2));  
 
             //var plottingSystem = RawDisplay.TimeDoublePlottingSystem;
             //plottingSystem.EnableOnlineMode(DateTime.UtcNow);
@@ -43,8 +43,8 @@ namespace GraphitVizualizer
             //    plottingSystem.TimeAxis.ActualUpperBound.AddSeconds(-5),
             //    plottingSystem.TimeAxis.ActualUpperBound);     
             CreateCurves();
-            RawDisplay.TimeDoublePlottingSystem.SetScalesVisibility(false, false, false);
-            TransformedDisplay.TimeDoublePlottingSystem.SetScalesVisibility(false, false, false);
+            //RawDisplay.TimeDoublePlottingSystem.SetScalesVisibility(false, false, false);
+            //TransformedDisplay.TimeDoublePlottingSystem.SetScalesVisibility(false, false, false);
         }
 
         private List<TimeDoubleCurve> rawCurves = new List<TimeDoubleCurve>();
@@ -55,26 +55,27 @@ namespace GraphitVizualizer
         {
             for (EdkDll.EE_DataChannel_t i = EdkDll.EE_DataChannel_t.AF3; i <= EdkDll.EE_DataChannel_t.AF4; i++)
             {
-                TimeDoubleCurve _curve = RawDisplay.TimeDoublePlottingSystem.AddCurve(
-             i.ToString(), 1000, ((int)i)*1000, cols[(int)i-3], RedrawTime.Ms500, AxisMatchingMode.None,
-             CurveDrawingMode.SimpleLine(),
-             new FloatingCommaValueFormater(),
-             new InterpolationValueFetchStrategy(),
-             AxisFormat.Double, 
-             15000);             
-                rawCurves.Add(_curve);
+                //TimeDoubleCurve _curve = RawDisplay.TimeDoublePlottingSystem.AddCurve(
+             //i.ToString(), 1000, ((int)i) * 1000, cols[(int)i - 3], RedrawTime.Ms100, AxisMatchingMode.None,
+             //CurveDrawingMode.SimpleLine(),
+             //new FloatingCommaValueFormater(),
+             //new InterpolationValueFetchStrategy(),
+             //AxisFormat.Double, 
+             //15000);             
+             //   rawCurves.Add(_curve);
             }
 
             for (EdkDll.EE_DataChannel_t i = EdkDll.EE_DataChannel_t.AF3; i <= EdkDll.EE_DataChannel_t.AF4; i++)
+           // for (EdkDll.EE_DataChannel_t i = EdkDll.EE_DataChannel_t.AF3; i <= EdkDll.EE_DataChannel_t.FC5; i++)
             {
-                TimeDoubleCurve _curve = TransformedDisplay.TimeDoublePlottingSystem.AddCurve(
-             i.ToString()+"prime", 0, ((int)i) * 1000, cols[(int)i - 3], RedrawTime.Ms500, AxisMatchingMode.None,
-             CurveDrawingMode.SimpleLine(),
-             new FloatingCommaValueFormater(),
-             new InterpolationValueFetchStrategy(),
-             AxisFormat.Double,
-             15000);
-                transformedCurves.Add(_curve);
+             //   TimeDoubleCurve _curve = TransformedDisplay.TimeDoublePlottingSystem.AddCurve(
+             //i.ToString()+"prime", 1000, ((int)i) * 1000, cols[(int)i - 3], RedrawTime.Ms100, AxisMatchingMode.None,
+             //CurveDrawingMode.SimpleLine(),
+             //new FloatingCommaValueFormater(),
+             //new InterpolationValueFetchStrategy(),
+             //AxisFormat.Double,
+             //15000);
+             //   transformedCurves.Add(_curve);
             }
               
         }
@@ -87,6 +88,7 @@ namespace GraphitVizualizer
             //foreach (EdkDll.EE_DataChannel_t channel in data.Keys)  
             double[] timestamp = data[EdkDll.EE_DataChannel_t.TIMESTAMP];
             for (EdkDll.EE_DataChannel_t k = EdkDll.EE_DataChannel_t.AF3; k <= EdkDll.EE_DataChannel_t.AF4; k++)
+            //for (EdkDll.EE_DataChannel_t k = EdkDll.EE_DataChannel_t.AF3; k <= EdkDll.EE_DataChannel_t.FC5; k++)
             {
 
                 List<double> serie = new List<double>(data[k]);
