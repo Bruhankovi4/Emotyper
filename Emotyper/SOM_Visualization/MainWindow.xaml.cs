@@ -32,8 +32,8 @@ namespace SOM_Visualization
         private List<double[]> patterns = new List<double[]>();
         public MainWindow()
         {     
-            this.length = 100; 
-            this.dimensions = 3;
+            this.length = 30; 
+            this.dimensions = 213;
             InitializeComponent();
             for (int i = 0; i < this.length; i++)
             {               
@@ -44,7 +44,8 @@ namespace SOM_Visualization
             gridControl.ShowGridLines = true;
             
             Initialise();
-            LoadData("Food.csv");
+            //LoadData("Food.csv");
+            LoadData("testAB.csv");
             NormalisePatterns();
             Train(0.0000001);
             DumpCoordinates();
@@ -71,10 +72,10 @@ namespace SOM_Visualization
         private void LoadData(string file)
         {
             StreamReader reader = File.OpenText(file);
-            reader.ReadLine(); // Ignore first line.
+            //reader.ReadLine(); // Ignore first line.
             while (!reader.EndOfStream)
             {
-                string[] line = reader.ReadLine().Split(',');
+                string[] line = reader.ReadLine().Split(';');
                 labels.Add(line[0]);
                 double[] inputs = new double[dimensions];
                 for (int i = 0; i < dimensions; i++)
