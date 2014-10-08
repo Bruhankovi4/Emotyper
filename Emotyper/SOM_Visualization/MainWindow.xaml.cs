@@ -35,7 +35,7 @@ namespace SOM_Visualization
         private List<double[]> patterns = new List<double[]>();
         public MainWindow()
         {     
-            this.length = 100; 
+            this.length = 50; 
             this.dimensions = 110;
             InitializeComponent();
             for (int i = 0; i < this.length; i++)
@@ -96,8 +96,11 @@ namespace SOM_Visualization
             //for (int i = 3; i < 17; i++)
             //{
                int aind = 0,bind=0; 
-               int i = 5;
-            foreach (String file in Directory.GetFiles("D://GitRepos//Emotyper//Emotyper//A"))
+               int ind = 5;
+               List<List<double>> Asamples = new List<List<double>>();
+               List<List<Tuple<int, int, int, int, double>>> correlations = new List<List<Tuple<int, int, int, int, double>>>();
+               int MinWinSize = 64;
+            foreach (String file in Directory.GetFiles("D://Emotyper//Emotyper//A"))
             {
                
                 DataTable table = CSVReader.ReadCSVFile(file.Replace("\\","//"), true);
@@ -108,15 +111,48 @@ namespace SOM_Visualization
                 {
                     DataRow row = table.Rows[j];
                     double val;
-                    Double.TryParse(row[i].ToString(), out val);
+                    Double.TryParse(row[ind].ToString(), out val);
                     serie.Add(val);
                 }
                 serie = processOneSeries(serie);
+                Asamples.Add(serie);
                 patterns.Add(serie.GetRange(0, 110).ToArray());
                 labels.Add(String.Format("A{0}", aind));
                 aind++;
             }
-            foreach (String file in Directory.GetFiles("D://GitRepos//Emotyper//Emotyper//B"))
+               for (int k = 1; k < Asamples.Count; k++)
+               {
+                   List<double> smaller;
+                   List<double> bigger;
+                   List <Tuple<int, int, int, int,double>> pairCorrs = new List<Tuple<int, int, int, int,double>>(); //winsizeSmaller winsizeBigger indexsmaller indexBigger  correlation
+                   if (Asamples[k].Count > Asamples[k - 1].Count)
+                   {
+                       bigger = Asamples[k];
+                       smaller = Asamples[k - 1];
+                   }
+                   else
+                   {
+                       bigger = Asamples[k-1];
+                       smaller = Asamples[k];
+                   }
+                   int m = smaller.Count;
+                   int n = bigger.Count;
+                   for (int ws1 = MinWinSize; ws1 < m; ws1++)
+                       //for (int ws2=MinWinSize;ws2<n;ws2++)
+                   {
+                       int ws2 = ws1;
+                       for (int j = 0; j < m - ws1; j++)
+                           for (int i = 0; i < n - ws2; i++)
+                           {
+                               double correl = dnAnalytics.Statistics.Correlation.Pearson(smaller.GetRange(j, ws1),bigger.GetRange(i, ws2));
+                               if (Math.Abs(correl)>0.5)
+                               pairCorrs.Add(new Tuple<int, int, int, int, double>(ws1, ws2, j, i,
+                                  correl));
+                           }
+                   }
+                   correlations.Add(pairCorrs);    
+               }
+            foreach (String file in Directory.GetFiles("D://Emotyper//Emotyper//B"))
             {
                 DataTable table = CSVReader.ReadCSVFile(file.Replace("\\","//"), true);
                 List<double> serie = new List<double>();
@@ -125,7 +161,7 @@ namespace SOM_Visualization
                 {
                     DataRow row = table.Rows[j];
                     double val;
-                    Double.TryParse(row[i].ToString(), out val);
+                    Double.TryParse(row[ind].ToString(), out val);
                     serie.Add(val);
                 }
                 serie = processOneSeries(serie);
@@ -260,21 +296,21 @@ namespace SOM_Visualization
             return winner;
         }
 
-        //private double Distance(double[] vector1, double[] vector2)
-        //{
-
-        //    double value = 0;
-        //    for (int i = 0; i < vector1.Length; i++)
-        //    {
-        //        value += Math.Pow((vector1[i] - vector2[i]), 2);
-        //    }
-        //    return Math.Sqrt(value);
-        //}
-
         private double Distance(double[] vector1, double[] vector2)
         {
-            return dnAnalytics.Statistics.Correlation.Pearson(vector1, vector2);
+
+            double value = 0;
+            for (int i = 0; i < vector1.Length; i++)
+            {
+                value += Math.Pow((vector1[i] - vector2[i]), 2);
+            }
+            return Math.Sqrt(value);
         }
+
+        //private double Distance(double[] vector1, double[] vector2)
+        //{
+        //    return dnAnalytics.Statistics.Correlation.Pearson(vector1, vector2);
+        //}
 
     }
 
