@@ -207,7 +207,7 @@ namespace WpfToolkitChart
             chartsPrime[i - 3].DataContext = valueListPrime;
         }
     }
-    private List<double> processOneSeries(List<double> serie)
+    public static List<double> processOneSeries(List<double> serie)
       {
 
           //Declaring the blocks

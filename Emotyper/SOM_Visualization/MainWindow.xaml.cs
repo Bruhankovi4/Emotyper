@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Com.StellmanGreene.CSVReader;
 using SOM;
+using WaveletStudio.Blocks;
 
 namespace SOM_Visualization
 {
@@ -32,8 +35,8 @@ namespace SOM_Visualization
         private List<double[]> patterns = new List<double[]>();
         public MainWindow()
         {     
-            this.length = 30; 
-            this.dimensions = 213;
+            this.length = 100; 
+            this.dimensions = 110;
             InitializeComponent();
             for (int i = 0; i < this.length; i++)
             {               
@@ -45,9 +48,10 @@ namespace SOM_Visualization
             
             Initialise();
             //LoadData("Food.csv");
-            LoadData("testAB.csv");
+           // LoadData("testAB.csv");
+            loadDateFromAllFiles();
             NormalisePatterns();
-            Train(0.0000001);
+            Train(0.0000007);
             DumpCoordinates();
         }
              
@@ -86,6 +90,78 @@ namespace SOM_Visualization
             }
             reader.Close();
         }
+           private void loadDateFromAllFiles()
+        {
+            
+            //for (int i = 3; i < 17; i++)
+            //{
+               int aind = 0,bind=0; 
+               int i = 5;
+            foreach (String file in Directory.GetFiles("D://GitRepos//Emotyper//Emotyper//A"))
+            {
+               
+                DataTable table = CSVReader.ReadCSVFile(file.Replace("\\","//"), true);
+              
+                List<double> serie = new List<double>();
+                // String sensorName = table.Columns[i].ColumnName;
+                for (int j = 0; j < table.Rows.Count; j++)
+                {
+                    DataRow row = table.Rows[j];
+                    double val;
+                    Double.TryParse(row[i].ToString(), out val);
+                    serie.Add(val);
+                }
+                serie = processOneSeries(serie);
+                patterns.Add(serie.GetRange(0, 110).ToArray());
+                labels.Add(String.Format("A{0}", aind));
+                aind++;
+            }
+            foreach (String file in Directory.GetFiles("D://GitRepos//Emotyper//Emotyper//B"))
+            {
+                DataTable table = CSVReader.ReadCSVFile(file.Replace("\\","//"), true);
+                List<double> serie = new List<double>();
+                // String sensorName = table.Columns[i].ColumnName;
+                for (int j = 0; j < table.Rows.Count; j++)
+                {
+                    DataRow row = table.Rows[j];
+                    double val;
+                    Double.TryParse(row[i].ToString(), out val);
+                    serie.Add(val);
+                }
+                serie = processOneSeries(serie);
+                patterns.Add(serie.GetRange(0, 110).ToArray());
+                labels.Add(String.Format("B{0}", bind));
+                bind++;
+            }
+            //}
+        }
+           public static List<double> processOneSeries(List<double> serie)
+           {
+
+               //Declaring the blocks
+               var inputSeriesBlock = new InputSeriesBlock();
+               inputSeriesBlock.SetSeries(serie);
+               var dWTBlock = new DWTBlock
+               {
+                   WaveletName = "Daubechies 10 (db10)",
+                   Level = 1,
+                   Rescale = false,
+                   ExtensionMode = WaveletStudio.SignalExtension.ExtensionMode.AntisymmetricWholePoint
+               };
+               var outputSeriesBlock = new OutputSeriesBlock();
+
+               //Connecting the blocks
+               inputSeriesBlock.OutputNodes[0].ConnectTo(dWTBlock.InputNodes[0]);
+               dWTBlock.OutputNodes[1].ConnectTo(outputSeriesBlock.InputNodes[0]);
+
+               //Appending the blocks to a block list and execute all
+               var blockList = new BlockList();
+               blockList.Add(inputSeriesBlock);
+               blockList.Add(dWTBlock);
+               blockList.Add(outputSeriesBlock);
+               blockList.ExecuteAll();
+               return outputSeriesBlock.GetSeries();
+           }
 
         private void NormalisePatterns()
         {
@@ -150,7 +226,15 @@ namespace SOM_Visualization
                 label.Content = labels[i];
                 //label.Width = 100;                
                // label.Height = 20;
-                label.Background= new SolidColorBrush(Colors.Black);
+                if (labels[i].Contains("A"))
+                {
+                    label.Background= new SolidColorBrush(Colors.Red);
+                }
+                else
+                {
+                    label.Background = new SolidColorBrush(Colors.Green);
+                }
+                
                 label.Foreground = new SolidColorBrush(Colors.White);
                 label.FontSize = 12;                   
                 Grid.SetRow(label,n.X);
@@ -176,15 +260,22 @@ namespace SOM_Visualization
             return winner;
         }
 
+        //private double Distance(double[] vector1, double[] vector2)
+        //{
+
+        //    double value = 0;
+        //    for (int i = 0; i < vector1.Length; i++)
+        //    {
+        //        value += Math.Pow((vector1[i] - vector2[i]), 2);
+        //    }
+        //    return Math.Sqrt(value);
+        //}
+
         private double Distance(double[] vector1, double[] vector2)
         {
-            double value = 0;
-            for (int i = 0; i < vector1.Length; i++)
-            {
-                value += Math.Pow((vector1[i] - vector2[i]), 2);
-            }
-            return Math.Sqrt(value);
+            return dnAnalytics.Statistics.Correlation.Pearson(vector1, vector2);
         }
+
     }
 
     public class Neuron

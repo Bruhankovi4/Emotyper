@@ -45,6 +45,8 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="dnAnalytics.dll" />
+    <Content Include="dnAnalytics.pdb" />
     <Content Include="DotNetEmotivSDK-vs2010.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -57,6 +59,7 @@
     <Content Include="edk_utils.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="zlib.net.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
