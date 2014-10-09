@@ -36,7 +36,7 @@ namespace SOM_Visualization
         public MainWindow()
         {     
             this.length = 50; 
-            this.dimensions = 110;
+            this.dimensions = 70;
             InitializeComponent();
             for (int i = 0; i < this.length; i++)
             {               
@@ -49,7 +49,8 @@ namespace SOM_Visualization
             Initialise();
             //LoadData("Food.csv");
            // LoadData("testAB.csv");
-            loadDateFromAllFiles();
+            //loadDateFromAllFiles();
+            loadCropedDateFromAllFiles();
             NormalisePatterns();
             Train(0.0000007);
             DumpCoordinates();
@@ -90,13 +91,33 @@ namespace SOM_Visualization
             }
             reader.Close();
         }
-           private void loadDateFromAllFiles()
+
+        private void loadCropedDateFromAllFiles()
+        {
+            List<List<double>> aData = getEssentialData("D://Emotyper//Emotyper//A", dimensions, 3);
+            List<List<double>> bData = getEssentialData("D://Emotyper//Emotyper//B", dimensions, 3);
+            int index = 0;
+            foreach (List<double> list in aData)
+            {
+                patterns.Add(list.ToArray());
+                labels.Add("A" + index);
+                index++;
+            }
+            foreach (List<double> list in bData)
+            {
+                patterns.Add(list.ToArray());
+                labels.Add("B" + index);
+                index++;
+            }
+        }
+
+        private void loadDateFromAllFiles()
         {
             
             //for (int i = 3; i < 17; i++)
             //{
                int aind = 0,bind=0; 
-               int ind = 5;
+               int ind = 3;
                List<List<double>> Asamples = new List<List<double>>();
                List<List<Tuple<int, int, int, int, double>>> correlations = new List<List<Tuple<int, int, int, int, double>>>();
                int MinWinSize = 64;
@@ -137,19 +158,20 @@ namespace SOM_Visualization
                    }
                    int m = smaller.Count;
                    int n = bigger.Count;
-                   for (int ws1 = MinWinSize; ws1 < m; ws1++)
+                  // for (int ws1 = MinWinSize; ws1 < m; ws1++)
                        //for (int ws2=MinWinSize;ws2<n;ws2++)
-                   {
-                       int ws2 = ws1;
+                   //{
+                   int ws2 = 70;
+                   int ws1 = 70;
                        for (int j = 0; j < m - ws1; j++)
                            for (int i = 0; i < n - ws2; i++)
                            {
                                double correl = dnAnalytics.Statistics.Correlation.Pearson(smaller.GetRange(j, ws1),bigger.GetRange(i, ws2));
-                               if (Math.Abs(correl)>0.5)
+                               if (Math.Abs(correl)>0.6)
                                pairCorrs.Add(new Tuple<int, int, int, int, double>(ws1, ws2, j, i,
                                   correl));
                            }
-                   }
+//}
                    correlations.Add(pairCorrs);    
                }
             foreach (String file in Directory.GetFiles("D://Emotyper//Emotyper//B"))
@@ -171,6 +193,75 @@ namespace SOM_Visualization
             }
             //}
         }
+
+        public  List<List<double>> getEssentialData(String samplesDirestory, int FrameSize,int sensor)
+        {
+           List<List<double>> resultSet = new List<List<double>>();
+           List<List<double>> rawSeries = new List<List<double>>();
+           List<Tuple<int, int, int, int, double>> pairCorrs = new List<Tuple<int, int, int, int, double>>(); //winsizeSmaller winsizeBigger indexsmaller indexBigger  correlation
+           foreach (String file in Directory.GetFiles(samplesDirestory))
+            {
+                DataTable table = CSVReader.ReadCSVFile(file.Replace("\\", "//"), true);
+                List<double> serie = new List<double>();
+                // String sensorName = table.Columns[i].ColumnName;
+                for (int j = 0; j < table.Rows.Count; j++)
+                {
+                    DataRow row = table.Rows[j];
+                    double val;
+                    Double.TryParse(row[sensor].ToString(), out val);
+                    serie.Add(val);
+                }
+                serie = processOneSeries(serie);
+                rawSeries.Add(serie);                
+            }
+           List<double> smaller;
+           List<double> bigger;
+
+           if (rawSeries[1].Count > rawSeries[0].Count)
+           {
+               bigger = rawSeries[1];
+               smaller = rawSeries[0];
+           }
+           else
+           {
+               bigger = rawSeries[0];
+               smaller = rawSeries[1];
+           }
+           int m = smaller.Count;
+           int n = bigger.Count;
+           for (int j = 0; j < m - FrameSize; j++)
+               for (int i = 0; i < n - FrameSize; i++)
+               {
+                   double correl = dnAnalytics.Statistics.Correlation.Pearson(smaller.GetRange(j, FrameSize), bigger.GetRange(i, FrameSize));
+                   if (Math.Abs(correl) > 0.5)
+                       pairCorrs.Add(Tuple.Create(0, 0, j, i,
+                          correl));
+               }
+          pairCorrs.Sort((a,b)=>a.Item5.CompareTo(b.Item5));
+            Tuple<int, int, int, int, double> tuple = pairCorrs[0];
+          resultSet.Add(smaller.GetRange(tuple.Item3,FrameSize));
+          resultSet.Add(bigger.GetRange(tuple.Item4, FrameSize));
+
+            for (int i = 1; i < rawSeries.Count; i++)
+            {
+                pairCorrs.Clear();
+                n = rawSeries[i].Count;
+                for (int j = 0; j < n - FrameSize; j++)
+                {
+                    double correl = dnAnalytics.Statistics.Correlation.Pearson(resultSet.Last(), rawSeries[i].GetRange(j, FrameSize));
+                    if (Math.Abs(correl) > 0.6)
+                        pairCorrs.Add(Tuple.Create(0, 0, i, j,
+                           correl));
+                }
+                pairCorrs.Sort((a, b) => a.Item5.CompareTo(b.Item5));
+                if (pairCorrs.Count > 0)
+                {
+                    tuple = pairCorrs[0];
+                    resultSet.Add(rawSeries[i].GetRange(tuple.Item4, FrameSize));
+                }
+            }
+            return resultSet;
+        }
            public static List<double> processOneSeries(List<double> serie)
            {
 
@@ -179,7 +270,7 @@ namespace SOM_Visualization
                inputSeriesBlock.SetSeries(serie);
                var dWTBlock = new DWTBlock
                {
-                   WaveletName = "Daubechies 10 (db10)",
+                   WaveletName = "Discreete Meyer (dmeyer)",
                    Level = 1,
                    Rescale = false,
                    ExtensionMode = WaveletStudio.SignalExtension.ExtensionMode.AntisymmetricWholePoint
@@ -296,21 +387,21 @@ namespace SOM_Visualization
             return winner;
         }
 
-        private double Distance(double[] vector1, double[] vector2)
-        {
-
-            double value = 0;
-            for (int i = 0; i < vector1.Length; i++)
-            {
-                value += Math.Pow((vector1[i] - vector2[i]), 2);
-            }
-            return Math.Sqrt(value);
-        }
-
         //private double Distance(double[] vector1, double[] vector2)
         //{
-        //    return dnAnalytics.Statistics.Correlation.Pearson(vector1, vector2);
+
+        //    double value = 0;
+        //    for (int i = 0; i < vector1.Length; i++)
+        //    {
+        //        value += Math.Pow((vector1[i] - vector2[i]), 2);
+        //    }
+        //    return Math.Sqrt(value);
         //}
+
+        private double Distance(double[] vector1, double[] vector2)
+        {
+            return 1/Math.Abs(dnAnalytics.Statistics.Correlation.Pearson(vector1, vector2));
+        }
 
     }
 
