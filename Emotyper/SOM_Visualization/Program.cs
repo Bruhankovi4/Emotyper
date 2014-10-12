@@ -199,9 +199,10 @@ namespace SOM
         public double UpdateWeights(double[] pattern, Neuron winner, int it)
         {
             double sum = 0;
+            var constantVal = LearningRate(it)*Gauss(winner, it);
             for (int i = 0; i < Weights.Length; i++)
             {
-                double delta = LearningRate(it)*Gauss(winner, it)*(pattern[i] - Weights[i]);
+                double delta = constantVal*(pattern[i] - Weights[i]);
                 Weights[i] += delta;
                 sum += delta;
             }
