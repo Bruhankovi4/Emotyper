@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using Com.StellmanGreene.CSVReader;
 using SOM;
 using WaveletStudio.Blocks;
+using WaveletStudio.Functions;
 
 namespace SOM_Visualization
 {
@@ -209,12 +210,12 @@ namespace SOM_Visualization
                     var arr = line.Split(';');
                     return Double.Parse(arr[sensor]);
                 }).ToList();
-                rawSeries.Add(ProcessSingleSeries(list));  
+                rawSeries.Add(ProcessSingleSeriesFFT(list));  
             }
            List<double> smaller;
            List<double> bigger;
-            int startIndex1 = 14;
-            int startIndex2 = 15;
+            int startIndex1 = 3;
+            int startIndex2 = 12;
             if (rawSeries[startIndex2].Count > rawSeries[startIndex1].Count)
            {
                bigger = rawSeries[startIndex1];
@@ -284,7 +285,14 @@ namespace SOM_Visualization
                inputSeriesBlock.SetSeries(serie);
                var dWTBlock = new DWTBlock
                {
-                   WaveletName = "Discreete Meyer (dmeyer)",
+                   WaveletName = "Coiflet 5(coif5)",
+                   Level = 1,
+                   Rescale = false,
+                   ExtensionMode = WaveletStudio.SignalExtension.ExtensionMode.AntisymmetricWholePoint
+               };
+               var dWTBlock2 = new DWTBlock
+               {
+                   WaveletName = "Symlet 8(sym8)",
                    Level = 1,
                    Rescale = false,
                    ExtensionMode = WaveletStudio.SignalExtension.ExtensionMode.AntisymmetricWholePoint
@@ -293,12 +301,39 @@ namespace SOM_Visualization
 
                //Connecting the blocks
                inputSeriesBlock.OutputNodes[0].ConnectTo(dWTBlock.InputNodes[0]);
-               dWTBlock.OutputNodes[1].ConnectTo(outputSeriesBlock.InputNodes[0]);
+            dWTBlock.OutputNodes[1].ConnectTo(dWTBlock2.InputNodes[0]);
+               dWTBlock2.OutputNodes[1].ConnectTo(outputSeriesBlock.InputNodes[0]);
 
                //Appending the blocks to a block list and execute all
                var blockList = new BlockList();
                blockList.Add(inputSeriesBlock);
                blockList.Add(dWTBlock);
+               blockList.Add(dWTBlock2);
+               blockList.Add(outputSeriesBlock);
+               blockList.ExecuteAll();
+               return outputSeriesBlock.GetSeries();
+           }
+        public static List<double> ProcessSingleSeriesFFT(List<double> serie)
+           {
+
+               //Declaring the blocks
+               var inputSeriesBlock = new InputSeriesBlock();
+               inputSeriesBlock.SetSeries(serie);
+              var outputSeriesBlock = new OutputSeriesBlock();
+               
+               var fFTBlock = new FFTBlock
+               {
+                   Mode = ManagedFFTModeEnum.UseLookupTable
+               };
+             
+
+               //Connecting the blocks
+               inputSeriesBlock.OutputNodes[0].ConnectTo(fFTBlock.InputNodes[0]);
+               fFTBlock.OutputNodes[1].ConnectTo(outputSeriesBlock.InputNodes[0]);
+               //Appending the blocks to a block list and execute all
+               var blockList = new BlockList();
+               blockList.Add(inputSeriesBlock);
+               blockList.Add(fFTBlock);
                blockList.Add(outputSeriesBlock);
                blockList.ExecuteAll();
                return outputSeriesBlock.GetSeries();
