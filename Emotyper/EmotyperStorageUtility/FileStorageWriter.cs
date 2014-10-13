@@ -110,10 +110,11 @@ namespace EmotyperDataUtility
 
         public void StartWritingToFile(string _folderName, string _fileName)
         {
+            Random r = new Random();
             _filename = _filestorageRoot + "\\" + _folderName + "\\";
             if (!Directory.Exists(_filename))
                 Directory.CreateDirectory(_filename);
-            _filename += _fileName + ".csv";
+            _filename += _fileName+r.NextDouble()+ ".csv";
             InitDatastorage();
             _writingThread = new Thread(StartRecording);
             _writingThread.Start();
@@ -133,7 +134,7 @@ namespace EmotyperDataUtility
             _file = new StreamWriter(_filename, true);
             string header = String.Join(";", _rawData.Keys.ToArray());
             _file.WriteLine(header);
-            int size = _rawData["TIMESTAMP"].Count;   //can be any of the sensors
+            int size = _rawData[EdkDll.EE_DataChannel_t.COUNTER.ToString()].Count;   //can be any of the sensors
             try
             {
                 for (int i = 0; i < size; i++)
@@ -141,7 +142,14 @@ namespace EmotyperDataUtility
                     // now write the data
                     foreach (String channel in _rawData.Keys)
                     {
-                        _file.Write(_rawData[channel][i] + ";");
+                        try
+                        {
+                            _file.Write(_rawData[channel][i] + ";");
+                        }
+                        catch (Exception)
+                        {                            
+                        }
+                        
                     }
                     _file.WriteLine("");
                 }

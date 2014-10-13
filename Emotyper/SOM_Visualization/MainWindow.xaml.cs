@@ -35,10 +35,11 @@ namespace SOM_Visualization
         private List<string> labels = new List<string>();
         private List<double[]> patterns = new List<double[]>();
         public MainWindow()
-        {     
-            this.length = 50; 
-            this.dimensions = 70;
+        {        
             InitializeComponent();
+            this.length = 100; 
+            this.dimensions = 70;
+            
             for (int i = 0; i < this.length; i++)
             {               
                 gridControl.ColumnDefinitions.Add(new ColumnDefinition());
@@ -99,11 +100,18 @@ namespace SOM_Visualization
         {
             List<List<double>> aData = getEssentialData("D://GitRepos//Emotyper//Emotyper//A", dimensions, 3);
             List<List<double>> bData = getEssentialData("D://GitRepos//Emotyper//Emotyper//B", dimensions, 3);
+           List<List<double>> cData = getEssentialData("D://GitRepos//Emotyper//Emotyper//C", dimensions, 3);
             int index = 0;
             foreach (List<double> list in aData)
             {
                 patterns.Add(list.ToArray());
                 labels.Add("A" + index);
+                index++;
+            }
+            foreach (List<double> list in cData)
+            {
+                patterns.Add(list.ToArray());
+                labels.Add("C" + index);
                 index++;
             }
             foreach (List<double> list in bData)
@@ -205,17 +213,25 @@ namespace SOM_Visualization
            List<Tuple<int, int, int, int, double>> pairCorrs = new List<Tuple<int, int, int, int, double>>(); //winsizeSmaller winsizeBigger indexsmaller indexBigger  correlation
            foreach (String file in Directory.GetFiles(samplesDirestory))
             {
-                var list = File.ReadLines(file.Replace("\\", "//")).Skip(1).Select(line =>
+               DataTable table = CSVReader.ReadCSVFile(file.Replace("\\", "//"), true);
+                List<double> serie = new List<double>();
+                // String sensorName = table.Columns[i].ColumnName;
+                for (int j = 0; j < table.Rows.Count; j++)
                 {
-                    var arr = line.Split(';');
-                    return Double.Parse(arr[sensor]);
-                }).ToList();
-                rawSeries.Add(ProcessSingleSeriesFFT(list));  
+                    DataRow row = table.Rows[j];
+                    double val;
+                    Double.TryParse(row[sensor].ToString(), out val);
+                    serie.Add(Math.Cosh(val));
+                }            
+                var s = ProcessSingleSeriesFFT(serie);
+               //rawSeries.Add(s);
+                rawSeries.Add(ProcessSingleSeries(s)); 
+               // rawSeries.Add(ProcessSingleSeries(serie));
             }
            List<double> smaller;
            List<double> bigger;
-            int startIndex1 = 3;
-            int startIndex2 = 12;
+            int startIndex1 = 12;
+            int startIndex2 = 15;
             if (rawSeries[startIndex2].Count > rawSeries[startIndex1].Count)
            {
                bigger = rawSeries[startIndex1];
@@ -290,25 +306,25 @@ namespace SOM_Visualization
                    Rescale = false,
                    ExtensionMode = WaveletStudio.SignalExtension.ExtensionMode.AntisymmetricWholePoint
                };
-               var dWTBlock2 = new DWTBlock
-               {
-                   WaveletName = "Symlet 8(sym8)",
-                   Level = 1,
-                   Rescale = false,
-                   ExtensionMode = WaveletStudio.SignalExtension.ExtensionMode.AntisymmetricWholePoint
-               };
+               //var dWTBlock2 = new DWTBlock
+               //{
+               //    WaveletName = "Discreete Meyer(dmeyer)",
+               //    Level = 1,
+               //    Rescale = false,
+               //    ExtensionMode = WaveletStudio.SignalExtension.ExtensionMode.AntisymmetricWholePoint
+               //};
                var outputSeriesBlock = new OutputSeriesBlock();
 
                //Connecting the blocks
                inputSeriesBlock.OutputNodes[0].ConnectTo(dWTBlock.InputNodes[0]);
-            dWTBlock.OutputNodes[1].ConnectTo(dWTBlock2.InputNodes[0]);
-               dWTBlock2.OutputNodes[1].ConnectTo(outputSeriesBlock.InputNodes[0]);
+           // dWTBlock.OutputNodes[1].ConnectTo(dWTBlock2.InputNodes[0]);
+               dWTBlock.OutputNodes[1].ConnectTo(outputSeriesBlock.InputNodes[0]);
 
                //Appending the blocks to a block list and execute all
                var blockList = new BlockList();
                blockList.Add(inputSeriesBlock);
                blockList.Add(dWTBlock);
-               blockList.Add(dWTBlock2);
+               //blockList.Add(dWTBlock2);
                blockList.Add(outputSeriesBlock);
                blockList.ExecuteAll();
                return outputSeriesBlock.GetSeries();
@@ -422,9 +438,13 @@ namespace SOM_Visualization
                 {
                     label.Background= new SolidColorBrush(Colors.Red);
                 }
-                else
+                else if (labels[i].Contains("B"))
                 {
                     label.Background = new SolidColorBrush(Colors.Green);
+                }
+                else if (labels[i].Contains("C"))
+                {
+                    label.Background = new SolidColorBrush(Colors.Yellow);
                 }
                 
                 label.Foreground = new SolidColorBrush(Colors.White);
@@ -442,8 +462,8 @@ namespace SOM_Visualization
             for (int i = 0; i < length; i++)
                 for (int j = 0; j < length; j++)
                 {
-                    double d = Distance(pattern, outputs[i, j].Weights);
-                    //double d = Distance2(pattern, outputs[i, j].Weights);
+                   // double d = Distance(pattern, outputs[i, j].Weights);
+                    double d = Distance2(pattern, outputs[i, j].Weights);
                     if (d < min)
                     {
                         min = d;
