@@ -15,6 +15,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Com.StellmanGreene.CSVReader;
+using DSP;
+using NDtw;
 using SOM;
 using WaveletStudio.Blocks;
 using WaveletStudio.Functions;
@@ -38,7 +40,7 @@ namespace SOM_Visualization
         {        
             InitializeComponent();
             this.length = 100; 
-            this.dimensions = 70;
+            this.dimensions = 11;
             
             for (int i = 0; i < this.length; i++)
             {               
@@ -55,7 +57,7 @@ namespace SOM_Visualization
            // loadDateFromAllFiles();
             loadCropedDateFromAllFiles();
 
-            NormalisePatterns();
+            //NormalisePatterns();
             Train(0.0000001);
             DumpCoordinates();
         }
@@ -77,25 +79,7 @@ namespace SOM_Visualization
                 }
             }
         }
-
-        private void LoadData(string file)
-        {
-            StreamReader reader = File.OpenText(file);
-            //reader.ReadLine(); // Ignore first line.
-            while (!reader.EndOfStream)
-            {
-                string[] line = reader.ReadLine().Split(';');
-                labels.Add(line[0]);
-                double[] inputs = new double[dimensions];
-                for (int i = 0; i < dimensions; i++)
-                {
-                    inputs[i] = double.Parse(line[i + 1]);
-                }
-                patterns.Add(inputs);
-            }
-            reader.Close();
-        }
-
+       
         private void loadCropedDateFromAllFiles()
         {
             List<List<double>> aData = getEssentialData("D://GitRepos//Emotyper//Emotyper//A", dimensions, 3);
@@ -122,98 +106,14 @@ namespace SOM_Visualization
             }
         }
 
-        private void loadDateFromAllFiles()
-        {
-            
-            //for (int i = 3; i < 17; i++)
-            //{
-               int aind = 0,bind=0; 
-               int ind = 3;
-               List<List<double>> Asamples = new List<List<double>>();
-               List<List<Tuple<int, int, int, int, double>>> correlations = new List<List<Tuple<int, int, int, int, double>>>();
-               int MinWinSize = 64;
-            foreach (String file in Directory.GetFiles("D://GitRepos//Emotyper//Emotyper//A"))
-            {
-               
-                DataTable table = CSVReader.ReadCSVFile(file.Replace("\\","//"), true);
-              
-                List<double> serie = new List<double>();
-                // String sensorName = table.Columns[i].ColumnName;
-                for (int j = 0; j < table.Rows.Count; j++)
-                {
-                    DataRow row = table.Rows[j];
-                    double val;
-                    Double.TryParse(row[ind].ToString(), out val);
-                    serie.Add(val);
-                }
-                //serie = processOneSeries(serie);
-                Asamples.Add(serie);
-                patterns.Add(serie.GetRange(0, 110).ToArray());
-                labels.Add(String.Format("A{0}", aind));
-                aind++;
-            }
-               for (int k = 1; k < Asamples.Count; k++)
-               {
-                   List<double> smaller;
-                   List<double> bigger;
-                   List <Tuple<int, int, int, int,double>> pairCorrs = new List<Tuple<int, int, int, int,double>>(); //winsizeSmaller winsizeBigger indexsmaller indexBigger  correlation
-                   if (Asamples[k].Count > Asamples[k - 1].Count)
-                   {
-                       bigger = Asamples[k];
-                       smaller = Asamples[k - 1];
-                   }
-                   else
-                   {
-                       bigger = Asamples[k-1];
-                       smaller = Asamples[k];
-                   }
-                   int m = smaller.Count;
-                   int n = bigger.Count;
-                  // for (int ws1 = MinWinSize; ws1 < m; ws1++)
-                       //for (int ws2=MinWinSize;ws2<n;ws2++)
-                   //{
-                   int ws2 = 140;
-                   int ws1 = ws2;
-                       for (int j = 0; j < m - ws1; j++)
-                           for (int i = 0; i < n - ws2; i++)
-                           {
-                               double correl = dnAnalytics.Statistics.Correlation.Pearson(smaller.GetRange(j, ws1),bigger.GetRange(i, ws2));
-                              // double correl = Distance(smaller.GetRange(j, ws1).ToArray(), bigger.GetRange(i, ws2).ToArray());
-                               if (Math.Abs(correl)>0.7)
-                               pairCorrs.Add(new Tuple<int, int, int, int, double>(k, k-1, j, i,
-                                  correl));
-                           }
-//}
-                   correlations.Add(pairCorrs);    
-               }
-            foreach (String file in Directory.GetFiles("D://Emotyper//Emotyper//B"))
-            {
-                DataTable table = CSVReader.ReadCSVFile(file.Replace("\\","//"), true);
-                List<double> serie = new List<double>();
-                // String sensorName = table.Columns[i].ColumnName;
-                for (int j = 0; j < table.Rows.Count; j++)
-                {
-                    DataRow row = table.Rows[j];
-                    double val;
-                    Double.TryParse(row[ind].ToString(), out val);
-                    serie.Add(val);
-                }
-                serie = ProcessSingleSeries(serie);
-                patterns.Add(serie.GetRange(0, 110).ToArray());
-                labels.Add(String.Format("B{0}", bind));
-                bind++;
-            }
-            //}
-        }
-
         public  List<List<double>> getEssentialData(String samplesDirestory, int FrameSize,int sensor)
         {
            List<List<double>> resultSet = new List<List<double>>();
            List<List<double>> rawSeries = new List<List<double>>();
            List<Tuple<int, int, int, int, double>> pairCorrs = new List<Tuple<int, int, int, int, double>>(); //winsizeSmaller winsizeBigger indexsmaller indexBigger  correlation
-           foreach (String file in Directory.GetFiles(samplesDirestory))
+            foreach (String file in Directory.GetFiles(samplesDirestory))
             {
-               DataTable table = CSVReader.ReadCSVFile(file.Replace("\\", "//"), true);
+                DataTable table = CSVReader.ReadCSVFile(file.Replace("\\", "//"), true);
                 List<double> serie = new List<double>();
                 // String sensorName = table.Columns[i].ColumnName;
                 for (int j = 0; j < table.Rows.Count; j++)
@@ -221,13 +121,26 @@ namespace SOM_Visualization
                     DataRow row = table.Rows[j];
                     double val;
                     Double.TryParse(row[sensor].ToString(), out val);
-                    serie.Add(Math.Cosh(val));
-                }            
-                var s = ProcessSingleSeriesFFT(serie);
-               //rawSeries.Add(s);
-                rawSeries.Add(ProcessSingleSeries(s)); 
+                    serie.Add(val);
+                }
+                //var s = ProcessSingleSeriesFFT(serie);
+                //rawSeries.Add(s);
+                if (serie.Count < 256)
+                {
+                    continue;
+                }
+                else
+                {
+                    serie = serie.GetRange(0, 256);
+                }
+
+                double[] ser = serie.ToArray();
+                double[] spectrum =FourierTransform.Spectrum(ref ser);
+                double[] mel = DSP.MFCC.compute(ref spectrum);                
+                rawSeries.Add(new List<double>(mel)); 
                // rawSeries.Add(ProcessSingleSeries(serie));
             }
+            return rawSeries;
            List<double> smaller;
            List<double> bigger;
             int startIndex1 = 12;
@@ -301,7 +214,7 @@ namespace SOM_Visualization
                inputSeriesBlock.SetSeries(serie);
                var dWTBlock = new DWTBlock
                {
-                   WaveletName = "Coiflet 5(coif5)",
+                   WaveletName = "haar",
                    Level = 1,
                    Rescale = false,
                    ExtensionMode = WaveletStudio.SignalExtension.ExtensionMode.AntisymmetricWholePoint
@@ -380,10 +293,12 @@ namespace SOM_Visualization
                 currentError = 0;
                 List<double[]> TrainingSet = patterns.ToList();
                
-                  var task1 = Task.Factory.StartNew(() => trainPatternRange(TrainingSet,0,patterns.Count/2));
-                  var task2 = Task.Factory.StartNew(() =>trainPatternRange(TrainingSet,patterns.Count / 2,patterns.Count ));
-                Task.WaitAll(task1,task2);
-                currentError = task1.Result + task2.Result;
+                  var task1 = Task.Factory.StartNew(() => trainPatternRange(TrainingSet,0,patterns.Count/4));
+                  var task2 = Task.Factory.StartNew(() =>trainPatternRange(TrainingSet,patterns.Count / 4,patterns.Count/2 ));
+                  var task3 = Task.Factory.StartNew(() => trainPatternRange(TrainingSet, patterns.Count / 2, patterns.Count/4*3));
+                  var task4 = Task.Factory.StartNew(() => trainPatternRange(TrainingSet, patterns.Count / 4*3, patterns.Count));
+                Task.WaitAll(task1,task2,task3,task4);
+                currentError = task1.Result + task2.Result + task3.Result + task4.Result;
                 
                 Console.WriteLine(currentError.ToString("0.0000000"));
             }
@@ -487,6 +402,11 @@ namespace SOM_Visualization
         private double Distance2(double[] vector1, double[] vector2)
         {
             return 1/Math.Abs(dnAnalytics.Statistics.Correlation.Pearson(vector1, vector2));
+        }
+        private double Distance3(double[] vector1, double[] vector2)
+        {
+          Dtw analyser = new Dtw(vector1,vector2,DistanceMeasure.Manhattan,sakoeChibaMaxShift:300);
+            return analyser.GetCost();
         }
 
     }
