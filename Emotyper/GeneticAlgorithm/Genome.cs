@@ -63,7 +63,7 @@ namespace btl.generic
 		{
 			// DateTime d = DateTime.UtcNow;
 			for (int i = 0 ; i < m_length ; i++)
-				m_genes[i] = m_random.NextDouble();
+				m_genes[i] = m_random.Next(0,1200);
 		}
 
 		public void Crossover(ref Genome genome2, out Genome child1, out Genome child2)

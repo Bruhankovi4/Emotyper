@@ -102,6 +102,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GeneticAlgorithm\GeneticAlgorithm.csproj">
+      <Project>{706521B7-F333-44CD-BCA0-B9675FAB6F2B}</Project>
+      <Name>GeneticAlgorithm</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NDtw\NDtw.csproj">
       <Project>{572EB90F-7F5D-484D-A701-C7FF1556FE32}</Project>
       <Name>NDtw</Name>

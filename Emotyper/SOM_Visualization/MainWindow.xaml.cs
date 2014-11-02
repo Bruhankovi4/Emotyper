@@ -20,6 +20,7 @@ using NDtw;
 using SOM;
 using WaveletStudio.Blocks;
 using WaveletStudio.Functions;
+using btl.generic;
 
 namespace SOM_Visualization
 {
@@ -40,7 +41,7 @@ namespace SOM_Visualization
         {        
             InitializeComponent();
             this.length = 100; 
-            this.dimensions = 128;
+            this.dimensions = 11;
             
             for (int i = 0; i < this.length; i++)
             {               
@@ -48,20 +49,104 @@ namespace SOM_Visualization
                 gridControl.RowDefinitions.Add(new RowDefinition());
                 
             }
-            gridControl.ShowGridLines = true;
+           // gridControl.ShowGridLines = true;
             
-            Initialise();
-            //LoadData("Food.csv");
-           // LoadData("testAB.csv");
+           // Initialise();
+           // //LoadData("Food.csv");
+           //// LoadData("testAB.csv");
 
-           // loadDateFromAllFiles();
-            loadCropedDateFromAllFiles();        
-            //NormalisePatterns();
-            Train(0.0000001); 
+           //// loadDateFromAllFiles();
+           // loadCropedDateFromAllFiles();        
+           // //NormalisePatterns();
+           // Train(0.0000001); 
            
-            DumpCoordinates();
+           // DumpCoordinates();
+
+            //  Crossover		= 80%
+            //  Mutation		=  5%
+            //  Population size = 100
+            //  Generations		= 2000
+            //  Genome size		= 2
+            GA ga = new GA(0.8, 0.05, 100, 2000, 3);
+
+            ga.FitnessFunction = new GAFunction(theActualFunction);
+
+            //ga.FitnessFile = @"H:\fitness.csv";
+            ga.Elitism = true;
+            ga.Go();
+
+            double[] values;
+            double fitness;
+            ga.GetBest(out values, out fitness);
+            //System.Console.WriteLine("Best ({0}):", fitness);
+            //for (int i = 0; i < values.Length; i++)
+            //    System.Console.WriteLine("{0} ", values[i]);
+
+            //ga.GetWorst(out values, out fitness);
+            //System.Console.WriteLine("\nWorst ({0}):", fitness);
+            //for (int i = 0 ; i < values.Length ; i++)
+            //    System.Console.WriteLine("{0} ", values[i]);
+         //   System.Console.ReadLine();
+            DSP.MFCC.d1 = values[0];
+            DSP.MFCC.d2 = values[1];
+            DSP.MFCC.d3 = values[2];
+            Initialise();
+            loadCropedDateFromAllFiles();
+            Train(0.0000001);
+             drawResults();
         }
-             
+        public double theActualFunction(double[] vals)
+        {
+                                List<double> values= new List<double>(vals);
+           // values.Sort();
+            DSP.MFCC.d1 = values[0];
+            DSP.MFCC.d2 = values[1];
+            DSP.MFCC.d3 = values[2];
+            Console.WriteLine("_____________________MelCoifs___________________________________");
+            Console.WriteLine(values[0]);
+            Console.WriteLine(values[1]);
+            Console.WriteLine(values[2]);
+            //Console.WriteLine("_____________________Frequincies___________________________________");
+            //for (int i = 3; i < values.Length; i++)
+            //{
+            //    MFCC.melWorkingFrequencies[i - 3] = values[i];
+            //    Console.WriteLine(values[i]);
+            //}
+                Initialise();
+            loadCropedDateFromAllFiles();
+            Train(0.0000001);
+           return DumpCoordinates();
+        }
+
+        //public static void Main()
+        //{
+        //    //  Crossover		= 80%
+        //    //  Mutation		=  5%
+        //    //  Population size = 100
+        //    //  Generations		= 2000
+        //    //  Genome size		= 2
+        //    GA ga = new GA(0.8, 0.05, 100, 2000, 2);
+
+        //    ga.FitnessFunction = new GAFunction(theActualFunction);
+
+        //    //ga.FitnessFile = @"H:\fitness.csv";
+        //    ga.Elitism = true;
+        //    ga.Go();
+
+        //    double[] values;
+        //    double fitness;
+        //    ga.GetBest(out values, out fitness);
+        //    System.Console.WriteLine("Best ({0}):", fitness);
+        //    for (int i = 0; i < values.Length; i++)
+        //        System.Console.WriteLine("{0} ", values[i]);
+
+        //    //ga.GetWorst(out values, out fitness);
+        //    //System.Console.WriteLine("\nWorst ({0}):", fitness);
+        //    //for (int i = 0 ; i < values.Length ; i++)
+        //    //    System.Console.WriteLine("{0} ", values[i]);
+        //    System.Console.ReadLine();
+
+        //}     
 
         private void Initialise()
         {
@@ -130,15 +215,19 @@ namespace SOM_Visualization
                 }
                     //Double.TryParse(row[sensor].ToString(), out val);
                     //serie.Add(val);
-               
-                rawSeries.Add(serie);
+
+                double[] ser = serie.ToArray();
+                //double[] spectrum = FourierTransform.Spectrum(ref ser);
+                double[] mel = MFCC.compute(ref ser);
+                rawSeries.Add(new List<double>(mel)); 
+                //rawSeries.Add(serie);
             }
             return rawSeries;
         }
 
       
 
-        public  List<List<double>> getEssentialData(String samplesDirestory, int FrameSize,int sensor)
+        public  List<List<double>> getEssentialData(String samplesDirestory, int FrameSize,int sensor,bool writefiles = false)
         {
            List<List<double>> resultSet = new List<List<double>>();
            List<List<double>> rawSeries = new List<List<double>>();
@@ -239,17 +328,24 @@ namespace SOM_Visualization
                     tuple = pairCorrs[0];
                    // tuple = pairCorrs.Last();
                     resultSet.Add(rawSeries[i].GetRange(tuple.Item4, FrameSize));
-                         CsvRow row = new CsvRow();
-                    StringBuilder s = new StringBuilder();
-                    foreach ( double val in resultSet.Last())
-                    {    row.Add(val);
-                        
+                    if (writefiles)
+                    {
+                        CsvRow row = new CsvRow();
+                        StringBuilder s = new StringBuilder();
+                        foreach (double val in resultSet.Last())
+                        {
+                            row.Add(val);
+
+                        }
+
+                        writer =
+                            new CsvFileWriter(
+                                samplesDirestory.Replace("A", "AFilter").Replace("B", "BFilter").Replace("C", "CFilter") +
+                                String.Format("sample{0}.csv", DateTime.Now.ToBinary()));
+                        writer.WriteRow(row);
+                        writer.Flush();
+                        writer.Close();
                     }
-                    
-                    writer = new CsvFileWriter(samplesDirestory.Replace("A", "AFilter").Replace("B", "BFilter").Replace("C", "CFilter")+String.Format("sample{0}.csv",DateTime.Now.ToBinary()));
-                    writer.WriteRow(row);
-                    writer.Flush();
-                    writer.Close();
                 }
             }
             return resultSet;
@@ -387,35 +483,94 @@ namespace SOM_Visualization
             return error;
         }
               
-        private void DumpCoordinates()
+        private double DumpCoordinates()
+        {
+            List<Point> a = new List<Point>();
+            List<Point> b = new List<Point>();
+            List<Point> c = new List<Point>();
+            for (int i = 0; i < patterns.Count; i++)
+            {
+                SOM.Neuron n = Winner(patterns[i]);
+                Console.WriteLine("{0},{1},{2}", labels[i], n.X, n.Y);
+                if (labels[i].Contains("A"))
+                {
+                    drawPoint(new Point(n.X, n.Y), Colors.Red, labels[i]);
+                    a.Add(new Point(n.X,n.Y));
+                }
+                else if (labels[i].Contains("B"))
+                {
+                    drawPoint(new Point(n.X, n.Y), Colors.Green, labels[i]);
+                    b.Add(new Point(n.X, n.Y));
+                }
+                else if (labels[i].Contains("C"))
+                {
+                    drawPoint(new Point(n.X, n.Y), Colors.Yellow, labels[i]);
+                    c.Add(new Point(n.X, n.Y));
+                }
+            }
+            Point acenter = getSetCenter(a);
+            Point bcenter = getSetCenter(b);
+            Point ccenter = getSetCenter(c);
+            drawPoint(acenter, Colors.Brown, "");
+            drawPoint(ccenter, Colors.Goldenrod, "");
+            drawPoint(bcenter, Colors.Lime, "");
+            double dist =  GetDistance(acenter, bcenter) + GetDistance(acenter, ccenter) + GetDistance(ccenter, bcenter);
+            Console.WriteLine("Distance= "+dist);
+            return dist;
+        }
+        private void drawResults()
         {
             for (int i = 0; i < patterns.Count; i++)
             {
                 SOM.Neuron n = Winner(patterns[i]);
                 Console.WriteLine("{0},{1},{2}", labels[i], n.X, n.Y);
-                Label label = new Label();
-                label.Content = labels[i];
-                //label.Width = 100;                
-               // label.Height = 20;
                 if (labels[i].Contains("A"))
                 {
-                    label.Background= new SolidColorBrush(Colors.Red);
+ 
+                    drawPoint(new Point(n.X, n.Y), Colors.Red, labels[i]);
                 }
                 else if (labels[i].Contains("B"))
                 {
-                    label.Background = new SolidColorBrush(Colors.Green);
+                    drawPoint(new Point(n.X, n.Y), Colors.Green, labels[i]);
                 }
                 else if (labels[i].Contains("C"))
                 {
-                    label.Background = new SolidColorBrush(Colors.Yellow);
+                    drawPoint(new Point(n.X, n.Y), Colors.Yellow, labels[i]);
                 }
-                
-                label.Foreground = new SolidColorBrush(Colors.White);
-                label.FontSize = 12;                   
-                Grid.SetRow(label,n.X);
-                Grid.SetColumn(label,n.Y);
-                gridControl.Children.Add(label);
-            }           
+
+            }
+        }
+        private static double GetDistance(Point point1, Point point2)
+        {
+            //pythagorean theorem c^2 = a^2 + b^2
+            //thus c = square root(a^2 + b^2)
+            double a = (double)(point2.X - point1.X);
+            double b = (double)(point2.Y - point1.Y);
+
+            return Math.Sqrt(a * a + b * b);
+        }
+        private void drawPoint(Point coordinates, Color color, String text)
+        {
+            Label label = new Label();
+            label.Content = text;
+            label.Background = new SolidColorBrush(color);
+            label.Foreground = new SolidColorBrush(Colors.White);
+            label.FontSize = 12;
+            Grid.SetRow(label, (int)coordinates.X);
+            Grid.SetColumn(label,(int) coordinates.Y);
+            gridControl.Children.Add(label);
+        }
+
+        private Point getSetCenter(List<Point> points)
+        {
+            Point center = new Point();
+            foreach (Point point in points)
+            {
+                center.Offset(point.X,point.Y);
+            }
+            center.X /= points.Count;
+            center.Y /= points.Count;
+            return center;
         }
 
         private SOM.Neuron Winner(double[] pattern)
