@@ -244,9 +244,9 @@ namespace Com.StellmanGreene.CSVReader
         /// <param name="filename">Filename of CSV file</param>
         /// <param name="headerRow">True if the first row contains column names</param>
         /// <returns>System.Data.DataTable object that contains the CSV data</returns>
-        public static DataTable ReadCSVFile(string filename, bool headerRow)
+        public static DataTable ReadCSVFile(string filename, bool headerRow,String delim = ";")
         {
-            using (CSVReader reader = new CSVReader(new FileInfo(filename),";"))
+            using (CSVReader reader = new CSVReader(new FileInfo(filename),delim))
                 return reader.CreateDataTable(headerRow);
         }
 

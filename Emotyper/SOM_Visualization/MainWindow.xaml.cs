@@ -40,7 +40,7 @@ namespace SOM_Visualization
         {        
             InitializeComponent();
             this.length = 100; 
-            this.dimensions = 11;
+            this.dimensions = 128;
             
             for (int i = 0; i < this.length; i++)
             {               
@@ -55,10 +55,10 @@ namespace SOM_Visualization
            // LoadData("testAB.csv");
 
            // loadDateFromAllFiles();
-            loadCropedDateFromAllFiles();
-
+            loadCropedDateFromAllFiles();        
             //NormalisePatterns();
-            Train(0.0000001);
+            Train(0.0000001); 
+           
             DumpCoordinates();
         }
              
@@ -82,9 +82,14 @@ namespace SOM_Visualization
        
         private void loadCropedDateFromAllFiles()
         {
-            List<List<double>> aData = getEssentialData("D://GitRepos//Emotyper//Emotyper//A", dimensions, 3);
-            List<List<double>> bData = getEssentialData("D://GitRepos//Emotyper//Emotyper//B", dimensions, 3);
-           List<List<double>> cData = getEssentialData("D://GitRepos//Emotyper//Emotyper//C", dimensions, 3);
+            patterns.Clear();
+            //labels.Clear();
+            //List<List<double>> aData = getEssentialData("D://GitRepos//Emotyper//Emotyper//A", dimensions, 3);
+            //List<List<double>> bData = getEssentialData("D://GitRepos//Emotyper//Emotyper//B", dimensions, 3);
+            //List<List<double>> cData = getEssentialData("D://GitRepos//Emotyper//Emotyper//C", dimensions, 3);
+            List<List<double>> aData = getSensorData("D://GitRepos//Emotyper//Emotyper//Aaf3");
+            List<List<double>> bData = getSensorData("D://GitRepos//Emotyper//Emotyper//Baf3");
+            List<List<double>> cData = getSensorData("D://GitRepos//Emotyper//Emotyper//Caf3");
             int index = 0;
             foreach (List<double> list in aData)
             {
@@ -103,16 +108,45 @@ namespace SOM_Visualization
                 patterns.Add(list.ToArray());
                 labels.Add("B" + index);
                 index++;
-            }
+            } 
+            
         }
+
+        private List<List<double>> getSensorData(string samplesDirestory)
+        {
+            List<List<double>> rawSeries = new List<List<double>>();
+            foreach (String file in Directory.GetFiles(samplesDirestory))
+            {
+
+                DataTable table = CSVReader.ReadCSVFile(file.Replace("\\", "//"), false,";");
+                List<double> serie = new List<double>();
+               
+                    DataRow row = table.Rows[0];
+                    double val;
+                foreach (object d in row.ItemArray)
+                {
+                    Double.TryParse(d.ToString(), out val);
+                    serie.Add(val);                   
+                }
+                    //Double.TryParse(row[sensor].ToString(), out val);
+                    //serie.Add(val);
+               
+                rawSeries.Add(serie);
+            }
+            return rawSeries;
+        }
+
+      
 
         public  List<List<double>> getEssentialData(String samplesDirestory, int FrameSize,int sensor)
         {
            List<List<double>> resultSet = new List<List<double>>();
            List<List<double>> rawSeries = new List<List<double>>();
            List<Tuple<int, int, int, int, double>> pairCorrs = new List<Tuple<int, int, int, int, double>>(); //winsizeSmaller winsizeBigger indexsmaller indexBigger  correlation
+           CsvFileWriter writer;
             foreach (String file in Directory.GetFiles(samplesDirestory))
             {
+               
                 DataTable table = CSVReader.ReadCSVFile(file.Replace("\\", "//"), true);
                 List<double> serie = new List<double>();
                 // String sensorName = table.Columns[i].ColumnName;
@@ -123,24 +157,26 @@ namespace SOM_Visualization
                     Double.TryParse(row[sensor].ToString(), out val);
                     serie.Add(val);
                 }
+                rawSeries.Add(serie);
                 //var s = ProcessSingleSeriesFFT(serie);
                 //rawSeries.Add(s);
-                if (serie.Count < 256)
-                {
-                    continue;
-                }
-                else
-                {
-                    serie = serie.GetRange(0, 256);
-                }
+               // serie = ProcessSingleSeries(serie);
+               // if (serie.Count < 128)
+               // {
+               //     continue;
+               // }
+               // else
+               // {
+               //     serie = serie.GetRange(0, 128);
+               // }
 
-                double[] ser = serie.ToArray();
-                double[] spectrum =FourierTransform.Spectrum(ref ser);
-                double[] mel = DSP.MFCC.compute(ref spectrum);                
-                rawSeries.Add(new List<double>(mel)); 
-               // rawSeries.Add(ProcessSingleSeries(serie));
+               // double[] ser =serie.ToArray();
+               //double[] spectrum =FourierTransform.Spectrum(ref ser);
+               // double[] mel = MFCC.compute(ref ser);
+               // rawSeries.Add(new List<double>(spectrum)); 
+              //  rawSeries.Add(ProcessSingleSeries(serie));
             }
-            return rawSeries;
+           // return rawSeries;
            List<double> smaller;
            List<double> bigger;
             int startIndex1 = 12;
@@ -188,7 +224,8 @@ namespace SOM_Visualization
                     double midleCorrel = 0;
                     foreach (List<double> list in resultSet)
                     {
-                        double correl = dnAnalytics.Statistics.Correlation.Pearson(list,rawSeries[i].GetRange(j, FrameSize));
+                     //   double correl = dnAnalytics.Statistics.Correlation.Pearson(list,rawSeries[i].GetRange(j, FrameSize));
+                        double correl = Distance3(list.ToArray(), rawSeries[i].GetRange(j, FrameSize).ToArray());
                         midleCorrel += Math.Abs(correl);
                     }
                     //    double correl = Distance(resultSet.Last().ToArray(), rawSeries[i].GetRange(j, FrameSize).ToArray());
@@ -202,6 +239,17 @@ namespace SOM_Visualization
                     tuple = pairCorrs[0];
                    // tuple = pairCorrs.Last();
                     resultSet.Add(rawSeries[i].GetRange(tuple.Item4, FrameSize));
+                         CsvRow row = new CsvRow();
+                    StringBuilder s = new StringBuilder();
+                    foreach ( double val in resultSet.Last())
+                    {    row.Add(val);
+                        
+                    }
+                    
+                    writer = new CsvFileWriter(samplesDirestory.Replace("A", "AFilter").Replace("B", "BFilter").Replace("C", "CFilter")+String.Format("sample{0}.csv",DateTime.Now.ToBinary()));
+                    writer.WriteRow(row);
+                    writer.Flush();
+                    writer.Close();
                 }
             }
             return resultSet;
@@ -214,7 +262,7 @@ namespace SOM_Visualization
                inputSeriesBlock.SetSeries(serie);
                var dWTBlock = new DWTBlock
                {
-                   WaveletName = "haar",
+                   WaveletName = "coif4",
                    Level = 1,
                    Rescale = false,
                    ExtensionMode = WaveletStudio.SignalExtension.ExtensionMode.AntisymmetricWholePoint
@@ -378,7 +426,7 @@ namespace SOM_Visualization
                 for (int j = 0; j < length; j++)
                 {
                    // double d = Distance(pattern, outputs[i, j].Weights);
-                    double d = Distance2(pattern, outputs[i, j].Weights);
+                    double d = Distance(pattern, outputs[i, j].Weights);
                     if (d < min)
                     {
                         min = d;
@@ -405,7 +453,7 @@ namespace SOM_Visualization
         }
         private double Distance3(double[] vector1, double[] vector2)
         {
-          Dtw analyser = new Dtw(vector1,vector2,DistanceMeasure.Manhattan,sakoeChibaMaxShift:300);
+          Dtw analyser = new Dtw(vector1,vector2,DistanceMeasure.Manhattan);
             return analyser.GetCost();
         }
 
