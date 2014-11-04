@@ -62,23 +62,23 @@ namespace SOM_Visualization
            
            // DumpCoordinates();
 
-            //  Crossover		= 80%
-            //  Mutation		=  5%
-            //  Population size = 100
-            //  Generations		= 2000
-            //  Genome size		= 2
-            GA ga = new GA(0.8, 0.05, 100, 2000, 3);
+              //Crossover		= 80%
+              //Mutation		=  5%
+              //Population size = 100
+              //Generations		= 2000
+              //Genome size		= 2
+            GA ga = new GA(0.8, 0.5, 100, 2000, 11);
 
             ga.FitnessFunction = new GAFunction(theActualFunction);
 
             //ga.FitnessFile = @"H:\fitness.csv";
-            ga.Elitism = true;
+            ga.Elitism = false;
             ga.Go();
 
             double[] values;
             double fitness;
             ga.GetBest(out values, out fitness);
-            //System.Console.WriteLine("Best ({0}):", fitness);
+            ////System.Console.WriteLine("Best ({0}):", fitness);
             //for (int i = 0; i < values.Length; i++)
             //    System.Console.WriteLine("{0} ", values[i]);
 
@@ -87,9 +87,9 @@ namespace SOM_Visualization
             //for (int i = 0 ; i < values.Length ; i++)
             //    System.Console.WriteLine("{0} ", values[i]);
          //   System.Console.ReadLine();
-            DSP.MFCC.d1 = values[0];
-            DSP.MFCC.d2 = values[1];
-            DSP.MFCC.d3 = values[2];
+            //DSP.MFCC.d1 = values[0];
+            //DSP.MFCC.d2 = values[1];
+            //DSP.MFCC.d3 = values[2];
             Initialise();
             loadCropedDateFromAllFiles();
             Train(0.0000001);
@@ -98,20 +98,28 @@ namespace SOM_Visualization
         public double theActualFunction(double[] vals)
         {
                                 List<double> values= new List<double>(vals);
-           // values.Sort();
-            DSP.MFCC.d1 = values[0];
-            DSP.MFCC.d2 = values[1];
-            DSP.MFCC.d3 = values[2];
-            Console.WriteLine("_____________________MelCoifs___________________________________");
-            Console.WriteLine(values[0]);
-            Console.WriteLine(values[1]);
-            Console.WriteLine(values[2]);
-            //Console.WriteLine("_____________________Frequincies___________________________________");
-            //for (int i = 3; i < values.Length; i++)
-            //{
-            //    MFCC.melWorkingFrequencies[i - 3] = values[i];
-            //    Console.WriteLine(values[i]);
-            //}
+                                values.Sort();
+            for (int index = 1; index < values.Count; index++)
+            {
+                if (values[index] == values[index - 1])
+                {
+                    values[index]++;
+                }
+            }
+            //DSP.MFCC.d1 = values[0];
+                                //DSP.MFCC.d2 = values[1];
+                                //DSP.MFCC.d3 = values[2];
+                                //Console.WriteLine("_____________________MelCoifs___________________________________");
+                                //Console.WriteLine(values[0]);
+                                //Console.WriteLine(values[1]);
+                                //Console.WriteLine(values[2]);
+            Console.WriteLine("_____________________Frequincies___________________________________");
+            for (int i = 0; i < 11; i++)
+            {
+                MFCC.melWorkingFrequencies[i] = values[i];
+                Console.WriteLine(values[i]);
+            }
+            iteration = 0;
                 Initialise();
             loadCropedDateFromAllFiles();
             Train(0.0000001);
@@ -150,6 +158,7 @@ namespace SOM_Visualization
 
         private void Initialise()
         {
+            
             outputs = new SOM.Neuron[length,length];
             for (int i = 0; i < length; i++)
             {
@@ -168,6 +177,7 @@ namespace SOM_Visualization
         private void loadCropedDateFromAllFiles()
         {
             patterns.Clear();
+            labels.Clear();
             //labels.Clear();
             //List<List<double>> aData = getEssentialData("D://GitRepos//Emotyper//Emotyper//A", dimensions, 3);
             //List<List<double>> bData = getEssentialData("D://GitRepos//Emotyper//Emotyper//B", dimensions, 3);

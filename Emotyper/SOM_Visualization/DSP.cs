@@ -8,7 +8,7 @@ namespace DSP
 {
     public class MFCC
     {
-        public static double[]  melWorkingFrequencies = new double[11] { 10.0, 20.0, 90.0, 300.0, 680.0, 1270.0, 2030.0, 2970.0, 4050.0, 5250.0, 6570.0 };
+        public static double[] melWorkingFrequencies = new double[11] {7, 8, 11, 12, 17, 18, 22, 27, 29, 32, 38};//{ 10.0, 20.0, 90.0, 300.0, 680.0, 1270.0, 2030.0, 2970.0, 4050.0, 5250.0, 6570.0 };
 
         public static int numMelFilters(int Nyquist)
         {
@@ -75,7 +75,7 @@ namespace DSP
             int start = 0;
             int end = 0;
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < melWorkingFrequencies.Length; i++)
             {
                 result[i] = 0;
                 segment = (int) Math.Round(mel( melWorkingFrequencies[i] ) / 10 );
