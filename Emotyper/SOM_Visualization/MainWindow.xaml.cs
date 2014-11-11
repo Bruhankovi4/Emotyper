@@ -7,21 +7,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using CodeArtEng.DspToolbox;
+using CodeArtEng.DspToolbox.Filters;
 using Com.StellmanGreene.CSVReader;
 using DSP;
 using NDtw;
-using SOM;
 using WaveletStudio.Blocks;
 using WaveletStudio.Functions;
 using btl.generic;
-
+using Microsoft.Office.Core;
+using Excel = Microsoft.Office.Interop.Excel;
 namespace SOM_Visualization
 {
     /// <summary>
@@ -41,7 +38,7 @@ namespace SOM_Visualization
         {        
             InitializeComponent();
             this.length = 100; 
-            this.dimensions = 11;
+            this.dimensions = 4;
             
             for (int i = 0; i < this.length; i++)
             {               
@@ -66,34 +63,22 @@ namespace SOM_Visualization
               //Mutation		=  5%
               //Population size = 100
               //Generations		= 2000
-              //Genome size		= 2
+              //Genome size		= 11
             GA ga = new GA(0.8, 0.5, 100, 2000, 11);
-
             ga.FitnessFunction = new GAFunction(theActualFunction);
-
-            //ga.FitnessFile = @"H:\fitness.csv";
             ga.Elitism = false;
-            ga.Go();
+          //  ga.Go();
 
-            double[] values;
+            double[] values = {6.75,14.5,17.375,17.5,20,23,24,25.25,26.5,28.5,30.5};
             double fitness;
-            ga.GetBest(out values, out fitness);
-            ////System.Console.WriteLine("Best ({0}):", fitness);
-            //for (int i = 0; i < values.Length; i++)
-            //    System.Console.WriteLine("{0} ", values[i]);
+         //   ga.GetBest(out values, out fitness);
+           // DSP.MFCC.melWorkingFrequencies = values;
 
-            //ga.GetWorst(out values, out fitness);
-            //System.Console.WriteLine("\nWorst ({0}):", fitness);
-            //for (int i = 0 ; i < values.Length ; i++)
-            //    System.Console.WriteLine("{0} ", values[i]);
-         //   System.Console.ReadLine();
-            //DSP.MFCC.d1 = values[0];
-            //DSP.MFCC.d2 = values[1];
-            //DSP.MFCC.d3 = values[2];
             Initialise();
             loadCropedDateFromAllFiles();
-            Train(0.0000001);
-             drawResults();
+            Train(0.0001);
+            // drawResults();
+            DumpCoordinates();
         }
         public double theActualFunction(double[] vals)
         {
@@ -182,23 +167,23 @@ namespace SOM_Visualization
             //List<List<double>> aData = getEssentialData("D://GitRepos//Emotyper//Emotyper//A", dimensions, 3);
             //List<List<double>> bData = getEssentialData("D://GitRepos//Emotyper//Emotyper//B", dimensions, 3);
             //List<List<double>> cData = getEssentialData("D://GitRepos//Emotyper//Emotyper//C", dimensions, 3);
-            List<List<double>> aData = getSensorData("D://GitRepos//Emotyper//Emotyper//Aaf3");
-            List<List<double>> bData = getSensorData("D://GitRepos//Emotyper//Emotyper//Baf3");
-            List<List<double>> cData = getSensorData("D://GitRepos//Emotyper//Emotyper//Caf3");
+            List<IEnumerable<double>> aData = getSensorData("D://GitRepos//Emotyper//Emotyper//Aaf3");
+            List<IEnumerable<double>> bData = getSensorData("D://GitRepos//Emotyper//Emotyper//Baf3");
+            List<IEnumerable<double>> cData = getSensorData("D://GitRepos//Emotyper//Emotyper//Caf3");
             int index = 0;
-            foreach (List<double> list in aData)
+            foreach (IEnumerable<double> list in aData)
             {
                 patterns.Add(list.ToArray());
                 labels.Add("A" + index);
                 index++;
             }
-            foreach (List<double> list in cData)
+            foreach (IEnumerable<double> list in cData)
             {
                 patterns.Add(list.ToArray());
                 labels.Add("C" + index);
                 index++;
             }
-            foreach (List<double> list in bData)
+            foreach (IEnumerable<double> list in bData)
             {
                 patterns.Add(list.ToArray());
                 labels.Add("B" + index);
@@ -207,9 +192,9 @@ namespace SOM_Visualization
             
         }
 
-        private List<List<double>> getSensorData(string samplesDirestory)
+        private List<IEnumerable<double>> getSensorData(string samplesDirestory)
         {
-            List<List<double>> rawSeries = new List<List<double>>();
+            List<IEnumerable<double>> rawSeries = new List<IEnumerable<double>>();
             foreach (String file in Directory.GetFiles(samplesDirestory))
             {
 
@@ -226,15 +211,73 @@ namespace SOM_Visualization
                     //Double.TryParse(row[sensor].ToString(), out val);
                     //serie.Add(val);
 
-                double[] ser = serie.ToArray();
-                //double[] spectrum = FourierTransform.Spectrum(ref ser);
-                double[] mel = MFCC.compute(ref ser);
-                rawSeries.Add(new List<double>(mel)); 
-                //rawSeries.Add(serie);
+               
+               //// Console.WriteLine("===================================FilteringStarted================================");
+                SecondOrderBandPassFilter deltaWavesFilter = new SecondOrderBandPassFilter(1.75, 1.25);
+                SecondOrderBandPassFilter tethaWavesFilter = new SecondOrderBandPassFilter(6, 2);
+                SecondOrderBandPassFilter alphaWavesFilter = new SecondOrderBandPassFilter(10.5, 2.5);
+                SecondOrderBandStopFilter betaWavesFilter = new SecondOrderBandStopFilter(21.5, 8.5);
+                DiscreteTimeSignal signal = new DiscreteTimeSignal();
+                signal.SamplingRate = 128;
+                signal.AddRange(serie);
+                DiscreteTimeSignal result = alphaWavesFilter.ProcessSignal(signal);
+              //  rawSeries.Add(result);
+                  //double[] ser = serie.ToArray();
+                  double[] ser = result.ToArray();
+
+                double[] xre = new double[ser.Length]; // Real part
+                double[] xim = new double[ser.Length]; // Imaginary part
+                double[] spectrum = new double[ser.Length / 2];
+
+                DSP.FourierTransform.Compute((uint)ser.Length, ser, null, xre, xim, false);
+
+                 //double[] mel = MFCC.compute(ref xre);
+               double[] mel = MFCC.compute(ref ser);
+                rawSeries.Add(new List<double>(mel));
+               // rawSeries.Add(serie);
             }
+            //double[,] sourceMatrix = To2dArray(rawSeries);
+
+            //// Creates the Principal Component Analysis of the given source
+            //var pca = new PrincipalComponentAnalysis(sourceMatrix, AnalysisMethod.Center);
+
+            //// Compute the Principal Component Analysis
+            //pca.Compute();
+
+            //// Creates a projection considering 80% of the information
+            //double[,] components = pca.Transform(sourceMatrix,4);
+
+            //rawSeries.Clear();
+            //List<double> templist;
+            //for (int i = 0; i < 58; i++)
+            //{
+            //    templist = new List<double>();
+            //    for (int j = 0; j < 4; j++)
+            //    {
+            //        templist.Add(components[i, j]);
+            //    }
+            //    rawSeries.Add(templist);
+            //}
             return rawSeries;
         }
+        public static double[,] To2dArray(List<IEnumerable<double>> list)
+        {
+            if (list.Count == 0 || list[0].ToArray().Length == 0)
+                throw new ArgumentException("The list must have non-zero dimensions.");
 
+            var result = new double[list.Count, list[0].ToArray().Length];
+            for (int i = 0; i < list.Count; i++)
+            {
+                for (int j = 0; j < list[i].ToArray().Length; j++)
+                {
+                    if (list[i].ToArray().Length != list[0].ToArray().Length)
+                        throw new InvalidOperationException("The list cannot contain elements (lists) of different sizes.");
+                    result[i, j] = list[i].ToArray()[j];
+                }
+            }
+
+            return result;
+        }
       
 
         public  List<List<double>> getEssentialData(String samplesDirestory, int FrameSize,int sensor,bool writefiles = false)
@@ -454,7 +497,7 @@ namespace SOM_Visualization
                 Task.WaitAll(task1,task2,task3,task4);
                 currentError = task1.Result + task2.Result + task3.Result + task4.Result;
                 
-                Console.WriteLine(currentError.ToString("0.0000000"));
+                Console.WriteLine(currentError.ToString("0.00000000000"));
             }
         }
 
@@ -495,6 +538,21 @@ namespace SOM_Visualization
               
         private double DumpCoordinates()
         {
+            String fileName = @"D:\GitRepos\Accord\Samples\MachineLearning\Classification (SVMs)\bin\x86\Release\Resources\examples.xlsx";
+            object misValue = System.Reflection.Missing.Value;
+            Excel.Application excelApp = new Excel.Application();  
+            Excel.Workbooks myExcelWorkbooks= excelApp.Workbooks;
+            Excel.Workbook myExcelWorkbook = myExcelWorkbooks.Open(fileName, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue);
+            try
+            {
+                excelApp.Visible = true;
+               // excelApp.Visible = true;
+             myExcelWorkbooks = excelApp.Workbooks;
+
+  myExcelWorkbook = myExcelWorkbooks.Open(fileName, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue);
+
+                Excel.Worksheet myExcelWorksheet = (Excel.Worksheet) myExcelWorkbook.Worksheets[1];// ActiveSheet;
+
             List<Point> a = new List<Point>();
             List<Point> b = new List<Point>();
             List<Point> c = new List<Point>();
@@ -506,16 +564,26 @@ namespace SOM_Visualization
                 {
                     drawPoint(new Point(n.X, n.Y), Colors.Red, labels[i]);
                     a.Add(new Point(n.X,n.Y));
+
+                    myExcelWorksheet.get_Range(String.Format("A{0}", i+1), misValue).Formula = n.X.ToString();
+                    myExcelWorksheet.get_Range(String.Format("B{0}", i + 1), misValue).Formula = n.Y.ToString();
+                    myExcelWorksheet.get_Range(String.Format("C{0}", i + 1), misValue).Formula = "A";
                 }
                 else if (labels[i].Contains("B"))
                 {
                     drawPoint(new Point(n.X, n.Y), Colors.Green, labels[i]);
                     b.Add(new Point(n.X, n.Y));
+                    myExcelWorksheet.get_Range(String.Format("A{0}", i + 1), misValue).Formula = n.X.ToString();
+                    myExcelWorksheet.get_Range(String.Format("B{0}", i + 1), misValue).Formula = n.Y.ToString();
+                    myExcelWorksheet.get_Range(String.Format("C{0}", i + 1), misValue).Formula = "B";
                 }
                 else if (labels[i].Contains("C"))
                 {
                     drawPoint(new Point(n.X, n.Y), Colors.Yellow, labels[i]);
                     c.Add(new Point(n.X, n.Y));
+                    myExcelWorksheet.get_Range(String.Format("A{0}", i + 1), misValue).Formula = n.X.ToString();
+                    myExcelWorksheet.get_Range(String.Format("B{0}", i + 1), misValue).Formula = n.Y.ToString();
+                    myExcelWorksheet.get_Range(String.Format("C{0}", i + 1), misValue).Formula = "C";
                 }
             }
             Point acenter = getSetCenter(a);
@@ -525,8 +593,22 @@ namespace SOM_Visualization
             drawPoint(ccenter, Colors.Goldenrod, "");
             drawPoint(bcenter, Colors.Lime, "");
             double dist =  GetDistance(acenter, bcenter) + GetDistance(acenter, ccenter) + GetDistance(ccenter, bcenter);
-            Console.WriteLine("Distance= "+dist);
+            Console.WriteLine("Distance= " + dist);
             return dist;
+
+            }
+            catch (Exception)
+            {
+                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(excelApp);
+                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(myExcelWorkbooks);
+                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(myExcelWorkbook);
+               
+            }
+
+            System.Runtime.InteropServices.Marshal.FinalReleaseComObject(excelApp);
+            System.Runtime.InteropServices.Marshal.FinalReleaseComObject(myExcelWorkbooks);
+            System.Runtime.InteropServices.Marshal.FinalReleaseComObject(myExcelWorkbook);
+            return 0;
         }
         private void drawResults()
         {

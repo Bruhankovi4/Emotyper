@@ -8,7 +8,7 @@ namespace DSP
 {
     public class MFCC
     {
-        public static double[] melWorkingFrequencies = new double[11] {7, 8, 11, 12, 17, 18, 22, 27, 29, 32, 38};//{ 10.0, 20.0, 90.0, 300.0, 680.0, 1270.0, 2030.0, 2970.0, 4050.0, 5250.0, 6570.0 };
+        public static double[] melWorkingFrequencies = new double[4] {1.75,6,10,21.5};//{ 10.0, 20.0, 90.0, 300.0, 680.0, 1270.0, 2030.0, 2970.0, 4050.0, 5250.0, 6570.0 };
 
         public static int numMelFilters(int Nyquist)
         {
@@ -116,6 +116,14 @@ namespace DSP
         public static double mel(double value)
         {
             return (d1 * (double)Math.Log10(d2 + value / d3));
+            //if (value == 1.75)
+            //    return 2.25;
+            //else if (value == 6)
+            //    return 2;
+            //else if (value == 10.5)
+            //    return 2.25;
+            //else return 8.5;
+            //return Math.Sqrt(Math.Exp(value/10));
         }
 
         public static double melinv(double value)
