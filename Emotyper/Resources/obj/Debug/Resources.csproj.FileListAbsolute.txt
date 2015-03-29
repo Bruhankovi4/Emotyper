@@ -31,4 +31,3 @@ D:\Emotyper\Emotyper\Resources\bin\Debug\Resources.pdb
 D:\Emotyper\Emotyper\Resources\obj\Debug\Resources.csprojResolveAssemblyReference.cache
 D:\Emotyper\Emotyper\Resources\obj\Debug\Resources.dll
 D:\Emotyper\Emotyper\Resources\obj\Debug\Resources.pdb
-D:\GitRepos\Emotyper\Emotyper\Emotyper\Resources\obj\Debug\Resources.csprojResolveAssemblyReference.cache

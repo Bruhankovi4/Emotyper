@@ -164,6 +164,7 @@ namespace SOM
         }
     }
 
+    [Serializable]
     public class Neuron
     {
         public double[] Weights;

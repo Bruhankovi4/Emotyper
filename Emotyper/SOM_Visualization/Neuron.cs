@@ -20,7 +20,7 @@ namespace SOM_Visualization
 
         private double Gauss(SOM.Neuron win, int it)
         {
-            double distance = Math.Abs(Math.Pow(win.X - X, 2) + Math.Pow(win.Y - Y, 2));
+            double distance = Calculations.Calculator.DistanceEuclid(new double[] { X, Y }, new double[] { win.X, win.Y });//Math.Abs(Math.Pow(win.X - X, 2) + Math.Pow(win.Y - Y, 2));
             return Math.Exp(-distance/(Math.Pow(Strength(it), 2)));
         }
 

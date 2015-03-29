@@ -1,89 +1,127 @@
-﻿using System;
+﻿using btl.generic;
+using Com.StellmanGreene.CSVReader;
+using DSP;
+using NDtw;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
-using CodeArtEng.DspToolbox;
-using CodeArtEng.DspToolbox.Filters;
-using Com.StellmanGreene.CSVReader;
-using DSP;
-using NDtw;
 using WaveletStudio.Blocks;
 using WaveletStudio.Functions;
-using btl.generic;
-using Microsoft.Office.Core;
-using Excel = Microsoft.Office.Interop.Excel;
+using Calculations;
 namespace SOM_Visualization
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {        
+    {
         private SOM.Neuron[,] outputs; // Collection of weights.
         private int iteration; // Current iteration.
         private int length; // Side length of output grid.
         private int dimensions; // Number of input dimensions.
         private Random rnd = new Random();
 
+        private bool loadInstance = true;
+        private string mapPath = "D://GitRepos//Emotyper//Emotyper//SOMInstances//AF3Map2.som";
+
         private List<string> labels = new List<string>();
         private List<double[]> patterns = new List<double[]>();
+
+        private double currMax = 0;
         public MainWindow()
-        {        
+        {
             InitializeComponent();
-            this.length = 100; 
-            this.dimensions = 4;
-            
+            this.length = 100;
+            this.dimensions = 128;
+
             for (int i = 0; i < this.length; i++)
-            {               
+            {
                 gridControl.ColumnDefinitions.Add(new ColumnDefinition());
                 gridControl.RowDefinitions.Add(new RowDefinition());
-                
+
             }
-           // gridControl.ShowGridLines = true;
-            
-           // Initialise();
-           // //LoadData("Food.csv");
-           //// LoadData("testAB.csv");
+            // gridControl.ShowGridLines = true;
 
-           //// loadDateFromAllFiles();
-           // loadCropedDateFromAllFiles();        
-           // //NormalisePatterns();
-           // Train(0.0000001); 
-           
-           // DumpCoordinates();
+            // Initialise();
+            // //LoadData("Food.csv");
+            //// LoadData("testAB.csv");
 
-              //Crossover		= 80%
-              //Mutation		=  5%
-              //Population size = 100
-              //Generations		= 2000
-              //Genome size		= 11
-            GA ga = new GA(0.8, 0.5, 100, 2000, 11);
-            ga.FitnessFunction = new GAFunction(theActualFunction);
-            ga.Elitism = false;
-          //  ga.Go();
+            //// loadDateFromAllFiles();
+            LoadCropedDateFromAllFiles();
+           // NormalisePatterns();
+            // Train(0.0000001); 
 
-            double[] values = {6.75,14.5,17.375,17.5,20,23,24,25.25,26.5,28.5,30.5};
-            double fitness;
-         //   ga.GetBest(out values, out fitness);
-           // DSP.MFCC.melWorkingFrequencies = values;
+            // DumpCoordinates();
+
+            //Crossover		= 80%
+            //Mutation		=  5%
+            //Population size = 100
+            //Generations		= 2000
+            //Genome size		= 11
+            //GA ga = new GA(0.8, 0.5, 100, 2000, 4);
+            //ga.FitnessFunction = new GAFunction(theActualFunction);
+            //ga.Elitism = false;
+            // ga.Go();
+
+            // double[] values = { 6.75, 14.5, 17.375, 17.5, 20, 23, 24, 25.25, 26.5, 28.5, 30.5 };
+            //  double fitness;
+            //    ga.GetBest(out values, out fitness);
+            //   DSP.MFCC.melWorkingFrequencies = values;
 
             Initialise();
-            loadCropedDateFromAllFiles();
-            Train(0.0001);
-            // drawResults();
+            //LoadCropedDateFromAllFiles();
+
+            if (loadInstance)
+                LoadMap();
+            else
+                Train(0.000001);
+            //while (true)
+            //{      
+            //       double max=DumpCoordinates();
+            //    if (max > currMax)
+            //    {
+            //        currMax = max;
+            //        SaveMap();
+            //    }
+            //    Initialise();
+            //    Train(0.000001);
+            //}
             DumpCoordinates();
         }
+
+        private void SaveMap()
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(mapPath));     // if directory does not exist
+            IFormatter formatter = new BinaryFormatter();
+            Stream stream = new FileStream(mapPath, FileMode.Create, FileAccess.Write, FileShare.None);
+            formatter.Serialize(stream, outputs);
+        }
+
+        private void LoadMap()
+        {
+            IFormatter formatter = new BinaryFormatter();
+            if (File.Exists(mapPath))
+            {
+                Stream stream = new FileStream(mapPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                outputs = (SOM.Neuron[,])formatter.Deserialize(stream);
+                stream.Close();
+            }
+        }
+
         public double theActualFunction(double[] vals)
         {
-                                List<double> values= new List<double>(vals);
-                                values.Sort();
+            List<double> values = new List<double>(vals);
+            values.Sort();
             for (int index = 1; index < values.Count; index++)
             {
                 if (values[index] == values[index - 1])
@@ -92,23 +130,23 @@ namespace SOM_Visualization
                 }
             }
             //DSP.MFCC.d1 = values[0];
-                                //DSP.MFCC.d2 = values[1];
-                                //DSP.MFCC.d3 = values[2];
-                                //Console.WriteLine("_____________________MelCoifs___________________________________");
-                                //Console.WriteLine(values[0]);
-                                //Console.WriteLine(values[1]);
-                                //Console.WriteLine(values[2]);
+            //DSP.MFCC.d2 = values[1];
+            //DSP.MFCC.d3 = values[2];
+            //Console.WriteLine("_____________________MelCoifs___________________________________");
+            //Console.WriteLine(values[0]);
+            //Console.WriteLine(values[1]);
+            //Console.WriteLine(values[2]);
             Console.WriteLine("_____________________Frequincies___________________________________");
-            for (int i = 0; i < 11; i++)
+            for (int i = 0; i < 4; i++)
             {
                 MFCC.melWorkingFrequencies[i] = values[i];
                 Console.WriteLine(values[i]);
             }
             iteration = 0;
-                Initialise();
-            loadCropedDateFromAllFiles();
+            Initialise();
+            LoadCropedDateFromAllFiles();
             Train(0.0000001);
-           return DumpCoordinates();
+            return DumpCoordinates();
         }
 
         //public static void Main()
@@ -143,8 +181,8 @@ namespace SOM_Visualization
 
         private void Initialise()
         {
-            
-            outputs = new SOM.Neuron[length,length];
+
+            outputs = new SOM.Neuron[length, length];
             for (int i = 0; i < length; i++)
             {
                 for (int j = 0; j < length; j++)
@@ -158,8 +196,8 @@ namespace SOM_Visualization
                 }
             }
         }
-       
-        private void loadCropedDateFromAllFiles()
+
+        private void LoadCropedDateFromAllFiles()
         {
             patterns.Clear();
             labels.Clear();
@@ -167,9 +205,10 @@ namespace SOM_Visualization
             //List<List<double>> aData = getEssentialData("D://GitRepos//Emotyper//Emotyper//A", dimensions, 3);
             //List<List<double>> bData = getEssentialData("D://GitRepos//Emotyper//Emotyper//B", dimensions, 3);
             //List<List<double>> cData = getEssentialData("D://GitRepos//Emotyper//Emotyper//C", dimensions, 3);
-            List<IEnumerable<double>> aData = getSensorData("D://GitRepos//Emotyper//Emotyper//Aaf3");
-            List<IEnumerable<double>> bData = getSensorData("D://GitRepos//Emotyper//Emotyper//Baf3");
-            List<IEnumerable<double>> cData = getSensorData("D://GitRepos//Emotyper//Emotyper//Caf3");
+            List<IEnumerable<double>> aData = getSensorData("D://GitRepos//Emotyper//Emotyper//Extracted//AExtractedAF3");
+            List<IEnumerable<double>> bData = getSensorData("D://GitRepos//Emotyper//Emotyper//Extracted//BExtractedAF3");
+            List<IEnumerable<double>> cData = getSensorData("D://GitRepos//Emotyper//Emotyper//Extracted//CExtractedAF3");
+            List<IEnumerable<double>> nData = getSensorData("D://GitRepos//Emotyper//Emotyper//Extracted//NeutralExtractedAF3");
             int index = 0;
             foreach (IEnumerable<double> list in aData)
             {
@@ -188,8 +227,13 @@ namespace SOM_Visualization
                 patterns.Add(list.ToArray());
                 labels.Add("B" + index);
                 index++;
-            } 
-            
+            }
+            foreach (IEnumerable<double> list in nData)
+            {
+                patterns.Add(list.ToArray());
+                labels.Add("Neutral" + index);
+                index++;
+            }
         }
 
         private List<IEnumerable<double>> getSensorData(string samplesDirestory)
@@ -198,63 +242,64 @@ namespace SOM_Visualization
             foreach (String file in Directory.GetFiles(samplesDirestory))
             {
 
-                DataTable table = CSVReader.ReadCSVFile(file.Replace("\\", "//"), false,";");
+                DataTable table = CSVReader.ReadCSVFile(file.Replace("\\", "//"), false, ";");
                 List<double> serie = new List<double>();
-               
-                    DataRow row = table.Rows[0];
-                    double val;
+
+                DataRow row = table.Rows[0];
+                double val;
                 foreach (object d in row.ItemArray)
                 {
                     Double.TryParse(d.ToString(), out val);
-                    serie.Add(val);                   
+                    serie.Add(val);
                 }
-                    //Double.TryParse(row[sensor].ToString(), out val);
-                    //serie.Add(val);
+                //Double.TryParse(row[sensor].ToString(), out val);
+                //serie.Add(val);
 
-               
-               //// Console.WriteLine("===================================FilteringStarted================================");
-                SecondOrderBandPassFilter deltaWavesFilter = new SecondOrderBandPassFilter(1.75, 1.25);
-                SecondOrderBandPassFilter tethaWavesFilter = new SecondOrderBandPassFilter(6, 2);
-                SecondOrderBandPassFilter alphaWavesFilter = new SecondOrderBandPassFilter(10.5, 2.5);
-                SecondOrderBandStopFilter betaWavesFilter = new SecondOrderBandStopFilter(21.5, 8.5);
-                DiscreteTimeSignal signal = new DiscreteTimeSignal();
-                signal.SamplingRate = 128;
-                signal.AddRange(serie);
-                DiscreteTimeSignal result = alphaWavesFilter.ProcessSignal(signal);
-              //  rawSeries.Add(result);
-                  //double[] ser = serie.ToArray();
-                  double[] ser = result.ToArray();
+
+                // Console.WriteLine("===================================FilteringStarted================================");
+                //SecondOrderBandPassFilter deltaWavesFilter = new SecondOrderBandPassFilter(1.75, 1.25);
+                //SecondOrderBandPassFilter tethaWavesFilter = new SecondOrderBandPassFilter(6, 2);
+                //SecondOrderBandPassFilter alphaWavesFilter = new SecondOrderBandPassFilter(10.5, 2.5);
+                //SecondOrderBandStopFilter betaWavesFilter = new SecondOrderBandStopFilter(21.5, 8.5);
+                //DiscreteTimeSignal signal = new DiscreteTimeSignal();
+                //signal.SamplingRate = 128;
+                //signal.AddRange(serie);
+                //DiscreteTimeSignal result = alphaWavesFilter.ProcessSignal(signal);
+                // rawSeries.Add(result);
+                double[] ser = serie.ToArray();
+                //double[] ser = result.ToArray();
 
                 double[] xre = new double[ser.Length]; // Real part
                 double[] xim = new double[ser.Length]; // Imaginary part
-                double[] spectrum = new double[ser.Length / 2];
+                //double[] spectrum = new double[ser.Length / 2];
 
                 DSP.FourierTransform.Compute((uint)ser.Length, ser, null, xre, xim, false);
 
-                 //double[] mel = MFCC.compute(ref xre);
-               double[] mel = MFCC.compute(ref ser);
-                rawSeries.Add(new List<double>(mel));
-               // rawSeries.Add(serie);
+                ////double[] mel = MFCC.compute(ref xre);
+                //double[] mel = MFCC.compute(ref ser);
+               // rawSeries.Add(new List<double>(mel));
+                //rawSeries.Add(serie); 
+                rawSeries.Add(xre);
             }
-            //double[,] sourceMatrix = To2dArray(rawSeries);
+            //double[,] sourceMatrix= To2dArray(rawSeries);
 
             //// Creates the Principal Component Analysis of the given source
             //var pca = new PrincipalComponentAnalysis(sourceMatrix, AnalysisMethod.Center);
 
             //// Compute the Principal Component Analysis
             //pca.Compute();
-
+            //   int sercount = rawSeries.Count();
             //// Creates a projection considering 80% of the information
-            //double[,] components = pca.Transform(sourceMatrix,4);
+            //double[,] components = pca.Transform(sourceMatrix, sercount);
 
             //rawSeries.Clear();
             //List<double> templist;
-            //for (int i = 0; i < 58; i++)
+            //for (int i = 0; i < sercount; i++)
             //{
             //    templist = new List<double>();
-            //    for (int j = 0; j < 4; j++)
+            //    for (int j = 0; j < dimensions; j++)
             //    {
-            //        templist.Add(components[i, j]);
+            //        templist.Add(components[j, i]);
             //    }
             //    rawSeries.Add(templist);
             //}
@@ -265,30 +310,29 @@ namespace SOM_Visualization
             if (list.Count == 0 || list[0].ToArray().Length == 0)
                 throw new ArgumentException("The list must have non-zero dimensions.");
 
-            var result = new double[list.Count, list[0].ToArray().Length];
+            var result = new double[list[0].ToArray().Length, list.Count];
             for (int i = 0; i < list.Count; i++)
             {
                 for (int j = 0; j < list[i].ToArray().Length; j++)
                 {
                     if (list[i].ToArray().Length != list[0].ToArray().Length)
                         throw new InvalidOperationException("The list cannot contain elements (lists) of different sizes.");
-                    result[i, j] = list[i].ToArray()[j];
+                    result[j, i] = list[i].ToArray()[j];
                 }
             }
 
             return result;
         }
-      
 
-        public  List<List<double>> getEssentialData(String samplesDirestory, int FrameSize,int sensor,bool writefiles = false)
+        public List<List<double>> getEssentialData(String samplesDirestory, int FrameSize, int sensor, bool writefiles = false)
         {
-           List<List<double>> resultSet = new List<List<double>>();
-           List<List<double>> rawSeries = new List<List<double>>();
-           List<Tuple<int, int, int, int, double>> pairCorrs = new List<Tuple<int, int, int, int, double>>(); //winsizeSmaller winsizeBigger indexsmaller indexBigger  correlation
-           CsvFileWriter writer;
+            List<List<double>> resultSet = new List<List<double>>();
+            List<List<double>> rawSeries = new List<List<double>>();
+            List<Tuple<int, int, int, int, double>> pairCorrs = new List<Tuple<int, int, int, int, double>>(); //winsizeSmaller winsizeBigger indexsmaller indexBigger  correlation
+            CsvFileWriter writer;
             foreach (String file in Directory.GetFiles(samplesDirestory))
             {
-               
+
                 DataTable table = CSVReader.ReadCSVFile(file.Replace("\\", "//"), true);
                 List<double> serie = new List<double>();
                 // String sensorName = table.Columns[i].ColumnName;
@@ -299,53 +343,53 @@ namespace SOM_Visualization
                     Double.TryParse(row[sensor].ToString(), out val);
                     serie.Add(val);
                 }
-                rawSeries.Add(serie);
+               // rawSeries.Add(serie);
                 //var s = ProcessSingleSeriesFFT(serie);
                 //rawSeries.Add(s);
-               // serie = ProcessSingleSeries(serie);
-               // if (serie.Count < 128)
-               // {
-               //     continue;
-               // }
-               // else
-               // {
-               //     serie = serie.GetRange(0, 128);
-               // }
+                // serie = ProcessSingleSeries(serie);
+                // if (serie.Count < 128)
+                // {
+                //     continue;
+                // }
+                // else
+                // {
+                //     serie = serie.GetRange(0, 128);
+                // }
 
-               // double[] ser =serie.ToArray();
-               //double[] spectrum =FourierTransform.Spectrum(ref ser);
-               // double[] mel = MFCC.compute(ref ser);
-               // rawSeries.Add(new List<double>(spectrum)); 
-              //  rawSeries.Add(ProcessSingleSeries(serie));
+                double[] ser = serie.ToArray();
+                double[] spectrum =FourierTransform.Spectrum(ref ser);
+                // double[] mel = MFCC.compute(ref ser);
+                 rawSeries.Add(new List<double>(spectrum)); 
+                //  rawSeries.Add(ProcessSingleSeries(serie));
             }
-           // return rawSeries;
-           List<double> smaller;
-           List<double> bigger;
+            // return rawSeries;
+            List<double> smaller;
+            List<double> bigger;
             int startIndex1 = 12;
             int startIndex2 = 15;
             if (rawSeries[startIndex2].Count > rawSeries[startIndex1].Count)
-           {
-               bigger = rawSeries[startIndex1];
-               smaller = rawSeries[startIndex2];
-           }
-           else
-           {
-               bigger = rawSeries[startIndex2];
-               smaller = rawSeries[startIndex1];
-           }
-           int m = smaller.Count;
-           int n = bigger.Count;
-           for (int j = 0; j < m - FrameSize; j++)
-               for (int i = 0; i < n - FrameSize; i++)
-               {
-                   double correl = dnAnalytics.Statistics.Correlation.Pearson(smaller.GetRange(j, FrameSize), bigger.GetRange(i, FrameSize));
-                 //  if (Math.Abs(correl) > 0.6)
-                       pairCorrs.Add(new Tuple<int, int, int, int, double>(0, 0, j, i,Math.Abs(correl)));
-               }
-          pairCorrs.Sort((a,b)=>a.Item5.CompareTo(b.Item5));
+            {
+                bigger = rawSeries[startIndex1];
+                smaller = rawSeries[startIndex2];
+            }
+            else
+            {
+                bigger = rawSeries[startIndex2];
+                smaller = rawSeries[startIndex1];
+            }
+            int m = smaller.Count;
+            int n = bigger.Count;
+            for (int j = 0; j < m - FrameSize; j++)
+                for (int i = 0; i < n - FrameSize; i++)
+                {
+                    double correl = dnAnalytics.Statistics.Correlation.Pearson(smaller.GetRange(j, FrameSize), bigger.GetRange(i, FrameSize));
+                    //  if (Math.Abs(correl) > 0.6)
+                    pairCorrs.Add(new Tuple<int, int, int, int, double>(0, 0, j, i, Math.Abs(correl)));
+                }
+            pairCorrs.Sort((a, b) => a.Item5.CompareTo(b.Item5));
             Tuple<int, int, int, int, double> tuple = pairCorrs[0];
-          resultSet.Add(smaller.GetRange(tuple.Item3,FrameSize));
-          resultSet.Add(bigger.GetRange(tuple.Item4, FrameSize));
+            resultSet.Add(smaller.GetRange(tuple.Item3, FrameSize));
+            resultSet.Add(bigger.GetRange(tuple.Item4, FrameSize));
             if (startIndex2 > startIndex1)
             {
                 rawSeries.RemoveAt(startIndex2);
@@ -366,20 +410,20 @@ namespace SOM_Visualization
                     double midleCorrel = 0;
                     foreach (List<double> list in resultSet)
                     {
-                     //   double correl = dnAnalytics.Statistics.Correlation.Pearson(list,rawSeries[i].GetRange(j, FrameSize));
-                        double correl = Distance3(list.ToArray(), rawSeries[i].GetRange(j, FrameSize).ToArray());
+                        //   double correl = dnAnalytics.Statistics.Correlation.Pearson(list,rawSeries[i].GetRange(j, FrameSize));
+                        double correl = Calculator.DistanceFunc(list.ToArray(), rawSeries[i].GetRange(j, FrameSize).ToArray());
                         midleCorrel += Math.Abs(correl);
                     }
                     //    double correl = Distance(resultSet.Last().ToArray(), rawSeries[i].GetRange(j, FrameSize).ToArray());
-                    midleCorrel = midleCorrel/resultSet.Count;
-                 //   if (Math.Abs(midleCorrel) > 0.4)
-                        pairCorrs.Add(Tuple.Create(0, 0, i, j,Math.Abs(midleCorrel)));
+                    midleCorrel = midleCorrel / resultSet.Count;
+                    //   if (Math.Abs(midleCorrel) > 0.4)
+                    pairCorrs.Add(Tuple.Create(0, 0, i, j, Math.Abs(midleCorrel)));
                 }
                 pairCorrs.Sort((a, b) => a.Item5.CompareTo(b.Item5));
                 if (pairCorrs.Count > 0)
                 {
                     tuple = pairCorrs[0];
-                   // tuple = pairCorrs.Last();
+                    // tuple = pairCorrs.Last();
                     resultSet.Add(rawSeries[i].GetRange(tuple.Item4, FrameSize));
                     if (writefiles)
                     {
@@ -403,67 +447,68 @@ namespace SOM_Visualization
             }
             return resultSet;
         }
+
         public static List<double> ProcessSingleSeries(List<double> serie)
-           {
+        {
 
-               //Declaring the blocks
-               var inputSeriesBlock = new InputSeriesBlock();
-               inputSeriesBlock.SetSeries(serie);
-               var dWTBlock = new DWTBlock
-               {
-                   WaveletName = "coif4",
-                   Level = 1,
-                   Rescale = false,
-                   ExtensionMode = WaveletStudio.SignalExtension.ExtensionMode.AntisymmetricWholePoint
-               };
-               //var dWTBlock2 = new DWTBlock
-               //{
-               //    WaveletName = "Discreete Meyer(dmeyer)",
-               //    Level = 1,
-               //    Rescale = false,
-               //    ExtensionMode = WaveletStudio.SignalExtension.ExtensionMode.AntisymmetricWholePoint
-               //};
-               var outputSeriesBlock = new OutputSeriesBlock();
+            //Declaring the blocks
+            var inputSeriesBlock = new InputSeriesBlock();
+            inputSeriesBlock.SetSeries(serie);
+            var dWTBlock = new DWTBlock
+            {
+                WaveletName = "coif4",
+                Level = 1,
+                Rescale = false,
+                ExtensionMode = WaveletStudio.SignalExtension.ExtensionMode.AntisymmetricWholePoint
+            };
+            //var dWTBlock2 = new DWTBlock
+            //{
+            //    WaveletName = "Discreete Meyer(dmeyer)",
+            //    Level = 1,
+            //    Rescale = false,
+            //    ExtensionMode = WaveletStudio.SignalExtension.ExtensionMode.AntisymmetricWholePoint
+            //};
+            var outputSeriesBlock = new OutputSeriesBlock();
 
-               //Connecting the blocks
-               inputSeriesBlock.OutputNodes[0].ConnectTo(dWTBlock.InputNodes[0]);
-           // dWTBlock.OutputNodes[1].ConnectTo(dWTBlock2.InputNodes[0]);
-               dWTBlock.OutputNodes[1].ConnectTo(outputSeriesBlock.InputNodes[0]);
+            //Connecting the blocks
+            inputSeriesBlock.OutputNodes[0].ConnectTo(dWTBlock.InputNodes[0]);
+            // dWTBlock.OutputNodes[1].ConnectTo(dWTBlock2.InputNodes[0]);
+            dWTBlock.OutputNodes[1].ConnectTo(outputSeriesBlock.InputNodes[0]);
 
-               //Appending the blocks to a block list and execute all
-               var blockList = new BlockList();
-               blockList.Add(inputSeriesBlock);
-               blockList.Add(dWTBlock);
-               //blockList.Add(dWTBlock2);
-               blockList.Add(outputSeriesBlock);
-               blockList.ExecuteAll();
-               return outputSeriesBlock.GetSeries();
-           }
+            //Appending the blocks to a block list and execute all
+            var blockList = new BlockList();
+            blockList.Add(inputSeriesBlock);
+            blockList.Add(dWTBlock);
+            //blockList.Add(dWTBlock2);
+            blockList.Add(outputSeriesBlock);
+            blockList.ExecuteAll();
+            return outputSeriesBlock.GetSeries();
+        }
         public static List<double> ProcessSingleSeriesFFT(List<double> serie)
-           {
+        {
 
-               //Declaring the blocks
-               var inputSeriesBlock = new InputSeriesBlock();
-               inputSeriesBlock.SetSeries(serie);
-              var outputSeriesBlock = new OutputSeriesBlock();
-               
-               var fFTBlock = new FFTBlock
-               {
-                   Mode = ManagedFFTModeEnum.UseLookupTable
-               };
-             
+            //Declaring the blocks
+            var inputSeriesBlock = new InputSeriesBlock();
+            inputSeriesBlock.SetSeries(serie);
+            var outputSeriesBlock = new OutputSeriesBlock();
 
-               //Connecting the blocks
-               inputSeriesBlock.OutputNodes[0].ConnectTo(fFTBlock.InputNodes[0]);
-               fFTBlock.OutputNodes[1].ConnectTo(outputSeriesBlock.InputNodes[0]);
-               //Appending the blocks to a block list and execute all
-               var blockList = new BlockList();
-               blockList.Add(inputSeriesBlock);
-               blockList.Add(fFTBlock);
-               blockList.Add(outputSeriesBlock);
-               blockList.ExecuteAll();
-               return outputSeriesBlock.GetSeries();
-           }
+            var fFTBlock = new FFTBlock
+            {
+                Mode = ManagedFFTModeEnum.UseLookupTable
+            };
+
+
+            //Connecting the blocks
+            inputSeriesBlock.OutputNodes[0].ConnectTo(fFTBlock.InputNodes[0]);
+            fFTBlock.OutputNodes[1].ConnectTo(outputSeriesBlock.InputNodes[0]);
+            //Appending the blocks to a block list and execute all
+            var blockList = new BlockList();
+            blockList.Add(inputSeriesBlock);
+            blockList.Add(fFTBlock);
+            blockList.Add(outputSeriesBlock);
+            blockList.ExecuteAll();
+            return outputSeriesBlock.GetSeries();
+        }
 
         private void NormalisePatterns()
         {
@@ -474,10 +519,10 @@ namespace SOM_Visualization
                 {
                     sum += patterns[i][j];
                 }
-                double average = sum/patterns.Count;
+                double average = sum / patterns.Count;
                 for (int i = 0; i < patterns.Count; i++)
                 {
-                    patterns[i][j] = patterns[i][j]/average;
+                    patterns[i][j] = patterns[i][j] / average;
                 }
             }
         }
@@ -489,14 +534,14 @@ namespace SOM_Visualization
             {
                 currentError = 0;
                 List<double[]> TrainingSet = patterns.ToList();
-               
-                  var task1 = Task.Factory.StartNew(() => trainPatternRange(TrainingSet,0,patterns.Count/4));
-                  var task2 = Task.Factory.StartNew(() =>trainPatternRange(TrainingSet,patterns.Count / 4,patterns.Count/2 ));
-                  var task3 = Task.Factory.StartNew(() => trainPatternRange(TrainingSet, patterns.Count / 2, patterns.Count/4*3));
-                  var task4 = Task.Factory.StartNew(() => trainPatternRange(TrainingSet, patterns.Count / 4*3, patterns.Count));
-                Task.WaitAll(task1,task2,task3,task4);
+
+                var task1 = Task.Factory.StartNew(() => trainPatternRange(TrainingSet, 0, patterns.Count / 4));
+                var task2 = Task.Factory.StartNew(() => trainPatternRange(TrainingSet, patterns.Count / 4, patterns.Count / 2));
+                var task3 = Task.Factory.StartNew(() => trainPatternRange(TrainingSet, patterns.Count / 2, patterns.Count / 4 * 3));
+                var task4 = Task.Factory.StartNew(() => trainPatternRange(TrainingSet, patterns.Count / 4 * 3, patterns.Count));
+                Task.WaitAll(task1, task2, task3, task4);
                 currentError = task1.Result + task2.Result + task3.Result + task4.Result;
-                
+
                 Console.WriteLine(currentError.ToString("0.00000000000"));
             }
         }
@@ -527,31 +572,17 @@ namespace SOM_Visualization
             double error = 0;
 
             for (int i = iLengthStart; i < iLengthEnd; i++)
-                    {
-                        for (int j = 0; j < length; j++)
-                        {
-                            error += outputs[i, j].UpdateWeights(pattern, winner, iteration);
-                        }
-                    }
+            {
+                for (int j = 0; j < length; j++)
+                {
+                    error += outputs[i, j].UpdateWeights(pattern, winner, iteration);
+                }
+            }
             return error;
         }
-              
+
         private double DumpCoordinates()
         {
-            String fileName = @"D:\GitRepos\Accord\Samples\MachineLearning\Classification (SVMs)\bin\x86\Release\Resources\examples.xlsx";
-            object misValue = System.Reflection.Missing.Value;
-            Excel.Application excelApp = new Excel.Application();  
-            Excel.Workbooks myExcelWorkbooks= excelApp.Workbooks;
-            Excel.Workbook myExcelWorkbook = myExcelWorkbooks.Open(fileName, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue);
-            try
-            {
-                excelApp.Visible = true;
-               // excelApp.Visible = true;
-             myExcelWorkbooks = excelApp.Workbooks;
-
-  myExcelWorkbook = myExcelWorkbooks.Open(fileName, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue);
-
-                Excel.Worksheet myExcelWorksheet = (Excel.Worksheet) myExcelWorkbook.Worksheets[1];// ActiveSheet;
 
             List<Point> a = new List<Point>();
             List<Point> b = new List<Point>();
@@ -559,56 +590,73 @@ namespace SOM_Visualization
             for (int i = 0; i < patterns.Count; i++)
             {
                 SOM.Neuron n = Winner(patterns[i]);
-                Console.WriteLine("{0},{1},{2}", labels[i], n.X, n.Y);
+
                 if (labels[i].Contains("A"))
                 {
-                    drawPoint(new Point(n.X, n.Y), Colors.Red, labels[i]);
-                    a.Add(new Point(n.X,n.Y));
-
-                    myExcelWorksheet.get_Range(String.Format("A{0}", i+1), misValue).Formula = n.X.ToString();
-                    myExcelWorksheet.get_Range(String.Format("B{0}", i + 1), misValue).Formula = n.Y.ToString();
-                    myExcelWorksheet.get_Range(String.Format("C{0}", i + 1), misValue).Formula = "A";
+                    drawPoint(new Point(n.X, n.Y), Colors.Red, (a.Count(p => p.X == n.X && p.Y == n.Y) + 1).ToString());
+                    a.Add(new Point(n.X, n.Y));
                 }
                 else if (labels[i].Contains("B"))
                 {
-                    drawPoint(new Point(n.X, n.Y), Colors.Green, labels[i]);
+                    drawPoint(new Point(n.X, n.Y), Colors.Green, (b.Count(p => p.X == n.X && p.Y == n.Y) + 1).ToString());
                     b.Add(new Point(n.X, n.Y));
-                    myExcelWorksheet.get_Range(String.Format("A{0}", i + 1), misValue).Formula = n.X.ToString();
-                    myExcelWorksheet.get_Range(String.Format("B{0}", i + 1), misValue).Formula = n.Y.ToString();
-                    myExcelWorksheet.get_Range(String.Format("C{0}", i + 1), misValue).Formula = "B";
                 }
                 else if (labels[i].Contains("C"))
                 {
-                    drawPoint(new Point(n.X, n.Y), Colors.Yellow, labels[i]);
+                    // drawPoint(new Point(n.X, n.Y), Colors.Yellow, labels[i]);
+                    drawPoint(new Point(n.X, n.Y), Colors.Yellow, (c.Count(p => p.X == n.X && p.Y == n.Y) + 1).ToString());
                     c.Add(new Point(n.X, n.Y));
-                    myExcelWorksheet.get_Range(String.Format("A{0}", i + 1), misValue).Formula = n.X.ToString();
-                    myExcelWorksheet.get_Range(String.Format("B{0}", i + 1), misValue).Formula = n.Y.ToString();
-                    myExcelWorksheet.get_Range(String.Format("C{0}", i + 1), misValue).Formula = "C";
+                }
+                else if (labels[i].Contains("Neutral"))
+                {
+                    drawPoint(new Point(n.X, n.Y), Colors.Gray, (c.Count(p => p.X == n.X && p.Y == n.Y) + 1).ToString());
                 }
             }
+
             Point acenter = getSetCenter(a);
             Point bcenter = getSetCenter(b);
             Point ccenter = getSetCenter(c);
-            drawPoint(acenter, Colors.Brown, "");
+
+            drawPoint(acenter, Colors.DarkRed, "");
             drawPoint(ccenter, Colors.Goldenrod, "");
             drawPoint(bcenter, Colors.Lime, "");
-            double dist =  GetDistance(acenter, bcenter) + GetDistance(acenter, ccenter) + GetDistance(ccenter, bcenter);
+            double dist = Math.Min(Math.Min(GetDistance(acenter, bcenter), GetDistance(acenter, ccenter)), GetDistance(ccenter, bcenter));
             Console.WriteLine("Distance= " + dist);
             return dist;
+        }
+        private void SaveCoordinates(string filename)
+        {
+            if (!Directory.Exists(Path.GetDirectoryName(filename)))
+                Directory.CreateDirectory(filename);
+           
+            CsvFileWriter writer = new CsvFileWriter(filename);
+            for (int i = 0; i < patterns.Count; i++)
+            {   
+                CsvRow row = new CsvRow();
+                SOM.Neuron n = Winner(patterns[i]);
+                row.Add(n.X);
+                row.Add(n.Y);
 
+                if (labels[i].Contains("A"))
+                {
+                    row.Add(1);
+                }
+                else if (labels[i].Contains("B"))
+                {
+                    row.Add(2);
+                }
+                else if (labels[i].Contains("C"))
+                {
+                    row.Add(3);
+                }
+                else if (labels[i].Contains("Neutral"))
+                {
+                    row.Add(4);
+                }
+                writer.WriteRow(row);
+                writer.Flush();
             }
-            catch (Exception)
-            {
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(excelApp);
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(myExcelWorkbooks);
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(myExcelWorkbook);
-               
-            }
-
-            System.Runtime.InteropServices.Marshal.FinalReleaseComObject(excelApp);
-            System.Runtime.InteropServices.Marshal.FinalReleaseComObject(myExcelWorkbooks);
-            System.Runtime.InteropServices.Marshal.FinalReleaseComObject(myExcelWorkbook);
-            return 0;
+            writer.Close();
         }
         private void drawResults()
         {
@@ -618,7 +666,7 @@ namespace SOM_Visualization
                 Console.WriteLine("{0},{1},{2}", labels[i], n.X, n.Y);
                 if (labels[i].Contains("A"))
                 {
- 
+
                     drawPoint(new Point(n.X, n.Y), Colors.Red, labels[i]);
                 }
                 else if (labels[i].Contains("B"))
@@ -649,7 +697,7 @@ namespace SOM_Visualization
             label.Foreground = new SolidColorBrush(Colors.White);
             label.FontSize = 12;
             Grid.SetRow(label, (int)coordinates.X);
-            Grid.SetColumn(label,(int) coordinates.Y);
+            Grid.SetColumn(label, (int)coordinates.Y);
             gridControl.Children.Add(label);
         }
 
@@ -658,13 +706,12 @@ namespace SOM_Visualization
             Point center = new Point();
             foreach (Point point in points)
             {
-                center.Offset(point.X,point.Y);
+                center.Offset(point.X, point.Y);
             }
             center.X /= points.Count;
             center.Y /= points.Count;
             return center;
         }
-
         private SOM.Neuron Winner(double[] pattern)
         {
             SOM.Neuron winner = null;
@@ -672,8 +719,8 @@ namespace SOM_Visualization
             for (int i = 0; i < length; i++)
                 for (int j = 0; j < length; j++)
                 {
-                   // double d = Distance(pattern, outputs[i, j].Weights);
-                    double d = Distance(pattern, outputs[i, j].Weights);
+                    // double d = Distance(pattern, outputs[i, j].Weights);
+                    double d = Calculator.DistanceFunc(pattern, outputs[i, j].Weights);
                     if (d < min)
                     {
                         min = d;
@@ -683,26 +730,15 @@ namespace SOM_Visualization
             return winner;
         }
 
-        private double Distance(double[] vector1, double[] vector2)
-        {
 
-            double value = 0;
-            for (int i = 0; i < vector1.Length; i++)
-            {
-                value += Math.Pow((vector1[i] - vector2[i]), 2);
-            }
-            return Math.Sqrt(value);
-        }
 
-        private double Distance2(double[] vector1, double[] vector2)
+        private void SavevMap_Click(object sender, RoutedEventArgs e)
         {
-            return 1/Math.Abs(dnAnalytics.Statistics.Correlation.Pearson(vector1, vector2));
+            SaveMap();
         }
-        private double Distance3(double[] vector1, double[] vector2)
+        private void SaveCoords_Click(object sender, RoutedEventArgs e)
         {
-          Dtw analyser = new Dtw(vector1,vector2,DistanceMeasure.Manhattan);
-            return analyser.GetCost();
+            SaveCoordinates("D://GitRepos//Emotyper//Emotyper//SOMCoordinates//Coords.csv");
         }
-
     }
 }
