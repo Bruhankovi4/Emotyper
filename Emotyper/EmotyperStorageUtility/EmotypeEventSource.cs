@@ -88,7 +88,7 @@ namespace EmotyperDataUtility
                 {
                     // Handle any waiting events
                     _engine.ProcessEvents();
-                    Console.WriteLine(_userId);
+                   // Console.WriteLine(_userId);
                     // If the user has not yet connected, do not proceed
                     if ((int)_userId == -1)
                     {
@@ -115,7 +115,7 @@ namespace EmotyperDataUtility
                         }
                         OnRowsArrived(this, new EmoEventRows { Rows = rows });
                     }
-                    Thread.Sleep(0);
+                    Thread.Sleep(100);
                 }
 
             }

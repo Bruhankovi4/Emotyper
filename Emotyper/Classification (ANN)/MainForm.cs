@@ -41,6 +41,7 @@ using System.Windows.Forms;
 using Accord.IO;
 using Accord.Math;
 using Accord.Neuro;
+using Accord.Neuro.ActivationFunctions;
 using Accord.Neuro.Learning;
 using Accord.Statistics.Analysis;
 using AForge.Neuro;
@@ -240,8 +241,8 @@ namespace Classification.ANNs
             double[][] outputs = sourceMatrix.GetColumn(2).Transpose().ToArray();
 
             // create multi-layer neural network
-            ann = new ActivationNetwork(
-                new BipolarSigmoidFunction(sigmoidAlphaValue),
+            ann = new ActivationNetwork(new GaussianFunction(sigmoidAlphaValue), 
+                //new BipolarSigmoidFunction(sigmoidAlphaValue),
                 2, neuronsInFirstLayer, 1);
 
             if (useNguyenWidrow)
@@ -272,7 +273,14 @@ namespace Classification.ANNs
                 // run epoch of learning procedure
                 error = teacher.RunEpoch(inputs, outputs) / samples;
 
-                var result = map.Apply(ann.Compute).GetColumn(0).Apply(Math.Sign);
+                //var result = map.Apply(ann.Compute).GetColumn(0).Apply(Math.Sign);
+                var result = map.Apply(ann.Compute).GetColumn(0).Apply(d =>
+                {
+                    if (d > 0.66) return 2;
+                    else if (d < 0.33)
+                        return 0;
+                    return 1;
+                });
 
                 var graph = map.ToMatrix().InsertColumn(result.ToDouble());
 
@@ -375,12 +383,15 @@ namespace Classification.ANNs
             // Classification problem
             PointPairList list1 = new PointPairList(); // Z = -1
             PointPairList list2 = new PointPairList(); // Z = +1
+            PointPairList list3 = new PointPairList(); // Z = 2
             for (int i = 0; i < graph.GetLength(0); i++)
             {
-                if (graph[i, 2] == -1)
+                if (graph[i, 2] == 0)
                     list1.Add(graph[i, 0], graph[i, 1]);
                 if (graph[i, 2] == 1)
                     list2.Add(graph[i, 0], graph[i, 1]);
+                if (graph[i, 2] == 2)
+                    list3.Add(graph[i, 0], graph[i, 1]);
             }
 
             // Add the curve
@@ -394,6 +405,11 @@ namespace Classification.ANNs
             myCurve.Symbol.Border.IsVisible = false;
             myCurve.Symbol.Fill = new Fill(Color.Green);
 
+
+            myCurve = myPane.AddCurve("G3", list3, Color.Red, SymbolType.Square);
+            myCurve.Line.IsVisible = false;
+            myCurve.Symbol.Border.IsVisible = false;
+            myCurve.Symbol.Fill = new Fill(Color.Red);
 
             // Fill the background of the chart rect and pane
             myPane.Fill = new Fill(Color.WhiteSmoke);
@@ -418,6 +434,7 @@ namespace Classification.ANNs
             // Classification problem
             PointPairList list1 = new PointPairList(); // Z = -1, OK
             PointPairList list2 = new PointPairList(); // Z = +1, OK
+
             PointPairList list3 = new PointPairList(); // Z = -1, Error
             PointPairList list4 = new PointPairList(); // Z = +1, Error
             for (int i = 0; i < output.Length; i++)

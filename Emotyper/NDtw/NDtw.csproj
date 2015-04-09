@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cudafy.NET">
+      <HintPath>..\CudafyFirstProj\bin\Debug\Cudafy.NET.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,6 +53,7 @@
     <Compile Include="IDtw.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SeriesVariable.cs" />
+    <Compile Include="SimpleDTW.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

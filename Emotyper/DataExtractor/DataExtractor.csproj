@@ -60,6 +60,10 @@
       <Project>{3d226a64-f7e7-4184-9575-9fd74560b517}</Project>
       <Name>Calculations</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GridBuilder\ZedGraphSampleCS_v5.0.9\ZedGraphSample\GridBuilder.csproj">
+      <Project>{9402C03E-2EE3-4125-BEC3-CF9A857E4F8B}</Project>
+      <Name>GridBuilder</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SOM_Visualization\SOM_Visualization.csproj">
       <Project>{6744C265-B127-4214-ACE2-AC3C4B267CBE}</Project>
       <Name>SOM_Visualization</Name>

@@ -2,7 +2,6 @@
 
 using System.Windows.Controls.DataVisualization.Charting;
 using System.Windows.Threading;
-using Com.StellmanGreene.CSVReader;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,6 +9,7 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 using System.Windows.Documents;
+using Com.StellmanGreene.CSVReader;
 using Emotiv;
 using EmotyperDataUtility;
 using WaveletStudio.Blocks;

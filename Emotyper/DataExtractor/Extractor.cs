@@ -18,7 +18,7 @@ namespace DataExtractor
         static Extractor()
         {
             SampleLength = 128;
-            SliceSamples = true;
+            SliceSamples = false;
         }
         static void Main(string[] args)
         {
@@ -31,7 +31,7 @@ namespace DataExtractor
                              i++)
                         {
                             getEssentialData("D://GitRepos//Emotyper//Emotyper//A",
-                                             "D://GitRepos//Emotyper//Emotyper//AExtracted" +
+                                             "D://GitRepos//Emotyper//Emotyper//Extracted//AExtracted" +
                                              Enum.GetName(typeof(EdkDll.EE_DataChannel_t), i), SampleLength, (int)i,
                                              true);
                         }
@@ -43,7 +43,7 @@ namespace DataExtractor
                              i++)
                         {
                             getEssentialData("D://GitRepos//Emotyper//Emotyper//B",
-                                             "D://GitRepos//Emotyper//Emotyper//BExtracted" +
+                                             "D://GitRepos//Emotyper//Emotyper//Extracted//BExtracted" +
                                              Enum.GetName(typeof(EdkDll.EE_DataChannel_t), i), SampleLength, (int)i,
                                              true);
                         }
@@ -55,7 +55,7 @@ namespace DataExtractor
                              i++)
                         {
                             getEssentialData("D://GitRepos//Emotyper//Emotyper//C",
-                                             "D://GitRepos//Emotyper//Emotyper//CExtracted" +
+                                             "D://GitRepos//Emotyper//Emotyper//Extracted//CExtracted" +
                                              Enum.GetName(typeof(EdkDll.EE_DataChannel_t), i), SampleLength, (int)i,
                                              true);
                         }
@@ -137,7 +137,7 @@ namespace DataExtractor
                     pairCorrs.Add(new Tuple<int, int, int, int, double>(0, 0, j, i, Math.Abs(correl)));
                 }
             pairCorrs.Sort((a, b) => a.Item5.CompareTo(b.Item5));
-            Tuple<int, int, int, int, double> tuple = pairCorrs.Last();
+            Tuple<int, int, int, int, double> tuple = pairCorrs.First();
             resultSet.Add(smaller.GetRange(tuple.Item3, FrameSize));
             resultSet.Add(bigger.GetRange(tuple.Item4, FrameSize));
             if (startIndex2 > startIndex1)
@@ -172,14 +172,14 @@ namespace DataExtractor
                 pairCorrs.Sort((a, b) => a.Item5.CompareTo(b.Item5));
                 if (pairCorrs.Count > 0)
                 {
-                    tuple = pairCorrs.Last();
+                    tuple = pairCorrs.First();
                     // tuple = pairCorrs.Last();
                     resultSet.Add(rawSeries[i].GetRange(tuple.Item4, FrameSize));
                     if (writefiles)
                     {
                         CsvRow row = new CsvRow();
                         StringBuilder s = new StringBuilder();
-                        foreach (double val in resultSet.Last())
+                        foreach (double val in resultSet.First())
                         {
                             row.Add(val);
                         }

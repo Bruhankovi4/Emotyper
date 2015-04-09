@@ -23,6 +23,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cudafy;
+using Cudafy.Host;
+using Cudafy.Translator;
 
 namespace NDtw
 {
@@ -62,9 +65,9 @@ namespace NDtw
         /// <param name="slopeStepSizeAside">Side steps in local window for calculation. Results in Ikatura paralelogram shaped dtw-candidate space. Use in combination with slopeStepSizeDiagonal parameter. Leave null for no constraint.</param>
         /// <param name="sakoeChibaMaxShift">Sakoe-Chiba max shift constraint (side steps). Leave null for no constraint.</param>
         public Dtw(double[] x, double[] y, DistanceMeasure distanceMeasure = DistanceMeasure.Euclidean, bool boundaryConstraintStart = true, bool boundaryConstraintEnd = true, int? slopeStepSizeDiagonal = null, int? slopeStepSizeAside = null, int? sakoeChibaMaxShift = null)
-            : this(new [] { new SeriesVariable(x, y) }, distanceMeasure, boundaryConstraintStart, boundaryConstraintEnd, slopeStepSizeDiagonal, slopeStepSizeAside, sakoeChibaMaxShift)
+            : this(new[] { new SeriesVariable(x, y) }, distanceMeasure, boundaryConstraintStart, boundaryConstraintEnd, slopeStepSizeDiagonal, slopeStepSizeAside, sakoeChibaMaxShift)
         {
-            
+
         }
 
         /// <summary>
@@ -99,7 +102,7 @@ namespace NDtw
             _xLen = _seriesVariables[0].OriginalXSeries.Length;
             _yLen = _seriesVariables[0].OriginalYSeries.Length;
 
-            if(_xLen == 0 || _yLen == 0)
+            if (_xLen == 0 || _yLen == 0)
                 throw new ArgumentException("Both series should have at least one value.");
 
             if (sakoeChibaMaxShift != null && sakoeChibaMaxShift < 0)
@@ -109,7 +112,7 @@ namespace NDtw
             _signalsLengthDifference = Math.Abs(_xLen - _yLen);
             _sakoeChibaConstraint = sakoeChibaMaxShift.HasValue;
             _sakoeChibaMaxShift = sakoeChibaMaxShift.HasValue ? sakoeChibaMaxShift.Value : int.MaxValue;
-            
+
             if (slopeStepSizeAside != null || slopeStepSizeDiagonal != null)
             {
                 if (slopeStepSizeAside == null || slopeStepSizeDiagonal == null)
@@ -126,8 +129,8 @@ namespace NDtw
                 _slopeStepSizeDiagonal = slopeStepSizeDiagonal.Value;
 
                 _slopeMatrixLookbehind = slopeStepSizeDiagonal.Value + slopeStepSizeAside.Value;
-            }        
-    
+            }
+
             //todo: throw error when solution (path from (1, 1) to (m, n) is not even possible due to slope constraints)
         }
 
@@ -153,7 +156,7 @@ namespace NDtw
         private void CalculateDistances()
         {
             for (int additionalIndex = 1; additionalIndex <= _slopeMatrixLookbehind; additionalIndex++)
-            {           
+            {
                 //initialize [x.len - 1 + additionalIndex][all] elements
                 for (int i = 0; i < _yLen + _slopeMatrixLookbehind; i++)
                     _pathCost[_xLen - 1 + additionalIndex][i] = double.PositiveInfinity;
@@ -177,7 +180,7 @@ namespace NDtw
                     var xVal = xSeriesForVariable[i];
                     for (int j = 0; j < _yLen; j++)
                     {
-                        if(_distanceMeasure == DistanceMeasure.Manhattan)
+                        if (_distanceMeasure == DistanceMeasure.Manhattan)
                             currentDistances[j] += Math.Abs(xVal - ySeriesForVariable[j]) * variableWeight;
                         else if (_distanceMeasure == DistanceMeasure.Maximum)
                             currentDistances[j] = Math.Max(currentDistances[j], Math.Abs(xVal - ySeriesForVariable[j]) * variableWeight);
@@ -186,12 +189,12 @@ namespace NDtw
                             //Math.Pow(xVal - ySeriesForVariable[j], 2) is much slower, so direct multiplication with temporary variable is used
                             var dist = (xVal - ySeriesForVariable[j]) * variableWeight;
                             currentDistances[j] += dist * dist;
-                        }        
+                        }
                     }
                 }
             }
 
-            if(_distanceMeasure == DistanceMeasure.Euclidean)
+            if (_distanceMeasure == DistanceMeasure.Euclidean)
                 for (int i = 0; i < _xLen; i++)
                 {
                     var currentDistances = _distances[i];
@@ -217,7 +220,7 @@ namespace NDtw
                 for (int j = _yLen - 1; j >= 0; j--)
                 {
                     //Sakoe-Chiba constraint, but make it wider in one dimension when signal lengths are not equal
-                    if (_sakoeChibaConstraint && 
+                    if (_sakoeChibaConstraint &&
                         (_isXLongerOrEqualThanY
                        ? j > i && j - i > _sakoeChibaMaxShift || j < i && i - j > _sakoeChibaMaxShift + _signalsLengthDifference
                        : j > i && j - i > _sakoeChibaMaxShift + _signalsLengthDifference || j < i && i - j > _sakoeChibaMaxShift))
@@ -264,15 +267,15 @@ namespace NDtw
             var stepAsideMovesHorizontalY = new int[_slopeStepSizeAside + 1][];
             var stepAsideMovesVerticalX = new int[_slopeStepSizeAside + 1][];
             var stepAsideMovesVerticalY = new int[_slopeStepSizeAside + 1][];
-            for(int i = 1; i <= _slopeStepSizeAside; i++)
+            for (int i = 1; i <= _slopeStepSizeAside; i++)
             {
                 var movesXHorizontal = new List<int>();
                 var movesYHorizontal = new List<int>();
-                var movesXVertical= new List<int>();
-                var movesYVertical= new List<int>();
+                var movesXVertical = new List<int>();
+                var movesYVertical = new List<int>();
 
                 //make steps in horizontal/vertical direction
-                for(int stepAside = 1; stepAside <= i; stepAside++)
+                for (int stepAside = 1; stepAside <= i; stepAside++)
                 {
                     movesXHorizontal.Add(1);
                     movesYHorizontal.Add(0);
@@ -282,7 +285,7 @@ namespace NDtw
                 }
 
                 //make steps in diagonal direction
-                for(int stepForward = 1; stepForward <= _slopeStepSizeDiagonal; stepForward++)
+                for (int stepForward = 1; stepForward <= _slopeStepSizeDiagonal; stepForward++)
                 {
                     movesXHorizontal.Add(1);
                     movesYHorizontal.Add(1);
@@ -297,7 +300,7 @@ namespace NDtw
                 stepAsideMovesVerticalX[i] = movesXVertical.ToArray();
                 stepAsideMovesVerticalY[i] = movesYVertical.ToArray();
             }
-            
+
             var stepMove1 = new[] { 1 };
 
             for (int i = _xLen - 1; i >= 0; i--)
@@ -313,8 +316,8 @@ namespace NDtw
                 for (int j = _yLen - 1; j >= 0; j--)
                 {
                     //Sakoe-Chiba constraint, but make it wider in one dimension when signal lengths are not equal
-                    if (_sakoeChibaConstraint && 
-                        (_isXLongerOrEqualThanY 
+                    if (_sakoeChibaConstraint &&
+                        (_isXLongerOrEqualThanY
                         ? j > i && j - i > _sakoeChibaMaxShift || j < i && i - j > _sakoeChibaMaxShift + _signalsLengthDifference
                         : j > i && j - i > _sakoeChibaMaxShift + _signalsLengthDifference || j < i && i - j > _sakoeChibaMaxShift))
                     {
@@ -327,18 +330,18 @@ namespace NDtw
                     var lowestCostStepX = stepMove1;
                     var lowestCostStepY = stepMove1;
 
-                    for(int alternativePathAside = 1; alternativePathAside <= _slopeStepSizeAside; alternativePathAside++)
+                    for (int alternativePathAside = 1; alternativePathAside <= _slopeStepSizeAside; alternativePathAside++)
                     {
                         var costHorizontalStepAside = 0.0;
                         var costVerticalStepAside = 0.0;
-                        
-                        for(int stepAside = 1; stepAside <= alternativePathAside; stepAside++)
+
+                        for (int stepAside = 1; stepAside <= alternativePathAside; stepAside++)
                         {
                             costHorizontalStepAside += _distances[i + stepAside][j];
                             costVerticalStepAside += _distances[i][j + stepAside];
                         }
-                        
-                        for(int stepForward = 1; stepForward < _slopeStepSizeDiagonal; stepForward++)
+
+                        for (int stepForward = 1; stepForward < _slopeStepSizeDiagonal; stepForward++)
                         {
                             costHorizontalStepAside += _distances[i + alternativePathAside + stepForward][j + stepForward];
                             costVerticalStepAside += _distances[i + stepForward][j + alternativePathAside + stepForward];
@@ -389,7 +392,13 @@ namespace NDtw
                 if (_useSlopeConstraint)
                     CalculateWithSlopeLimit();
                 else
+                {
                     CalculateWithoutSlopeConstraint();
+                    //CudafyModes.Target = eGPUType.Cuda;
+                    //CudafyModes.DeviceId = 0;
+                    //CudafyTranslator.Language = CudafyModes.Target == eGPUType.OpenCL ? eLanguage.OpenCL : eLanguage.Cuda;
+                    //CudafyClassExamples.Execute(1000);
+                }
 
                 _calculated = true;
             }
@@ -399,7 +408,7 @@ namespace NDtw
         {
             Calculate();
 
-            if(_boundaryConstraintStart)
+            if (_boundaryConstraintStart)
                 return _pathCost[0][0];
 
             return Math.Min(_pathCost[0].Min(), _pathCost.Select(y => y[0]).Min());
@@ -412,7 +421,7 @@ namespace NDtw
             var path = new List<Tuple<int, int>>();
             var indexX = 0;
             var indexY = 0;
-            if(!_boundaryConstraintStart)
+            if (!_boundaryConstraintStart)
             {
                 //find the starting element with lowest cost
                 var min = double.PositiveInfinity;
@@ -435,14 +444,14 @@ namespace NDtw
 
             path.Add(new Tuple<int, int>(indexX, indexY));
             while (
-                _boundaryConstraintEnd 
-                ? (indexX < _xLen - 1 || indexY < _yLen - 1) 
+                _boundaryConstraintEnd
+                ? (indexX < _xLen - 1 || indexY < _yLen - 1)
                 : (indexX < _xLen - 1 && indexY < _yLen - 1))
             {
                 var stepX = _predecessorStepX[indexX][indexY];
                 var stepY = _predecessorStepY[indexX][indexY];
 
-                for(int i = 0; i < stepX.Length; i++)
+                for (int i = 0; i < stepX.Length; i++)
                 {
                     indexX += stepX[i];
                     indexY += stepY[i];
@@ -477,6 +486,53 @@ namespace NDtw
         public SeriesVariable[] SeriesVariables
         {
             get { return _seriesVariables; }
-        }   
+        }
     }
+    public class CudafyClassExamples
+    {
+       
+        public static void Execute(int threads)
+        {
+            CudafyTranslator.AllowClasses = true;
+            CudafyModule km = CudafyTranslator.Cudafy(new Type[] { typeof(CudafyClassExamples) });
+            GPGPU gpu = CudafyHost.GetDevice(CudafyModes.Target, 0);
+            gpu.LoadModule(km);
+            Example1(gpu, threads);
+          
+        }
+
+        public static void Example1(GPGPU gpu, int threads)
+        {
+            double[] a = new double[threads];
+            double[] b = new double[threads];
+            Random r = new Random();
+            for (int i = 0; i < threads; i++)
+            {
+                a[i] = r.NextDouble();
+                b[i] = r.NextDouble();
+            }
+
+            double[] gpuarr1 = gpu.CopyToDevice(a);
+            double[] gpuarr2 = gpu.CopyToDevice(b);
+
+            double[] result = new double[threads];
+            var gpuresult = gpu.Allocate<double>(result);
+
+            gpu.Launch(threads, 1).Test2(gpuarr1, gpuarr2, gpuresult);
+
+            gpu.CopyFromDevice(gpuresult, result);
+            gpu.Free(gpuarr1);
+            gpu.Free(gpuarr2);
+            gpu.Free(gpuresult);
+        }
+
+
+        [Cudafy]
+        public static void Test2(GThread thread, double[] arrayView1, double[] arrayView2, double[] result)
+        {
+            int i = thread.blockIdx.x;
+            result[i] = arrayView1[i] + arrayView2[i];
+        }
+    }
+
 }

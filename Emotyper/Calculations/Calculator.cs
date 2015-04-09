@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using CudaCalculation;
 using NDtw;
+using SimpleDTW = CudaCalculation.SimpleDTW;
 
 namespace Calculations
 {
@@ -33,5 +33,13 @@ namespace Calculations
             Dtw analyser = new Dtw(vector1, vector2, DistanceMeasure.Manhattan);
             return analyser.GetCost();
         }
+
+        public static double DistanceFastDTW(double[] vector1, double[] vector2)
+        {
+            SimpleDTW dtw = new SimpleDTW(vector1, vector2);
+            dtw.computeDTW();
+            return dtw.getSum();
+            //return CudafyClassHelper.DTW(vector1, vector2);
+        }                              
     }
 }

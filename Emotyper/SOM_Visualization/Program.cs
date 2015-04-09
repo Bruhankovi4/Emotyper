@@ -1,13 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
- 
-                 using System;
-using System.Collections.Generic;
-using System.IO;
 
 namespace SOM
 {
@@ -42,6 +35,7 @@ namespace SOM
         private void Initialise()
         {
             outputs = new Neuron[length,length];
+            iteration = 0;
             for (int i = 0; i < length; i++)
             {
                 for (int j = 0; j < length; j++)

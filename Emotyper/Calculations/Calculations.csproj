@@ -47,6 +47,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CudafyFirstProj\CudaFunctions.csproj">
+      <Project>{3E50C057-F8BD-4239-94B2-5C4DA97EC1B3}</Project>
+      <Name>CudaFunctions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NDtw\NDtw.csproj">
       <Project>{572EB90F-7F5D-484D-A701-C7FF1556FE32}</Project>
       <Name>NDtw</Name>
