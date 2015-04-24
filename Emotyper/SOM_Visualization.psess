@@ -66,15 +66,55 @@
       <ProjPath>SOM_Visualization\SOM_Visualization.csproj</ProjPath>
       <ProjName>SOM_Visualization</ProjName>
     </ProjBinary>
+    <ProjBinary>
+      <Path>Classifier\obj\Debug\Classifier.exe</Path>
+      <ArgumentTimestamp>01/01/0001 00:00:00</ArgumentTimestamp>
+      <Instrument>true</Instrument>
+      <Sample>true</Sample>
+      <ExternalWebsite>false</ExternalWebsite>
+      <InteractionProfilingEnabled>false</InteractionProfilingEnabled>
+      <IsLocalJavascript>false</IsLocalJavascript>
+      <IsWindowsStoreApp>false</IsWindowsStoreApp>
+      <IsWWA>false</IsWWA>
+      <LaunchProject>true</LaunchProject>
+      <OverrideProjectSettings>false</OverrideProjectSettings>
+      <LaunchMethod>Executable</LaunchMethod>
+      <ExecutablePath>Classifier\bin\Debug\Classifier.exe</ExecutablePath>
+      <StartupDirectory>Classifier\bin\Debug\</StartupDirectory>
+      <Arguments>
+      </Arguments>
+      <NetAppHost>IIS</NetAppHost>
+      <NetBrowser>InternetExplorer</NetBrowser>
+      <ExcludeSmallFuncs>true</ExcludeSmallFuncs>
+      <JScriptProfilingEnabled>false</JScriptProfilingEnabled>
+      <PreinstrumentEvent>
+        <InstrEventExclude>false</InstrEventExclude>
+      </PreinstrumentEvent>
+      <PostinstrumentEvent>
+        <InstrEventExclude>false</InstrEventExclude>
+      </PostinstrumentEvent>
+      <ProjRef>{7B377088-1591-444F-92E4-A22FE3A99F17}|Classifier\Classifier.csproj</ProjRef>
+      <ProjPath>Classifier\Classifier.csproj</ProjPath>
+      <ProjName>Classifier</ProjName>
+    </ProjBinary>
   </Binaries>
   <Reports>
     <Report>
       <Path>SOM_Visualization150401.vsp</Path>
     </Report>
+    <Report>
+      <Path>SOM_Visualization150422.vsp</Path>
+    </Report>
+    <Report>
+      <Path>SOM_Visualization150422(1).vsp</Path>
+    </Report>
   </Reports>
   <Launches>
     <ProjBinary>
       <Path>:PB:{6744C265-B127-4214-ACE2-AC3C4B267CBE}|SOM_Visualization\SOM_Visualization.csproj</Path>
+    </ProjBinary>
+    <ProjBinary>
+      <Path>:PB:{7B377088-1591-444F-92E4-A22FE3A99F17}|Classifier\Classifier.csproj</Path>
     </ProjBinary>
   </Launches>
 </VSPerformanceSession>

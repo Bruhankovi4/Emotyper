@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Accord.Statistics, Version=2.13.1.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\3rd party\Accord.Statistics.dll</HintPath>
+    </Reference>
     <Reference Include="dnAnalytics">
       <HintPath>..\..\3rd party\dnAnalytics.dll</HintPath>
     </Reference>
@@ -49,7 +53,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CombinationIterator.cs" />
     <Compile Include="Extractor.cs" />
+    <Compile Include="MatrixTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -60,13 +66,29 @@
       <Project>{3d226a64-f7e7-4184-9575-9fd74560b517}</Project>
       <Name>Calculations</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CSVReader\CSVUtils.csproj">
+      <Project>{E2D28965-1F51-4752-AB7D-B3BA60603342}</Project>
+      <Name>CSVUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GeneticAlgorithm\GeneticAlgorithm.csproj">
+      <Project>{706521B7-F333-44CD-BCA0-B9675FAB6F2B}</Project>
+      <Name>GeneticAlgorithm</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GridBuilder\ZedGraphSampleCS_v5.0.9\ZedGraphSample\GridBuilder.csproj">
       <Project>{9402C03E-2EE3-4125-BEC3-CF9A857E4F8B}</Project>
       <Name>GridBuilder</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ParticleSwarm\ParticleSwarm.csproj">
+      <Project>{68a29c09-4f73-46c7-a26a-ed7441f2f162}</Project>
+      <Name>ParticleSwarm</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SOM_Visualization\SOM_Visualization.csproj">
       <Project>{6744C265-B127-4214-ACE2-AC3C4B267CBE}</Project>
       <Name>SOM_Visualization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WaveletStudio\WaveletStudio.csproj">
+      <Project>{003D0672-355F-416B-9E88-DC95F0762329}</Project>
+      <Name>WaveletStudio</Name>
     </ProjectReference>
     <ProjectReference Include="..\WpfToolkitChart\WpfToolkitChart.csproj">
       <Project>{1FBF4292-DAEF-459C-9D95-C32688E2CF3B}</Project>

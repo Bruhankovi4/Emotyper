@@ -115,13 +115,13 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CSVReader\CSVUtils.csproj">
+      <Project>{E2D28965-1F51-4752-AB7D-B3BA60603342}</Project>
+      <Name>CSVUtils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EmotyperStorageUtility\EmotyperDataUtility.csproj">
       <Project>{c5da12f9-81db-4ab4-bae7-d2a3713b21cc}</Project>
       <Name>EmotyperDataUtility</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GridBuilder\ZedGraphSampleCS_v5.0.9\ZedGraphSample\GridBuilder.csproj">
-      <Project>{9402C03E-2EE3-4125-BEC3-CF9A857E4F8B}</Project>
-      <Name>GridBuilder</Name>
     </ProjectReference>
     <ProjectReference Include="..\Resources\Resources.csproj">
       <Project>{f3953227-55f4-4e35-82cc-0e2232b48219}</Project>

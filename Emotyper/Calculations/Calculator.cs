@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using CudaCalculation;
 using NDtw;
 using SimpleDTW = CudaCalculation.SimpleDTW;
 
 namespace Calculations
 {
-    public class Calculator
+    public class DistanceCalculator
     {
-        public static double DistanceEuclid(double[] vector1, double[] vector2)
-        {
-
-            double value = 0;
-            for (int i = 0; i < vector1.Length; i++)
+        public static double DistanceEuclid(IEnumerable<double> vector1, IEnumerable<double> vector2)
+        {                       
+            double value = 0;            
+            for (int i = 0; i < vector1.Count(); i++)
             {
-                value += Math.Pow((vector1[i] - vector2[i]), 2);
+                value += Math.Pow((vector1.ElementAt(i) - vector2.ElementAt(i)), 2);
             }
             return Math.Sqrt(value);
         }
@@ -24,22 +23,16 @@ namespace Calculations
         {
             return 1 / Math.Abs(dnAnalytics.Statistics.Correlation.Pearson(vector1, vector2));
         }
-        public static double MeasurePearson(IEnumerable<double> vector1, IEnumerable<double> vector2)
+       
+        public static double KoiffPearson(IEnumerable<double> vector1, IEnumerable<double> vector2)
         {
             return dnAnalytics.Statistics.Correlation.Pearson(vector1, vector2);
         }
-        public static double DistanceFunc(double[] vector1, double[] vector2)
+       
+        public static double DistanceFunc(IEnumerable<double> vector1, IEnumerable<double> vector2)
         {
-            Dtw analyser = new Dtw(vector1, vector2, DistanceMeasure.Manhattan);
+            Dtw analyser = new Dtw(vector1.ToArray(), vector2.ToArray(), DistanceMeasure.SquaredEuclidean);
             return analyser.GetCost();
-        }
-
-        public static double DistanceFastDTW(double[] vector1, double[] vector2)
-        {
-            SimpleDTW dtw = new SimpleDTW(vector1, vector2);
-            dtw.computeDTW();
-            return dtw.getSum();
-            //return CudafyClassHelper.DTW(vector1, vector2);
-        }                              
+        }                          
     }
 }

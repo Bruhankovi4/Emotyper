@@ -9,7 +9,7 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 using System.Windows.Documents;
-using Com.StellmanGreene.CSVReader;
+using CsvReader;
 using Emotiv;
 using EmotyperDataUtility;
 using WaveletStudio.Blocks;

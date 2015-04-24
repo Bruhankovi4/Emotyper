@@ -73,3 +73,5 @@ D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\obj\Debug\UIRecorder.Propertie
 D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\obj\Debug\UIRecorder.csproj.GenerateResource.Cache
 D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\obj\Debug\UIRecorder.exe
 D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\obj\Debug\UIRecorder.pdb
+D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\CSVReader.dll
+D:\GitRepos\Emotyper\Emotyper\Emotyper\UIRecorder\bin\Debug\CSVReader.pdb

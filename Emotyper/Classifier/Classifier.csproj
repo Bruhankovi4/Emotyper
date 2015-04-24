@@ -33,12 +33,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Accord.MachineLearning">
+      <HintPath>..\..\3rd party\Accord.MachineLearning.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Math, Version=2.13.1.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\3rd party\Accord.Math.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Statistics, Version=2.13.1.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\3rd party\Accord.Statistics.dll</HintPath>
+    </Reference>
     <Reference Include="DotNetEmotivSDK, Version=0.8.4.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\3rd party\DotNetEmotivSDK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,7 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Classifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -56,6 +68,10 @@
     <ProjectReference Include="..\Calculations\Calculations.csproj">
       <Project>{3D226A64-F7E7-4184-9575-9FD74560B517}</Project>
       <Name>Calculations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ConfigurationProject\Configuration.csproj">
+      <Project>{FC792F65-ADF1-48F7-B865-2967DCE21B1F}</Project>
+      <Name>Configuration</Name>
     </ProjectReference>
     <ProjectReference Include="..\EmotyperStorageUtility\EmotyperDataUtility.csproj">
       <Project>{C5DA12F9-81DB-4AB4-BAE7-D2A3713B21CC}</Project>

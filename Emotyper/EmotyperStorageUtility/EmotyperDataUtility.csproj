@@ -62,6 +62,16 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ConfigurationProject\Configuration.csproj">
+      <Project>{FC792F65-ADF1-48F7-B865-2967DCE21B1F}</Project>
+      <Name>Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CSVReader\CSVUtils.csproj">
+      <Project>{E2D28965-1F51-4752-AB7D-B3BA60603342}</Project>
+      <Name>CSVUtils</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
